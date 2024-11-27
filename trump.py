@@ -29,7 +29,10 @@ class Game:
 			'7' : 7,
 			'8' : 8,
 			'9' : 9,
-			'10' : 10
+			'10' : 10,
+			'King' : 11,
+			'Queen' : 12,
+			'Jack' : 13
 		}
 		self.start()
 
@@ -45,7 +48,7 @@ class Game:
 		for group in card_groups:
 			cards.append([group, 'King'])
 			cards.append([group, 'Queen'])
-			cards.append([group, 'Jester'])
+			cards.append([group, 'Jack'])
 
 		shuffle(cards)
 
@@ -65,14 +68,19 @@ class Game:
 			self.playing = 'computer'
 
 	def display_inven(self):
+		count = 0
 		for card in self.player_inven:
-			if self.player_inven.index(card) // 3 == 0:
-				print(f'{self.player_inven.index(card) + 1}. {card[0]} {card[1]}', end = '\n')
+			print(f'{self.player_inven.index(card) + 1}. {card[0]} {card[1]}', end = '\t\t')
+			if count != 3:
+				count += 1
 			else:
-				print(f'{self.player_inven.index(card) + 1}. {card[0]} {card[1]}', end = '  ')
+				print()
+				count = 0
+		print()
 
 	def get_card_val(self, card):
-		return self.group_val[card[0]] + self.card_val[card[1]]
+		print(card)
+		return self.group_val[str(card[0])] + self.card_val[card[1]]
 
 	def compare_cards(self, card1, card2):
 		return True if self.get_card_val(card2) > self.get_card_val(card1) else False
@@ -83,17 +91,17 @@ class Game:
 		if not self.top_card:
 			print("Pick Any Card to play:")
 		else:
-			print(f"The top card is {self.top_card}, pick card accordingly.")
+			print(f"The top card is {self.top_card[0]} {self.top_card[1]}, pick card accordingly.")
 		while True:
 			try:
 				player_card = int(input(">")) - 1
-				if 0 < player_card < len(self.player_inven): break
+				if 0 <= player_card < len(self.player_inven): break
 				else:
 					print("Card Number Beyond Inventory Size !!")
 			except Exception as e:
 				print("Invalid Input !!")
 		if not self.top_card:
-			self.top_card = player_card
+			self.top_card = [player_card[0], player_card[1]]
 		else:
 			if self.compare_cards(self.top_card, player_card):
 				self.player_points += 1
