@@ -79,7 +79,6 @@ class Game:
 		print()
 
 	def get_card_val(self, card):
-		print(card)
 		return self.group_val[str(card[0])] + self.card_val[card[1]]
 
 	def compare_cards(self, card1, card2):
