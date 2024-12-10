@@ -25,13 +25,16 @@ class App(ctk.CTk):
 	
 		# ctk.set_appearance_mode('light')
 
+		self.history = list()
+
 		# fonts
 		self.main_font = ctk.CTkFont(family = 'Helvitica', size = MAIN_FONT_SIZE)
 		self.result_label_font = ctk.CTkFont(family = 'Helvitica', size = RESULT_LABEL_FONT_SIZE)
 		self.formula_label_font = ctk.CTkFont(family = 'Helvitica', size = FORMULA_LABEL_FONT_SIZE)
-		self.frame = NormalLayout(self)
+		self.his_btn_font = ctk.CTkFont(family = 'Helvitica', size =  HISTORY_BTN_FONT_SIZE)
 
 		# creating app dependent widgets
+		self.frame = NormalLayout(self)
 		self.add_widgets()
 
 		# key binds
@@ -40,16 +43,19 @@ class App(ctk.CTk):
 		self.mainloop()
 
 	def add_widgets(self):
-		self.button = ctk.CTkButton(self,
-			text = '>',
-			font = self.main_font,
+		self.history_frame = ToggleFrame(self)
+
+		self.his_button = ctk.CTkButton(self,
+			text = '↑',
+			font = self.his_btn_font,
 			fg_color = APP_BG,
 			text_color = COLORS['label_text_color'],
 			width = 20,
 			height = 10,
-			hover_color = BUTTON_HVR_COLOR)
+			hover_color = BUTTON_HVR_COLOR,
+			command = self.history_frame.animate_frame)
 
-		self.button.place(relx = 0.99, rely = 0.01, anchor = 'ne')
+		self.his_button.place(relx = 0.99, rely = 0.01, anchor = 'ne')
 
 	def chng_title_clr(self):
 		try:
@@ -59,7 +65,19 @@ class App(ctk.CTk):
 			windll.dwmapi.DwmSetWindowAttribute(HWND, ATTRIBUTE, byref(c_int(COLOR)), sizeof(c_int))
 		except Exception as e:
 			print(e)
+
+	def change_layout(self):
+		self.frame.pack_forget()
+
+		if isinstance(self.frame, NormalLayout):
+			self.geometry(f'{APP_MAX_SIZE[0]}x{APP_MAX_SIZE[1]}')
+			self.frame = AdvancedLayout(self)
+			self.add_widgets()
+		else:
+			self.geometry(f'{APP_SIZE[0]}x{APP_SIZE[1]}')
+			self.frame = NormalLayout(self)
+			self.add_widgets()
 			
 
 if __name__ == '__main__':
-	App()
+	App() 
