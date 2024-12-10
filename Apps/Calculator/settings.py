@@ -91,3 +91,5 @@ ADVANCED_BTNS = {
 
 OPE_BTNS = {'+', '-', '/', '*', '='}
 SPECIAL_BTNS = {'AC', '%', '+/-', 'exp'}
+ADVANCED_SPECIAL_BTNS = {'sin', 'cos', 'tan', 'sqr', 'cube_root', 'sq', 'raised_to', 'env', '(', ')'}
+TRIG_FUNCS = {'sin', 'cos', 'tan'}

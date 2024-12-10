@@ -23,8 +23,8 @@ class App(ctk.CTk):
 		self.iconbitmap(icon)
 		self.chng_title_clr()
 	
-		# ctk.set_appearance_mode('light')
-
+		
+		self.is_dark = isDark()
 		self.history = list()
 
 		# fonts
@@ -77,6 +77,16 @@ class App(ctk.CTk):
 			self.geometry(f'{APP_SIZE[0]}x{APP_SIZE[1]}')
 			self.frame = NormalLayout(self)
 			self.add_widgets()
+
+	def switch_mode(self):
+		if self.is_dark:
+			ctk.set_appearance_mode('light')
+			self.iconbitmap('Images\\light.ico')
+			self.is_dark = False
+		else:
+			ctk.set_appearance_mode('dark')
+			self.is_dark = True
+			self.iconbitmap('Images\\dark.ico')
 			
 
 if __name__ == '__main__':

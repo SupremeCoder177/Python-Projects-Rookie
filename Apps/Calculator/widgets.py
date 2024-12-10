@@ -1,6 +1,7 @@
 # making specific use case widgets
 
 from settings import *
+from math import sin, cos, tan
 
 
 class Button(ctk.CTkButton):
@@ -323,6 +324,11 @@ class AdvancedLayout(ctk.CTkFrame):
 		self.num_list = list()
 		self.equation = list()
 		self.calculated = False
+		self.trig_open = False
+		self.open_brack = 0
+		self.closed_brack = 0
+		self.waiting_for_expo = False
+		self.trig_ope = ''
 
 		self.add_widgets()
 
@@ -354,6 +360,7 @@ class AdvancedLayout(ctk.CTkFrame):
 			text_var = self.result_var)
 
 	def num_btn_func(self, text):
+		if self.waiting_for_expo and text == '.': return
 		if self.calculated:
 			self.calculated = False
 		if text == '.' and '.' in self.num_list:
@@ -369,6 +376,8 @@ class AdvancedLayout(ctk.CTkFrame):
 		self.formula_var.set(' '.join(self.equation))
 
 	def ope_add_btn(self, ope):
+		if self.waiting_for_expo and ope != '=': return
+		if self.trig_open and ope != '=': return
 		if ope != '=':
 			if self.num_list:
 				self.equation.append(''.join(self.num_list))
@@ -384,6 +393,41 @@ class AdvancedLayout(ctk.CTkFrame):
 			self.calculate()
 
 	def calculate(self):
+		if self.trig_open:
+			if self.num_list:
+				num = float(''.join(self.num_list[self.num_list.index('(') + 1:self.num_list.index(')')]))
+			if self.calculated:
+				num = float(self.result_var.get()[self.result_var.get().index('(') + 1:self.result_var.get().index(')')])
+			if self.trig_ope == 'sin':
+				result = sin(num)
+			if self.trig_ope == 'cos':
+				result = cos(num)
+			if self.trig_ope == 'tan':
+				result = tan(num)
+			result = round(result, 15)
+			self.result_var.set(str(result))
+			self.calculated = True
+			self.num_list.clear()
+			self.trig_open = False
+			self.equation.clear()
+			self.parent.history.insert(0 ,(f'{self.trig_ope}({num})', str(result)))
+			return
+		if self.waiting_for_expo:
+			if not self.num_list: return
+			else:
+				num = float(self.equation[self.equation.index('^') - 1])
+				power = int(''.join(self.num_list))
+				result = num ** power
+				result = round(result, 15)
+				self.result_var.set(str(result))
+				self.calculated = True
+				self.waiting_for_expo = False
+				self.equation.clear()
+				self.parent.history.insert(0, (f'{num} ^ {power}', str(result)))
+				return
+
+		if self.open_brack != self.closed_brack:
+			return
 		if self.num_list:
 			self.equation.append(''.join(self.num_list))
 			self.num_list.clear()
@@ -394,7 +438,7 @@ class AdvancedLayout(ctk.CTkFrame):
 		
 		result = eval(''.join(self.equation))
 		if isinstance(result, float):
-			result = round(result, 10)
+			result = round(result, 15)
 		self.result_var.set(result)
 		self.formula_var.set(' '.join(self.equation))
 		self.equation.clear()
@@ -418,19 +462,25 @@ class AdvancedLayout(ctk.CTkFrame):
 		self.num_list.clear()
 		self.equation.clear()
 		self.calculated = False
+		self.open_brack = 0
+		self.closed_brack = 0
+		self.trig_open = False
+		self.waiting_for_expo = False
 
 	def percentagize(self):
+		if self.trig_open or self.open_brack > self.closed_brack: return
 		if not self.num_list:
 			return
 		num = float(''.join(self.num_list))
 		num /= 100
-		num = round(num, 10)
+		num = round(num, 15)
 		self.num_list.clear()
 		for ch in str(num):
 			self.num_list.append(ch)
 		self.result_var.set(''.join(self.num_list))
 
 	def change_sign(self):
+		if self.trig_open or self.open_brack > self.closed_brack: return
 		if self.calculated:
 			if self.result_var.get()[0] != '-':
 				self.result_var.set('-' + self.result_var.get())
@@ -446,16 +496,88 @@ class AdvancedLayout(ctk.CTkFrame):
 
 		self.result_var.set(''.join(self.num_list))
 
+	def adv_special_btn_func(self, func):
+		if func in TRIG_FUNCS:
+			self.trig(func)
+		if func == '(' or func == ')':
+			self.brack(func)
+		if func == 'sqr':
+			self.raise_to(1/2)
+		if func == 'cube_root':
+			self.raise_to(1/3)
+		if func == 'sq':
+			self.raise_to(2)
+		if func == 'raised_to':
+			self.special_raise_to()
+		if func == 'env':
+			self.parent.switch_mode()
+
+	def special_raise_to(self):
+		if self.waiting_for_expo: return
+
+		if not (self.num_list or self.calculated): return
+
+		if self.num_list:
+			self.equation.append(''.join(self.num_list))
+			self.num_list.clear()
+		if self.calculated:
+			self.equation.append(self.result_var.get())
+			self.calculated = False
+
+		self.equation.append('^')
+		self.formula_var.set(' '.join(self.equation))
+		self.waiting_for_expo = True
+
+	def raise_to(self, power):
+		if self.calculated:
+			result = float(self.result_var.get())
+			result = result ** power
+			result = round(result, 15)
+			self.result_var.set(str(result))
+		if self.num_list:
+			num = float(''.join(self.num_list))
+			num = num ** power
+			num = round(num, 15)
+			self.num_list.clear()
+			for ch in str(num):
+				self.num_list.append(ch)
+			self.result_var.set(''.join(self.num_list))
+
+	def brack(self, ope):
+		if self.trig_open and ope == '(': return
+		if ope == '(':
+			self.num_list.append(ope)
+			self.open_brack += 1
+		else:
+			if self.closed_brack < self.open_brack:
+				self.num_list.append(ope)
+				self.closed_brack += 1
+		self.result_var.set(''.join(self.num_list))
+
+	def trig(self, ope):
+		if self.trig_open: return
+		if self.num_list:
+			self.num_list.insert(0, f'{ope}')
+			self.num_list.insert(1, '(')
+			self.num_list.insert(len(self.num_list), ')')
+			self.result_var.set(''.join(self.num_list))
+		if self.calculated:
+			self.result_var.set(f'{ope}(' + self.result_var.get() + ')')
+		self.trig_open = True
+		self.trig_ope = ope
+
 	def add_buttons(self):
 		for btn, para in ADVANCED_BTNS.items():
 			color = COLORS['nor_btn'] if btn not in OPE_BTNS else COLORS['operator_yellow']
 			hvr_color = COLORS['nor_btn_hvr'] if btn not in OPE_BTNS else COLORS['operator_hvr']
 			text_clr = COLORS['text_color']			
-			if btn not in OPE_BTNS and btn not in SPECIAL_BTNS:
+			if btn not in OPE_BTNS and btn not in SPECIAL_BTNS and btn not in ADVANCED_SPECIAL_BTNS:
 				command = lambda btn=btn: self.num_btn_func(btn)
 			else:
 				if btn in OPE_BTNS:
 					command = lambda btn=btn: self.ope_add_btn(btn)
+				elif btn in ADVANCED_SPECIAL_BTNS:
+					command = lambda btn=btn: self.adv_special_btn_func(btn)
 				else:
 					command = lambda btn=btn: self.special_btn_func(btn)
 			Button(parent = self,
