@@ -556,6 +556,7 @@ class AdvancedLayout(ctk.CTkFrame):
 
 	def trig(self, ope):
 		if self.trig_open: return
+		if not (self.num_list or self.calculated): return
 		if self.num_list:
 			self.num_list.insert(0, f'{ope}')
 			self.num_list.insert(1, '(')
