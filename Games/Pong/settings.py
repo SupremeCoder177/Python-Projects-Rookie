@@ -1,0 +1,27 @@
+# pong settings
+
+from random import randint
+
+GAME_SIZE = (1200, 700)
+player_x = player_y = 0
+FPS = 60
+DECORATION_COLOR = (181, 27, 0)
+DECOR_WIDTH = 15
+CIRCLE_COLOR = (97, 27, 15)
+ARC_SIZE = 100
+GAME_BG = (28, 27, 27)
+PLAYER_COLOR = (245, 62, 29)
+PLAYER_WIDTH = 100
+PLAYER_HEIGHT = 2 * PLAYER_WIDTH
+PLAYER_SPEED = 5
+ball_x = GAME_SIZE[0] / 2
+ball_y = GAME_SIZE[1] / 2
+BALL_GOING_UP = bool(randint(0, 1))
+BALL_GOING_LEFT = bool(randint(0, 1))
+BALL_GOING_DOWN = not BALL_GOING_UP
+BALL_GOING_RIGHT = not BALL_GOING_LEFT
+BALL_COLOR = (44, 163, 11)
+BALL_BD_COLOR = (29, 227, 18)
+BALL_RADIUS = 50
+BALL_BD = 15
+BALL_SPEED = 5
