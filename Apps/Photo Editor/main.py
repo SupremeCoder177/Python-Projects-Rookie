@@ -138,7 +138,6 @@ class App(ctk.CTk):
 		self.editor_panel.flip_hor.set(False)
 		self.editor_panel.invert.set(False)
 		self.editor_panel.gray_scale.set(False)
-		self.editor_panel.solarize.set(0)
 		self.place_img(self.image)
 
 

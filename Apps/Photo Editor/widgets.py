@@ -81,7 +81,7 @@ class EditorPanel(ctk.CTkTabview):
 		Appearance(self.tab('Appearance'), PANEL_BG, self.rot_var, self.zoom_var, self.image_blur, self.reset, self.flip_ver, self.flip_hor)
 		Filters(self.tab('Filters'), PANEL_BG, self.brightness, self.contrast, self.color, self.sharpness)
 		Save(self.tab('Save'), PANEL_BG, self.save)
-		Color(self.tab('Color'), PANEL_BG, self.invert, self.gray_scale, self.solarize)
+		Color(self.tab('Color'), PANEL_BG, self.invert, self.gray_scale)
 
 
 class Appearance(ctk.CTkFrame):
