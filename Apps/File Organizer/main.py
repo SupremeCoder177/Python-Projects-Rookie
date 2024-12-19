@@ -32,6 +32,7 @@ class App(ctk.CTk):
 		self.rowconfigure(0, weight = 2, uniform = 'a')
 		self.rowconfigure(1, weight = 1, uniform = 'a')
 		self.columnconfigure(0, weight = 1, uniform = 'a')
+		self.columnconfigure(1, weight = 1, uniform = 'a')
 
 		font = ctk.CTkFont(family = FONT, size = FONT_SIZE)
 
@@ -53,7 +54,7 @@ class App(ctk.CTk):
 			hover_color = BTN_HVR_CLR,
 			command = self.get_path).grid(row = 0, column = 1)
 
-		frame.grid(row = 0, column = 0, padx = PADDING)
+		frame.grid(row = 0, column = 0, padx = PADDING, columnspan = 2)
 
 		ctk.CTkButton(self,
 			text = 'Organize',
@@ -63,16 +64,46 @@ class App(ctk.CTk):
 			corner_radius = 10,
 			command = self.organize).grid(row = 1, column = 0, padx = PADDING)
 
+		ctk.CTkButton(self,
+			text = 'De-Organize',
+			font = font,
+			fg_color = BTN_CLR,
+			hover_color = BTN_HVR_CLR,
+			corner_radius = 10,
+			command = self.deorganize).grid(row = 1, column = 1, padx = PADDING)
+
 	def get_path(self):
 		path = filedialog.askdirectory()
 		if path:
 			self.path_var.set(path)
 
-	def organize(self):
+	def deorganize(self):
+		if not self.check_path(): return
+		if not messagebox.askyesno(title = "U sure ?", message = "This could result into cluttered files\nOrganize may not restore previous configuration."): return
+
+		folders = os.listdir(self.path_var.get())
+		folders = [folder for folder in folders if os.path.isdir(os.path.join(self.path_var.get(), folder)) and folder not in ['$RECYCLE.BIN', "System Volume Information", "$Recycle.Bin", ".git"]]
+
+		for folder in folders:
+			current_path = os.path.join(self.path_var.get(), folder)
+			for file in os.listdir(current_path):
+				if os.path.isfile(os.path.join(current_path, file)):
+					try:
+						shutil.move(os.path.join(current_path, file), self.path_var.get())
+					except Exception as e: 
+						print(e)
+						continue
+
+	def check_path(self):
 		if not os.path.exists(self.path_var.get()): 
 			self.path_var.set("No Such Directory")
 			self.after(2000, lambda : self.path_var.set("Enter Path"))
-			return
+			return False
+		return True
+		
+	def organize(self):
+		if not self.check_path(): return
+		if not messagebox.askyesno(title = "U sure ?", message = "This Will Move All Files Into Folders\nDeorganize may not result into previous configuration"): return
 
 		files = os.listdir(self.path_var.get())
 		files = [file for file in files if os.path.isfile(os.path.join(self.path_var.get(), file)) and file not in ['.gitignore']]
