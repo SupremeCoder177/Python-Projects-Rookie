@@ -4,6 +4,10 @@ import pygame as pg
 from sys import exit
 from settings import *
 from random import randint, choice
+import os
+
+if os.name != "nt":
+	os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 class Game:
@@ -19,8 +23,7 @@ class Game:
 		self.bricks_on_floor = list()
 		self.score = 0
 		self.high_score = 0
-		self.font = pg.font.Font('Fonts\\knight_warrior.otf', 50)
-
+		self.font = pg.font.Font('Fonts\\knight_warrior.otf', 50) if os.name == "nt" else pg.font.Font('Fonts//knight_warrior.otf', 50)
 		self.run()
 
 	def draw_grid(self):
