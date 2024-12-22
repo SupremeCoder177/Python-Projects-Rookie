@@ -1,4 +1,4 @@
-# Tetris
+# # Tetris
 
 import pygame as pg
 from sys import exit
@@ -24,6 +24,7 @@ class Game:
 		self.score = 0
 		self.high_score = 0
 		self.font = pg.font.Font('Fonts\\knight_warrior.otf', 50) if os.name == "nt" else pg.font.Font('Fonts//knight_warrior.otf', 50)
+		self.fall_speed = BRICK_FALLING_SPEED
 		self.run()
 
 	def draw_grid(self):
@@ -192,6 +193,7 @@ class Game:
 						if event.key == pg.K_RIGHT or event.key == pg.K_d:
 							if self.check_valid_movement(brick, COL_SIZE):
 								pos = [pos[0] + COL_SIZE, pos[1]]
+
 						self.brick.clear()
 						brick['index'] = index
 						brick['pos'] = pos
@@ -225,3 +227,5 @@ class Game:
 
 if __name__ == '__main__':
 	Game()
+
+

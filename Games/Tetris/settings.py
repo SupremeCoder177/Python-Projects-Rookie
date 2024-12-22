@@ -9,6 +9,7 @@ GRID_WIDTH = 2
 BRICK_COLORS = ('red', 'white', 'purple', 'yellow', 'green', 'orange', 'cyan', 'blue')
 BRICK_WIDTH = 5
 BRICK_STYLE = BRICK_WIDTH * 4
+BRICK_FALLING_SPEED = 1
 
 BRICKS = {
 	'brick_1' : {
