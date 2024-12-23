@@ -36,6 +36,7 @@ class Game:
 
 		for tile in tiles:
 			if self.player.player.colliderect(tile):
+				colided = True
 				if tile.y <= self.player.player.y <= tile.y + COL_SIZE:
 					if self.player.direction_x[0]:
 						print('left')
@@ -48,7 +49,6 @@ class Game:
 					if self.player.direction_y[0]:
 						self.player.player.top = tile.bottom
 						self.player.velocity = 0
-
 				pg.draw.rect(self.screen, 'green', tile)
 
 	def check_player_pos(self):
@@ -80,7 +80,7 @@ class Game:
 
 			after_time = time()
 
-			print(self.clock.get_fps())
+			# print(self.clock.get_fps())
   
 			pg.display.flip()
 			self.clock.tick(FPS)
