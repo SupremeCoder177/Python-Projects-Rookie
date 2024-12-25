@@ -1,10 +1,6 @@
 # map
 
 from player import *
-import itertools as itr
-
-for per in itr.permutations([-1, 0, 1], 2):
-	print(per)
 
 class Map:
 
@@ -21,8 +17,10 @@ class Map:
 				if col == 2:
 					self.player_pos = [col_index, row_index]
 
-	def render_tiles(self, surf):
+	def render_tiles(self, surf, offset):
 		for tile in self.tiles:
+			tile.x += offset[0]
+			tile.y += offset[1]
 			pg.draw.rect(surf, 'gray', tile)
 
 	def draw_grid(self, surf):
