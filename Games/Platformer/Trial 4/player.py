@@ -50,9 +50,7 @@ class Player:
 
 		self.velocity[1] = min(10, self.velocity[1] + 1)
 
-	def render(self, surf, offset):
-		self.player_rect.x += offset[0]
-		self.player_rect.y += offset[1]
+	def render(self, surf):
 		pg.draw.rect(surf, self.color, self.player_rect)
 
 	def get_pos(self):
