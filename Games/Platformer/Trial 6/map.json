@@ -1,0 +1,284 @@
+{
+    "0;-1": {
+        "physics": true
+    },
+    "0;-2": {
+        "physics": true
+    },
+    "0;0": {
+        "physics": true
+    },
+    "0;1": {
+        "physics": true
+    },
+    "0;2": {
+        "physics": true
+    },
+    "0;3": {
+        "physics": true
+    },
+    "0;4": {
+        "physics": true
+    },
+    "0;5": {
+        "physics": true
+    },
+    "0;6": {
+        "physics": true
+    },
+    "0;7": {
+        "physics": true
+    },
+    "0;8": {
+        "physics": true
+    },
+    "0;9": {
+        "physics": true
+    },
+    "10;-12": {
+        "physics": true
+    },
+    "10;-7": {
+        "physics": true
+    },
+    "10;0": {
+        "physics": true
+    },
+    "10;9": {
+        "physics": true
+    },
+    "11;-12": {
+        "physics": true
+    },
+    "11;6": {
+        "physics": true
+    },
+    "11;9": {
+        "physics": true
+    },
+    "12;-11": {
+        "physics": true
+    },
+    "12;2": {
+        "physics": true
+    },
+    "12;6": {
+        "physics": true
+    },
+    "12;9": {
+        "physics": true
+    },
+    "13;-10": {
+        "physics": true
+    },
+    "13;2": {
+        "physics": true
+    },
+    "13;9": {
+        "physics": true
+    },
+    "14;-2": {
+        "physics": true
+    },
+    "14;-3": {
+        "physics": true
+    },
+    "14;-4": {
+        "physics": true
+    },
+    "14;-5": {
+        "physics": true
+    },
+    "14;-6": {
+        "physics": true
+    },
+    "14;-7": {
+        "physics": true
+    },
+    "14;-8": {
+        "physics": true
+    },
+    "14;-9": {
+        "physics": true
+    },
+    "14;2": {
+        "physics": true
+    },
+    "14;9": {
+        "physics": true
+    },
+    "15;-2": {
+        "physics": true
+    },
+    "15;9": {
+        "physics": true
+    },
+    "16;-1": {
+        "physics": true
+    },
+    "16;-2": {
+        "physics": true
+    },
+    "16;0": {
+        "physics": true
+    },
+    "16;1": {
+        "physics": true
+    },
+    "16;2": {
+        "physics": true
+    },
+    "16;3": {
+        "physics": true
+    },
+    "16;4": {
+        "physics": true
+    },
+    "16;5": {
+        "physics": true
+    },
+    "16;6": {
+        "physics": true
+    },
+    "16;7": {
+        "physics": true
+    },
+    "16;8": {
+        "physics": true
+    },
+    "16;9": {
+        "physics": true
+    },
+    "1;-2": {
+        "physics": true
+    },
+    "1;9": {
+        "physics": true
+    },
+    "2;-2": {
+        "physics": true
+    },
+    "2;-3": {
+        "physics": true
+    },
+    "2;-4": {
+        "physics": true
+    },
+    "2;-5": {
+        "physics": true
+    },
+    "2;-6": {
+        "physics": true
+    },
+    "2;-7": {
+        "physics": true
+    },
+    "2;-8": {
+        "physics": true
+    },
+    "2;-9": {
+        "physics": true
+    },
+    "2;9": {
+        "physics": true
+    },
+    "3;-10": {
+        "physics": true
+    },
+    "3;9": {
+        "physics": true
+    },
+    "4;-11": {
+        "physics": true
+    },
+    "4;-3": {
+        "physics": true
+    },
+    "4;2": {
+        "physics": true
+    },
+    "4;9": {
+        "physics": true
+    },
+    "5;-12": {
+        "physics": true
+    },
+    "5;-3": {
+        "physics": true
+    },
+    "5;-7": {
+        "physics": true
+    },
+    "5;2": {
+        "physics": true
+    },
+    "5;9": {
+        "physics": true
+    },
+    "6;-12": {
+        "physics": true
+    },
+    "6;-2": {
+        "physics": true
+    },
+    "6;-5": {
+        "physics": true
+    },
+    "6;-7": {
+        "physics": true
+    },
+    "6;2": {
+        "physics": true
+    },
+    "6;9": {
+        "physics": true
+    },
+    "7;-12": {
+        "physics": true
+    },
+    "7;-5": {
+        "physics": true
+    },
+    "7;7": {
+        "physics": true
+    },
+    "7;9": {
+        "physics": true
+    },
+    "8;-12": {
+        "physics": true
+    },
+    "8;-5": {
+        "physics": true
+    },
+    "8;0": {
+        "physics": true
+    },
+    "8;4": {
+        "physics": true
+    },
+    "8;7": {
+        "physics": true
+    },
+    "8;9": {
+        "physics": true
+    },
+    "9;-12": {
+        "physics": true
+    },
+    "9;-7": {
+        "physics": true
+    },
+    "9;-8": {
+        "physics": true
+    },
+    "9;0": {
+        "physics": true
+    },
+    "9;4": {
+        "physics": true
+    },
+    "9;9": {
+        "physics": true
+    }
+}
