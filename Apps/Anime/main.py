@@ -121,7 +121,7 @@ watched_list_movies = ['Josee, the Tiger and the Fish',
 			    'Momotaro The Undefeated',
 			    'Hello World']
 
-			   
+
 # A way to access all of these
 
 import customtkinter as ctk
