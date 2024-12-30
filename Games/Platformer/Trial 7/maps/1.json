@@ -1,66 +1,337 @@
 {
-    "2;6": {
-        "color": "#8000ff",
-        "physics": false
+    "0;2": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
     },
-    "2;7": {
-        "color": "#8000ff",
-        "physics": false
+    "0;3": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "0;4": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "0;5": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "0;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "10;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "11;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "11;7": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "12;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "12;7": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "13;7": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "14;7": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "15;7": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "16;7": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "16;8": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "17;7": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "17;8": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "18;4": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "18;8": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "19;4": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "19;8": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "1;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "20;4": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "20;8": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "21;3": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "21;4": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "21;8": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "22;3": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "22;8": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "23;3": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "23;8": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "24;2": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "24;3": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "24;7": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "24;8": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "25;2": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "25;7": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "26;2": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "26;7": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "27;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "27;2": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "27;7": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "28;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "28;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "28;7": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "29;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "29;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "2;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "30;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "30;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "31;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "31;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "32;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "32;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "33;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "33;2": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "33;3": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "33;4": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "33;5": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "33;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
     },
     "3;6": {
         "color": "gray",
+        "fill": true,
         "physics": true
-    },
-    "3;7": {
-        "color": "#8000ff",
-        "physics": false
     },
     "4;6": {
         "color": "gray",
+        "fill": true,
         "physics": true
-    },
-    "4;7": {
-        "color": "#8000ff",
-        "physics": false
     },
     "5;6": {
         "color": "gray",
+        "fill": true,
         "physics": true
-    },
-    "5;7": {
-        "color": "#8000ff",
-        "physics": false
     },
     "6;6": {
         "color": "gray",
+        "fill": true,
         "physics": true
-    },
-    "6;7": {
-        "color": "#8000ff",
-        "physics": false
     },
     "7;6": {
         "color": "gray",
+        "fill": true,
         "physics": true
-    },
-    "7;7": {
-        "color": "#8000ff",
-        "physics": false
     },
     "8;6": {
         "color": "gray",
+        "fill": true,
         "physics": true
     },
-    "8;7": {
-        "color": "#8000ff",
-        "physics": false
-    },
     "9;6": {
-        "color": "#8000ff",
-        "physics": false
-    },
-    "9;7": {
-        "color": "#8000ff",
-        "physics": false
+        "color": "gray",
+        "fill": true,
+        "physics": true
     }
 }

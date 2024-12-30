@@ -1,7 +1,6 @@
 # editor
 
 import json
-import pygame as pg
 from sys import exit
 import customtkinter as ctk
 from tkinter import colorchooser
@@ -144,17 +143,13 @@ class Editor(ctk.CTk):
 		self.title("Level Editor")
 		self.resizable(False, False)
 		self.offset = [0, 0]
-		self.tile_size = TILE_SIZE
-		self.map = {}
-		self.rects = {}
 		self.attributes = {"physics" : True, "color" : 'gray'}
+		self.tile_size = TILE_SIZE
+		self.rects = {}
 
 		self.ask_input()
 		
 		ctk.set_appearance_mode('dark')
-
-		if self.map: self.load_map_tiles()
-		else: self.map = dict()
 
 		self.bind('<Escape>', lambda event: self.quit())
 		self.bind('<KeyPress>', self.change_offset)
@@ -163,11 +158,12 @@ class Editor(ctk.CTk):
 	def ask_input(self):
 		pre = Prerequisite()
 		pre.quit()
-		if not pre.map: self.quit()
-		self.map = pre.map
+		if pre.map: self.map = pre.map
+		else: self.map = {}
 		self.lvl = pre.lvl.get()
 		self.path = pre.path.get()
 		self.add_widgets()
+		self.load_map_tiles()
 
 	def load_map_tiles(self):
 		for tile in self.map:
@@ -180,7 +176,10 @@ class Editor(ctk.CTk):
 				if not semi_seen: x += ch
 				if semi_seen: y += ch
 			pos = (int(x), int(y))
-			self.rects[pos] = {'color' : self.map[tile]['color'], 'physics' : self.map[tile]['physics']}
+			self.rects[pos] = self.map[tile]
+		if self.rects:
+			self.attributes = list(self.rects.values())[0]
+		self.attributes_widgets()
 		self.refresh()
 
 	def change_offset(self, event):
@@ -205,7 +204,6 @@ class Editor(ctk.CTk):
 		self.tabs.add('Attributes')
 		self.tabs.add('Save')
 		self.tabs.grid(row = 0, column = 1, sticky = 'NSEW')
-		self.attributes_widgets()
 
 		ctk.CTkButton(self.tabs.tab('Save'),
 			text = 'Save Changes',
