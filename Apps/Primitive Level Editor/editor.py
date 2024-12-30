@@ -81,6 +81,60 @@ class Prerequisite(ctk.CTkToplevel):
 		self.quit()
 
 
+class SingleAttribute(ctk.CTkFrame):
+
+		def __init__(self, parent, bg, pad, attribute_name, val, font, app):
+			super().__init__(parent, fg_color = bg)
+
+			self.rowconfigure((0, 1), weight = 1, uniform = 'b')
+			self.columnconfigure((0, 1), weight = 1, uniform = 'b')
+			self.app = app
+			self.attribute_name = attribute_name
+			self.val = ctk.StringVar(value = str(val))
+
+			ctk.CTkLabel(self,
+				text = attribute_name.capitalize(),
+				font = font,
+				fg_color = 'transparent').grid(row = 0, column = 0, sticky = 'NSEW')
+
+			ctk.CTkLabel(self,
+				text = str(val),
+				font = font,
+				fg_color = 'transparent',
+				textvariable = self.val).grid(row = 0, column = 1, sticky = 'NSEW')
+
+			if type(val) == bool:
+				self.bool_var = ctk.StringVar()
+				ctk.CTkSwitch(self,
+					text = f'{attribute_name.capitalize()} Enable',
+					command = self.change_bool,
+					font = font,
+					variable = self.bool_var,
+					onvalue = 'on',
+					offvalue = 'off').grid(row = 1, column = 0, columnspan = 2, sticky = 'NSEW')
+			else:
+				ctk.CTkButton(self,
+					text = "Choose Color",
+					font = font,
+					command = self.change_color).grid(row = 1, column = 0, columnspan = 2, sticky = 'NSEW')
+
+			self.pack(padx = pad, pady = pad, expand = True, fill = 'both')
+
+		def change_bool(self):
+			if self.bool_var.get() == 'on': 
+				self.app.attributes[self.attribute_name] = True
+				self.val.set('True')
+			else: 
+				self.app.attributes[self.attribute_name] = False
+				self.val.set('False')
+
+		def change_color(self):
+			color = colorchooser.askcolor()[1]
+			if color:
+				self.app.attributes[self.attribute_name] = color
+				self.val.set(color)
+
+
 class Editor(ctk.CTk):
 
 	def __init__(self):
@@ -91,10 +145,9 @@ class Editor(ctk.CTk):
 		self.resizable(False, False)
 		self.offset = [0, 0]
 		self.tile_size = TILE_SIZE
-		self.curr_color = 'gray'
-		self.curr_phy_val = True
 		self.map = {}
 		self.rects = {}
+		self.attributes = {"physics" : True, "color" : 'gray'}
 
 		self.ask_input()
 		
@@ -110,8 +163,10 @@ class Editor(ctk.CTk):
 	def ask_input(self):
 		pre = Prerequisite()
 		pre.quit()
+		if not pre.map: self.quit()
 		self.map = pre.map
 		self.lvl = pre.lvl.get()
+		self.path = pre.path.get()
 		self.add_widgets()
 
 	def load_map_tiles(self):
@@ -144,43 +199,78 @@ class Editor(ctk.CTk):
 		self.columnconfigure(1, weight = 1, uniform = 'a')
 		self.rowconfigure(0, weight = 1, uniform = 'a')
 
+		# input field
+
+		self.tabs = ctk.CTkTabview(self, fg_color = 'transparent')
+		self.tabs.add('Attributes')
+		self.tabs.add('Save')
+		self.tabs.grid(row = 0, column = 1, sticky = 'NSEW')
+		self.attributes_widgets()
+
+		ctk.CTkButton(self.tabs.tab('Save'),
+			text = 'Save Changes',
+			font = ("Cascadia Mono", 20),
+			command = self.save_map).pack(expand = True)
+
 		self.canvas = ctk.CTkCanvas(self, bg = 'black')
-
-		font = ctk.CTkFont(family = 'Cascadia Mono', size = 15)
-		ioframe = ctk.CTkFrame(self)
-		self.phy_var = ctk.StringVar(value = 'on')
-
-		ctk.CTkSwitch(ioframe,
-			text = "Physics Enabled",
-			variable = self.phy_var,
-			command = self.toogle_physics,
-			onvalue = 'on',
-			offvalue = 'off',
-			font = font).pack(expand = True)
-
-		ctk.CTkButton(ioframe,
-			text = 'Choose Tile Color',
-			font = font,
-			command = self.choose_color).pack(expand = True)
-
-		ctk.CTkButton(ioframe,
-			text = "Save Changes",
-			font = font,
-			command = self.change_map).pack(expand = True)
-
-		ioframe.grid(row = 0, column = 1, sticky = 'NSEW')
-
 		self.canvas.grid(row = 0, column = 0, sticky = "NSEW")
 		self.canvas.bind('<MouseWheel>', self.zoom)
 		self.canvas.bind('<Button-1>', self.add_tile)
 		self.canvas.bind('<Button-3>', self.remove_tile)
 
-	def toogle_physics(self):
-		if self.phy_var.get() == 'on': self.curr_phy_val = True
-		else: self.curr_phy_val = False
+	def save_map(self):
+		self.map.clear()
+		for rect in self.rects:
+			self.map[f'{rect[0]};{rect[1]}'] = self.rects[rect]
+		with open(f'{self.path}/{self.lvl}.json', 'w') as file:
+			json.dump(self.map, file, indent = 4, sort_keys = True)
 
-	def choose_color(self):
-		self.curr_color = colorchooser.askcolor()[1]
+	def attributes_widgets(self):
+		for widget in self.tabs.tab('Attributes').winfo_children():
+			widget.destroy()
+
+		frame = ctk.CTkScrollableFrame(self.tabs.tab("Attributes"))
+
+		frame.pack(expand = True, fill = 'both')
+		font = ctk.CTkFont(family = 'Cascadia Mono', size = 15)
+		for attribute in self.attributes:
+			SingleAttribute(frame, '#0f0f0f', 10, attribute, self.attributes[attribute], font, self)
+
+		ctk.CTkButton(frame,
+			text = '+',
+			font = ("Cascadia Mono", 25),
+			width = 50,
+			height = 50,
+			command = self.add_attribute).pack(expand = True, pady = 10, padx = 10)
+
+	def add_attribute(self):
+		window = ctk.CTkToplevel(self)
+		window.title("Add attribute")
+		window.geometry('350x200')
+
+		font = ctk.CTkFont(family = 'Cascadia Mono', size = 15)
+		name = ctk.StringVar(value = 'Enter Name')
+
+		ctk.CTkLabel(window,
+			text = "Enter attribute name (Single Letter)",
+			font = font).pack(expand = True)
+
+		ctk.CTkEntry(window,
+			textvariable = name,
+			font = font).pack(expand = True, fill = 'x', padx = 10, pady = 10)
+
+		ctk.CTkButton(window,
+			text = 'Add',
+			font = font,
+			command = lambda: self.add(name)).pack(expand = True, padx = 10)
+
+		window.bind('<Escape>', lambda event: window.quit())
+		window.mainloop()
+
+	def add(self, name):
+		if name.get().find(' ') != -1: return
+		self.attributes[name.get()] = False
+		self.attributes_widgets()
 
 	def zoom(self, event):
 		if event.delta > 0:
@@ -205,16 +295,8 @@ class Editor(ctk.CTk):
 	def add_tile(self, event):
 		tile_pos = self.get_tile_pos(event.x, event.y)
 		if tuple(tile_pos) not in self.rects:
-			self.rects[tuple(tile_pos)] = {'color' : self.curr_color, 'physics' : self.curr_phy_val}
+			self.rects[tuple(tile_pos)] = self.attributes.copy()
 		self.refresh()
-
-	def change_map(self):
-		self.map.clear()
-		for rect in self.rects:
-			self.map.update({f'{rect[0]};{rect[1]}' : self.rects[rect]})
-		with open(f'maps/{self.lvl}.json', 'w') as file:
-			json.dump(self.map, file, sort_keys = True, indent = 4)
-		if not file.closed: file.close()
 
 	def remove_tile(self, event):
 		tile_pos = self.get_tile_pos(event.x, event.y)

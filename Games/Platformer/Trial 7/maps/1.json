@@ -1,0 +1,66 @@
+{
+    "2;6": {
+        "color": "#8000ff",
+        "physics": false
+    },
+    "2;7": {
+        "color": "#8000ff",
+        "physics": false
+    },
+    "3;6": {
+        "color": "gray",
+        "physics": true
+    },
+    "3;7": {
+        "color": "#8000ff",
+        "physics": false
+    },
+    "4;6": {
+        "color": "gray",
+        "physics": true
+    },
+    "4;7": {
+        "color": "#8000ff",
+        "physics": false
+    },
+    "5;6": {
+        "color": "gray",
+        "physics": true
+    },
+    "5;7": {
+        "color": "#8000ff",
+        "physics": false
+    },
+    "6;6": {
+        "color": "gray",
+        "physics": true
+    },
+    "6;7": {
+        "color": "#8000ff",
+        "physics": false
+    },
+    "7;6": {
+        "color": "gray",
+        "physics": true
+    },
+    "7;7": {
+        "color": "#8000ff",
+        "physics": false
+    },
+    "8;6": {
+        "color": "gray",
+        "physics": true
+    },
+    "8;7": {
+        "color": "#8000ff",
+        "physics": false
+    },
+    "9;6": {
+        "color": "#8000ff",
+        "physics": false
+    },
+    "9;7": {
+        "color": "#8000ff",
+        "physics": false
+    }
+}
