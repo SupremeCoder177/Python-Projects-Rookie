@@ -1,0 +1,12 @@
+# settings
+
+SCREEN_SIZE = (800, 600)
+FONT = 'Cascadia Mono'
+FONT_SIZE = 15
+LABEL_BG = '#13c2b9'
+BTN_BG = '#11bf34'
+BTN_HVR_CLR = '#0ea12c'
+
+TILE_SIZE = 50
+PADDING = 10
+CLOSE_RED = '#f01e13'
