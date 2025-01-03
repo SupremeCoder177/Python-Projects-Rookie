@@ -1,4 +1,9 @@
 {
+    "0;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
     "0;2": {
         "color": "gray",
         "fill": true,
@@ -24,7 +29,17 @@
         "fill": true,
         "physics": true
     },
+    "10;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
     "10;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "11;1": {
         "color": "gray",
         "fill": true,
         "physics": true
@@ -39,6 +54,16 @@
         "fill": true,
         "physics": true
     },
+    "12;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "12;2": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
     "12;6": {
         "color": "gray",
         "fill": true,
@@ -49,7 +74,17 @@
         "fill": true,
         "physics": true
     },
+    "13;2": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
     "13;7": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "14;2": {
         "color": "gray",
         "fill": true,
         "physics": true
@@ -59,7 +94,17 @@
         "fill": true,
         "physics": true
     },
+    "15;2": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
     "15;7": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "16;2": {
         "color": "gray",
         "fill": true,
         "physics": true
@@ -74,12 +119,27 @@
         "fill": true,
         "physics": true
     },
+    "17;2": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "17;3": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
     "17;7": {
         "color": "gray",
         "fill": true,
         "physics": true
     },
     "17;8": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "18;3": {
         "color": "gray",
         "fill": true,
         "physics": true
@@ -100,6 +160,11 @@
         "physics": true
     },
     "19;8": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "1;1": {
         "color": "gray",
         "fill": true,
         "physics": true
@@ -234,6 +299,11 @@
         "fill": true,
         "physics": true
     },
+    "2;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
     "2;6": {
         "color": "gray",
         "fill": true,
@@ -299,7 +369,17 @@
         "fill": true,
         "physics": true
     },
+    "3;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
     "3;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "4;1": {
         "color": "gray",
         "fill": true,
         "physics": true
@@ -309,7 +389,17 @@
         "fill": true,
         "physics": true
     },
+    "5;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
     "5;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "6;1": {
         "color": "gray",
         "fill": true,
         "physics": true
@@ -319,12 +409,27 @@
         "fill": true,
         "physics": true
     },
+    "7;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
     "7;6": {
         "color": "gray",
         "fill": true,
         "physics": true
     },
+    "8;1": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
     "8;6": {
+        "color": "gray",
+        "fill": true,
+        "physics": true
+    },
+    "9;1": {
         "color": "gray",
         "fill": true,
         "physics": true

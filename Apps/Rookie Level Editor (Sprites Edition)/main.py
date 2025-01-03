@@ -27,6 +27,7 @@ class App(ctk.CTk):
 		self.tile_size = TILE_SIZE
 		self.offset = [0, 0]
 		self.attributes = {'color' : 'gray', 'physics' : True}
+		self.map_name = ''
 
 		self.input = Input(self, self.path, self.lvl, self.font)
 
@@ -45,6 +46,7 @@ class App(ctk.CTk):
 			with open(f'{self.path.get()}/{self.lvl.get()}.json', 'w') as file:
 				json.dump({}, file)
 			if not file.closed: file.close()
+		self.map_name = self.lvl.get()
 
 		self.input.pack_forget()
 		self.convert()
@@ -67,7 +69,7 @@ class App(ctk.CTk):
 		for rect in self.rects:
 			temp = ';'.join(map(str, rect))
 			self.map[temp] = self.rects[rect]
-		with open(f'{self.path.get()}/{self.lvl.get()}.json', 'w') as file:
+		with open(f'{self.path.get()}/{self.map_name}.json', 'w') as file:
 			json.dump(self.map, file, sort_keys = True, indent = 4)
 		if not file.closed: file.close()
 
