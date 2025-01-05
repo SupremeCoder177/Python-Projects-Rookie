@@ -24,7 +24,7 @@ class Game:
 		self.ball_x = ball_x
 		self.ball_y = ball_y
 		self.score = 0
-		self.font = pg.font.Font('Fonts//knight_warrior.otf', 50) if os.name == 'posix' else pg.font.Font('Fonts//knight_warrior.otf', 50)
+		self.font = pg.font.Font('Fonts//knight_warrior.otf', 50) if os.name == 'posix' else pg.font.Font('Fonts\\knight_warrior.otf', 50)
 		
 		pg.display.set_caption('Pong')
 

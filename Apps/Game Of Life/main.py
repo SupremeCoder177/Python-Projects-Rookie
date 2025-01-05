@@ -138,7 +138,7 @@ class App(ctk.CTk):
 		while not self.stop_event.is_set():
 			self.get_next_gen()
 			self.refresh()
-			self.stop_event.wait(0.1)
+			self.stop_event.wait(0.05)
 
 	def add_tile(self, event):
 		pos = self.get_pos((event.x, event.y))
