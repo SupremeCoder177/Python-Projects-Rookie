@@ -85,6 +85,7 @@ class Game:
 	def reset(self):
 		self.ball_x = ball_x
 		self.ball_y = ball_y
+		self.score = 0
 
 	def move_ball(self):
 		if self.BALL_UP:

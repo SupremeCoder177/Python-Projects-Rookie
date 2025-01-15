@@ -1,129 +1,5 @@
 # Don't mind me just making another dumbshit program
 
-# Anime's I wanna watch
-
-wanna_watch_list = ['Cowboy Bebop',
-					'Durarara x2 The Third Arc',
-					'Witch Craft Works',
-					'Nisekoi',
-					'Neon Genesis Evangelion',
-					'Dragon Ball GT',
-					'Dragon Ball',
-					'The Eminence In Shadow',
-					'The Quintessential Quintuplets',
-					'Tsundere Children',
-					'Your Lie In April',
-					'Date A Live',
-					'Bleach',
-					'Gin-Tama',
-					'Full Metal Alchemist - Brotherhood',
-					'Jujutsu Kaisen',
-					'Demon Slayer',
-					'Solo Leveling',
-					'Naruto',
-					'One Piece',
-					'Sumomomo Momomo',
-					'Daily Life Of High School Boys',
-					'How To Raise A Boring Girlfriend',
-					"An Archdemon's Dilemma: How to Love Your Elf Bride",
-					'The Magical Girl and the Evil Lieutenant Used to Be Archenemies',
-					'2.5 Dimensional Seduction',
-					'The Devil Is a Part Timer',
-					'Infinite Stratos',
-					'Vinland Saga',
-					'Berserk',
-					'Vagabond',
-					'Toradora!',
-					'From Me to You',
-					'Pseudo Harem',
-					"JoJo's Bizzare Adventure",
-					'Attack On Titan',
-					'High School Dxd',
-					'Dragon Ball Daima',
-					'Azumanga Dioh',
-					'Darling In The Franxx',
-					'Hell Girl',
-					'Violet Evergarden',
-					'Run With the Wind',
-					'12 Kingdoms',
-					'Sliver Spoon',
-					'Mononoke',
-					'ACCA13'
-				]
-
-# Anime's I have watched 
-
-watched_list = ['Dragon Ball Super',
-				'One Punch Man',
-				'Dragon Ball Z',
-				'Scissor Seven', 
-				'My Teen Romantic Comedy SNAFU Too',
-				'My Hero Acadamia',
-				'Terror In Resonance',
-				'Mashle: Magic And Muscles',
-				'The 100 girlfriend who really really really really really love you !!',
-				'Golden Hour', 
-				"My Stepmother's Daughter is my Ex", 
-				'Twin Star Exocrists', 
-				'Horimiya',
-				'My Little Monster', 
-				'Our Love Story: The Experienced You and The Inexperienced Me',
-				'My Sempai is Annoying', 
-				'Shikimori is Not Just A Cutie', 
-				"Komi Can't Communicate",
-				'Rent-A-Girlfriend', 
-				'The Wrong Way to Use Healing Magic', 
-				'The Misfit of the Demong King Acadmy',
-				'The Daily Life of the Immortal King', 
-				'And You Thought There Is Never A Girl Online',
-				"Please don't toy with me Miss Nagatoro",
-				'Tomo-Chan Is a Girl',
-				'Love Lab',
-				'Re: Creators',
-				'Love Is War : Kauguya-Sama',
-				'The World Is Still Beautiful',
-				'My Dress Up Darling',
-				'Suzuka',
-				'Fuuka',
-				'Undefeated Bahamut Chronicle',
-				'Studio Apartment, Good Lighting, Angel Included',
-				'Midori Days',
-				'Clean Freak! Aoyama - kun',
-				'The Demon Sword Master of Excalibur Acadamy',
-				'The Pet Girl of Sakurasou',
-				'Seitokai Yakuindomo',
-				'Date a live',
-				'Akashic Records of Bastard Magic Instructor',
-				'Campione',
-				'Rascal Does Not Dream of Bunny Girl Senpai',
-				'The Angel Next Door Spoils Me Rotten',
-				'AHO-GIRL',
-				'TenPuru',
-				'Science Fell In Love, So I Tried To Prove It',
-				'We Never Learn : BOKUBEN',
-				'Yunna and the Haunted Hot Sptrings',
-				'Battle Game In 5 Seconds',
-				'The Troubled Life of Miss Kotoura',
-				'TONIKAWA: Over The Moon For You',
-				'Viral Hit',
-				'Parasyte -the maxim-',
-				'Trapped in a Dating Sim: The World of Otome Games Is Tough for Mobs',
-				'Seirei Gensouki: Spirit Chronicles',
-				'Hokkaido Gals Are Super Adorable',
-				'Classroom Of The Elite',
-				"I'm Quitting Heroing",
-				'Monthly Girls - Nozaki-Kun',
-				'Lookism']
-
-watched_list_movies = ['Josee, the Tiger and the Fish',
-			    'The Tunnel to Summer, the Exit of Goodbyes',
-			    'A Silent Voice',
-			    'Momotaro The Undefeated',
-			    'Hello World']
-
-
-# A way to access all of these
-
 import customtkinter as ctk
 import requests
 from tkinter import *
@@ -144,21 +20,27 @@ class App(ctk.CTk):
 		self.title("Anime Things")
 		self.resizable(False, False)
 		ctk.set_appearance_mode('dark')
-
-		self.ANIM_LISTS = {
-			0 : watched_list,
-			1 : wanna_watch_list,
-			2 : watched_list_movies,
-			}
-
-		with open('data/desc.json', 'r') as f:
-			self.desc = json.load(f)
+		self.load_data()
 
 		self.add_widgets()
 
 		self.bind("<Escape>", lambda event: self.quit())
 		self.attributes('-topmost', True)
 		self.mainloop()
+
+	def load_data(self):
+		with open('data/desc.json', 'r') as f:
+			self.desc = json.load(f)
+
+		with open('data/anim.json', 'r') as f:
+			temp = json.load(f)
+		if not f.closed: f.close()
+
+		self.ANIM_LISTS = {}
+		count = 0
+		for lis in temp.values():
+			self.ANIM_LISTS[count] = lis
+			count += 1
 
 	def add_widgets(self):
 
@@ -192,11 +74,11 @@ class App(ctk.CTk):
 
 		ctk.CTkLabel(input_frame,
 			text = "Watched List",
-			font = text_font).grid(row = 0, column = 0)
+			font = text_font).grid(row = 1, column = 0)
 
 		ctk.CTkLabel(input_frame,
 			text = "Wanna Watch List",
-			font = text_font).grid(row = 1, column = 0)
+			font = text_font).grid(row = 0, column = 0)
 
 		ctk.CTkLabel(input_frame,
 			text = "Watched List (Movies)",
@@ -212,7 +94,7 @@ class App(ctk.CTk):
 			command = self.watch).pack(expand = True)
 
 		ctk.CTkLabel(desc_frame,
-			text = "Anime Description",
+			text = "Description",
 			font = text_font).pack(pady = 4)
 
 		self.text = ctk.CTkTextbox(desc_frame,
