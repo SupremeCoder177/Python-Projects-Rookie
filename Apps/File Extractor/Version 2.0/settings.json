@@ -1,0 +1,16 @@
+{
+	"txt_clr" : ["#222", "#eee"],
+	"btn_bg" : ["#0cab98", "#0aad1d"],
+	"btn_hvr_clr" : ["#098071", "#098017"],
+	"label_bg" : ["#7c0ca8", "#0ca864"],
+	"widget_font_family" : "Cascadio Mono",
+	"user_input_font_family" : "Consolas",
+	"entry_txt_clr" : ["#eee", "#222"],
+	"entry_bg" : ["#222", "#eee"],
+	"corner_radius" : 10,
+	"padding" : 4,
+	"list_view_bg" : ["#d9d0d0", "#0f0f0f"],
+	"list_view_obj_bg" : ["#b9c4c4", "#211f1f"],
+	"list_view_obj_hvr_clr" : ["#d1dede", "#171616"],
+	"list_view_obj_selection_highlight_clr" : ["#3c04b5", "#03adad"]
+}
