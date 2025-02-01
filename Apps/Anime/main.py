@@ -8,6 +8,19 @@ from tkinter import ttk, messagebox
 from webbrowser import open_new_tab
 
 
+def update_data():
+	with open('data/desc.json', 'r') as f:
+		desc = json.load(f)
+	with open('data/anim.json', 'r') as f:
+		anim = json.load(f)
+	for lis in anim.values():
+		for anime in lis:
+			if anime not in desc.keys():
+				desc[anime] = "No Description Yet."	
+	with open('data/desc.json', 'w') as f:
+		json.dump(desc, f, indent = 4, sort_keys = True)
+
+
 class App(ctk.CTk):
 
 	def __init__(self, screen_size):
@@ -148,9 +161,9 @@ class App(ctk.CTk):
 				if e == requests.ConnectionError:
 					messagebox.showerror("Error", "No Internet Connection !!")
 					return
-
 		messagebox.showerror("Error", "No Working Site Found !!")
 
 
 if __name__ == '__main__':
+	update_data()
 	App((700, 400))

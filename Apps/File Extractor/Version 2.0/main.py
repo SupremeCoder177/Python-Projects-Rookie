@@ -4,7 +4,7 @@
 import customtkinter as ctk
 from darkdetect import isDark
 from tkinter import messagebox, filedialog
-from widgets import Label, Button, Entry, ListScrolledView
+from widgets import Label, Button, Entry, ListScrolledView, data, HoverFrame
 from json import load
 import logging
 import os
@@ -71,12 +71,12 @@ class App(ctk.CTk):
 		self.extensions = []
 
 		# frames
-		extract_frame = ctk.CTkFrame(self, fg_color = "transparent")
-		dst_frame = ctk.CTkFrame(self, fg_color = "transparent")
-		get_extension_frame = ctk.CTkFrame(self, fg_color = "transparent")
-		set_extension_frame = ctk.CTkFrame(self, fg_color = "transparent")
-		run_frame = ctk.CTkFrame(self, fg_color = "transparent")
-		info_frame = ctk.CTkFrame(self, fg_color = "transparent")
+		extract_frame = HoverFrame(self)
+		dst_frame = HoverFrame(self)
+		get_extension_frame = HoverFrame(self)
+		set_extension_frame = HoverFrame(self)
+		run_frame = HoverFrame(self)
+		info_frame = HoverFrame(self)
 
 		self.logger.debug("All good while setting layout variables")
 		self.logger.info("Adding widgets")
@@ -104,7 +104,7 @@ class App(ctk.CTk):
 
 		# all search extensions widgets frame 
 		self.ext_view = ListScrolledView(set_extension_frame)
-		self.ext_view.place(relx = 0.25, rely = 0.0, relwidth = 0.5, relheight = 0.8)
+		self.ext_view.place(relx = 0.25, rely = 0.02, relwidth = 0.5, relheight = 0.8)
 		Button(15, "Delete", set_extension_frame, self.rmv_ext).place(relx = 0.5, rely = 0.85, relwidth = 0.4, relheight = 0.15, anchor = 'n')
 
 		# label to display warning when user enters incorrect data
@@ -133,12 +133,12 @@ class App(ctk.CTk):
 		self.remain_files.place(relx = 0.0, rely = 0.65)
 
 		# griding the frames
-		extract_frame.grid(row = 0, column = 0, sticky = "NSEW")
-		dst_frame.grid(row = 0, column = 1, sticky = "NSEW")
-		get_extension_frame.grid(row = 1, column = 0, sticky = "NSEW")
-		set_extension_frame.grid(row = 1, column = 1, sticky = "NSEW")
-		run_frame.grid(row = 2, column = 0, sticky = "NSEW")
-		info_frame.grid(row = 2, column = 1, sticky = "NSEW")
+		extract_frame.grid(row = 0, column = 0, sticky = "NSEW", padx = data["frame_padding"], pady = data["frame_padding"])
+		dst_frame.grid(row = 0, column = 1, sticky = "NSEW", padx = data["frame_padding"], pady = data["frame_padding"])
+		get_extension_frame.grid(row = 1, column = 0, sticky = "NSEW", padx = data["frame_padding"], pady = data["frame_padding"])
+		set_extension_frame.grid(row = 1, column = 1, sticky = "NSEW", padx = data["frame_padding"], pady = data["frame_padding"])
+		run_frame.grid(row = 2, column = 0, sticky = "NSEW", padx = data["frame_padding"], pady = data["frame_padding"])
+		info_frame.grid(row = 2, column = 1, sticky = "NSEW", padx = data["frame_padding"], pady = data["frame_padding"])
 
 		# btn to toggle between dark mode and light mode 
 		Button(5, "D/L", self, self.toggle_theme).place(relx = 1, rely = 1, anchor = 'se', relwidth = 0.04, relheight = 0.04)
@@ -193,9 +193,6 @@ class App(ctk.CTk):
 			paths.clear()
 			paths.extend(temp)
 		self.logger.info(f"Found {len(files)}, preparing for extraction")
-		self.logger.info("The files were found namely:")
-		for file in files:
-			self.logger.info(file)
 		self.extract(files)
 
 	# function to copy files to specified path
@@ -234,7 +231,7 @@ class App(ctk.CTk):
 		self.anim_label.configure(text = string)
 
 	# function to initialize a new thread for execution
-	def start(self):
+	def start(self) -> None:
 		if not self.stop_event.is_set() and self.thread:
 			self.paused = False
 			return
@@ -247,12 +244,12 @@ class App(ctk.CTk):
 		self.toggle_state([self.start_btn, self.stop_btn, self.terminate_btn])
 
 	# halting the thread's execution until 
-	def stop(self):
+	def stop(self) -> None:
 		self.logger.info("Search halted")
 		self.toggle_state([self.start_btn, self.stop_btn, self.terminate_btn])
 		self.paused = True
 		while self.paused:
-			self.stop_event.wait(0.1)
+			self.stop_event.wait()
 
 	# function for toggling button states
 	def toggle_state(self, btns) -> None:

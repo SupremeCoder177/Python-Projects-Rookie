@@ -94,7 +94,7 @@ class ListScrolledView(ctk.CTkScrollableFrame):
 
 	# function to add a label to the scorlled list
 	def add_label(self, text : str, size : int) -> None:
-		temp = BorderLabel(self, text, data["list_view_obj_bg"], data["list_view_obj_hvr_clr"], data["list_view_obj_selection_highlight_clr"], size, 2)
+		temp = BorderLabel(self, text, data["list_view_obj_bg"], data["list_view_obj_hvr_clr"], data["list_view_obj_selection_highlight_clr"], size, data["list_view_obj_bd_width"])
 		temp.label.bind("<Button-1>", lambda _: self.set_select(temp))
 		self.objs.append(temp)
 		self.update()
@@ -129,6 +129,22 @@ class ListScrolledView(ctk.CTkScrollableFrame):
 		#packing the objects in current list
 		for _obj in self.objs:
 			_obj.label.pack(expand = True, fill = 'both')
+
+
+'''A pre-defined frame to be used for the app,
+	only difference being it has a hover effect and a 
+	select highlight function
+'''
+class HoverFrame(ctk.CTkFrame):
+
+	def __init__(self, master):
+		super().__init__(master = master,
+			fg_color = data["frame_bg"],
+			border_width = 4,
+			border_color = data["frame_bg"])
+		self.bind("<Enter>", lambda _: self.configure(fg_color = data["frame_hvr_clr"], border_color = data["frame_select_highlight_clr"]))
+		self.bind("<Leave>", lambda _: self.configure(fg_color = data["frame_bg"], border_color = data["frame_bg"]))
+
 
 
 # making sure data is only loaded when file is run as a lib

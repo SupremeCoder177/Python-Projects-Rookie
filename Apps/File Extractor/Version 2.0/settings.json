@@ -12,5 +12,11 @@
 	"list_view_bg" : ["#d9d0d0", "#0f0f0f"],
 	"list_view_obj_bg" : ["#b9c4c4", "#211f1f"],
 	"list_view_obj_hvr_clr" : ["#d1dede", "#171616"],
-	"list_view_obj_selection_highlight_clr" : ["#3c04b5", "#03adad"]
+	"list_view_obj_selection_highlight_clr" : ["#3c04b5", "#03adad"],
+	"list_view_obj_bd_width" : 2,
+	"frame_bg" : ["#e6e6da", "#0f0f0e"],
+	"frame_hvr_clr" : ["#d1d1c7", "#242321"],
+	"frame_select_highlight_clr" : ["#09ad16", "#069cc9"],
+	"frame_padding" : 10,
+	"frame_border_width" : 4
 }
