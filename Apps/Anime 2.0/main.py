@@ -85,13 +85,40 @@ class App(ctk.CTk):
 
 		self.anim_selection_frame.set_btn(DropDownButton(self.anim_selection_frame, "vertical", 0.3, 0))
 
-		'''This panel is the one the user will use to add a new anime to
+		'''This panel is the one the user will use to add/delete a new anime to
 		   their list
 		'''
 
-		self.anim_add_frame = HorizontalDropDown(parent = self, start_x = 0, end_x = -0.36, width = 0.4, height = 0.65, y = 0.2)
+		self.anim_toggle_frame = HorizontalDropDown(parent = self, start_x = 0, end_x = -0.36, width = 0.4, height = 0.65, y = 0.2)
+		tabs = ctk.CTkTabview(self.anim_toggle_frame, fg_color = 'transparent')
+		tabs.add("Add")
+		tabs.add("Delete")
 
-		ctk.CTkLabel(self.anim_add_frame, text = "Name of the Anime", font = self.font,
+		ctk.CTkLabel(tabs.tab("Delete"), text = "Anime Name", font = self.font,
+			fg_color = ADD_LABEL_BG,
+			text_color = ADD_LABEL_TXT_CLR,
+			corner_radius = 20).pack(expand = True)
+
+		self.del_anim_name = ctk.CTkEntry(tabs.tab("Delete"),
+			fg_color = ADD_ENTRY_BG,
+			text_color = ADD_ENTRY_TXT_CLR)
+		self.del_anim_name.pack(expand = True, fill = 'x')
+
+		ctk.CTkButton(tabs.tab("Delete"),
+			text = "Delete",
+			font = self.font,
+			fg_color = ADD_BTN_BG,
+			hover_color = ADD_BTN_HVR_CLR,
+			text_color = ADD_BTN_TXT_CLR,
+			command = self.delete_anime).pack(expand = True)
+
+		self.warning_label = ctk.CTkLabel(tabs.tab("Delete"), text = "", font = self.font,
+			fg_color = "transparent",
+			text_color = ("#222", "#eee"),
+			corner_radius = 20)
+		self.warning_label.pack(expand = True)
+
+		ctk.CTkLabel(tabs.tab("Add"), text = "Name of the Anime", font = self.font,
 			fg_color = ADD_LABEL_BG,
 			text_color = ADD_LABEL_TXT_CLR,
 			corner_radius = 20).place(relx = 0.04, rely = 0.05, relwidth = 0.8, relheight = 0.07)
@@ -99,18 +126,18 @@ class App(ctk.CTk):
 		self.new_anim_status = ctk.StringVar(value = "True")
 		self.new_anim_type = ctk.StringVar(value = "Anime")
 
-		self.new_anim_name = ctk.CTkEntry(self.anim_add_frame,
+		self.new_anim_name = ctk.CTkEntry(tabs.tab("Add"),
 			fg_color = ADD_ENTRY_BG,
 			text_color = ADD_ENTRY_TXT_CLR)
 
 		self.new_anim_name.place(relx = 0.04, rely = 0.13, relwidth = 0.8, relheight = 0.1)
 
-		ctk.CTkLabel(self.anim_add_frame, text = "Watch Status", font = self.font,
+		ctk.CTkLabel(tabs.tab("Add"), text = "Watch Status", font = self.font,
 			fg_color = ADD_LABEL_BG,
 			text_color = ADD_LABEL_TXT_CLR,
 			corner_radius = 20).place(relx = 0.04, rely = 0.27, relwidth = 0.8, relheight = 0.07)
 
-		ctk.CTkButton(self.anim_add_frame,
+		ctk.CTkButton(tabs.tab("Add"),
 			textvariable = self.new_anim_status,
 			font = self.font,
 			fg_color = ADD_BTN_BG,
@@ -118,12 +145,12 @@ class App(ctk.CTk):
 			text_color = ADD_BTN_TXT_CLR,
 			command = lambda: self.new_anim_status.set("True" if self.new_anim_status.get() == "False" else "False")).place(relx = 0.04, rely = 0.37, relwidth = 0.8, relheight = 0.07)
 
-		ctk.CTkLabel(self.anim_add_frame, text = "Type", font = self.font,
+		ctk.CTkLabel(tabs.tab("Add"), text = "Type", font = self.font,
 			fg_color = ADD_LABEL_BG,
 			text_color = ADD_LABEL_TXT_CLR,
 			corner_radius = 20).place(relx = 0.04, rely = 0.5, relwidth = 0.8, relheight = 0.07)		
 
-		ctk.CTkButton(self.anim_add_frame,
+		ctk.CTkButton(tabs.tab("Add"),
 			textvariable = self.new_anim_type,
 			font = self.font,
 			fg_color = ADD_BTN_BG,
@@ -131,7 +158,7 @@ class App(ctk.CTk):
 			text_color = ADD_BTN_TXT_CLR,
 			command = lambda: self.new_anim_type.set("Movie" if self.new_anim_type.get() == "Anime" else "Anime")).place(relx = 0.04, rely = 0.59, relwidth = 0.8, relheight = 0.07)
 
-		ctk.CTkButton(self.anim_add_frame,
+		ctk.CTkButton(tabs.tab("Add"),
 			text = "Add Anime",
 			font = self.font,
 			fg_color = ADD_BTN_BG,
@@ -139,7 +166,8 @@ class App(ctk.CTk):
 			text_color = ADD_BTN_TXT_CLR,
 			command = self.add_anime).place(relx = 0.19, rely = 0.75, relwidth = 0.5, relheight = 0.07)
 
-		self.anim_add_frame.set_btn(DropDownButton(self.anim_add_frame, "horizontal", 0, -0.35))
+		tabs.pack(expand = True, fill = 'both')
+		self.anim_toggle_frame.set_btn(DropDownButton(self.anim_toggle_frame, "horizontal", 0, -0.35))
 
 		''' Nothing to document but just wanted to say, it took a lot of head-scratching figuring out a decent theme for light and dakr 
 			I know I could have used ttkbootstrap but it is not nearly flexible enough for all the other
@@ -157,13 +185,25 @@ class App(ctk.CTk):
 
 	def add_anime(self):
 		if not self.new_anim_name.get(): return
-		if not messagebox.askyesno("You sure ?", "There is no delete feature for now !!"): return
 		if self.new_anim_name.get() not in self.data_manager.format_dat.keys():
 			self.data_manager.format_dat[self.new_anim_name.get()] = {"watched" : True if self.new_anim_status.get() == "True" else False,
 																	  "type" : self.new_anim_type.get(),
 																	  "desc" : "No Description Yet"}
 			self.data_manager.update_anime_existence(self.new_anim_name.get())
 			self.refresh_lists()
+
+	def delete_anime(self):
+		if not self.del_anim_name.get(): 
+			self.warning_label.configure(text = "Enter a name !!")
+			self.after(1500, lambda: self.warning_label.configure(text = ""))
+			return
+		if self.del_anim_name.get() not in self.data_manager.format_dat:
+			self.warning_label.configure(text = "No Such Anime In List !!")
+			self.after(1500, lambda: self.warning_label.configure(text = ""))
+			return
+		if not messagebox.askyesno("Warning !!", "Are you sure ?"): return
+		self.data_manager.delete_anime(self.del_anim_name.get())
+		self.refresh_lists()
 
 	def open(self, url):
 		try:

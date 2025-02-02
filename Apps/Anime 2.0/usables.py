@@ -171,6 +171,14 @@ class DataOrganizer:
 				self.names["wanna_watch_list_movies"].append(anime)
 			self.upload()
 
+	def delete_anime(self, anime):
+		if anime not in self.format_dat: return
+		del self.format_dat[anime]
+		del self.desc[anime]
+		for list_ in self.names.values():
+			if anime in list_: list_.remove(anime)
+		self.upload()
+
 	def update_names(self):
 		for anime in self.format_dat:
 			if self.format_dat[anime]["watched"]:
