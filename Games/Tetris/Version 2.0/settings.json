@@ -1,0 +1,11 @@
+{
+	"window_size" : [1400, 800],
+	"game_name" : "Tetris 2",
+	"tile_size" : 50,
+	"game_size" : [800, 700],
+	"fps" : 10, 
+	"brick_fall_speed" : 1,
+	"game_grid_start_x" : 150,
+	"game_grid_start_y" : 50,
+	"grid_color" : [40, 40, 40]
+}	

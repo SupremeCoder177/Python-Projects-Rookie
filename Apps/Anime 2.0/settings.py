@@ -1,5 +1,5 @@
 # app settings
-APP_SIZE = (750, 600)
+APP_SIZE = (800, 600)
 FONT_FAMILY = "Cascadio Mono"
 FONT_SIZE = 16
 DATA_PATH = {"names" : "data/anim.json", "desc" : "data/desc.json"}

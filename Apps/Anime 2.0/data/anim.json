@@ -50,7 +50,9 @@
         "From Me to You",
         "One Piece"
     ],
-    "wanna_watch_list_movies": [],
+    "wanna_watch_list_movies": [
+        "Suzume"
+    ],
     "watched_list": [
         "Dragon Ball Super",
         "One Punch Man",
