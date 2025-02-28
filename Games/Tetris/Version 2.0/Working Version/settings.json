@@ -1,13 +1,12 @@
 {
-	"window_size" : [1400, 800],
-	"game_name" : "Tetris 2",
+	"screen_size" : [1000, 800],
+	"grid_size" : [800, 800],
+	"grid_x_offset" : 0,
+	"grid_y_offset" : 0,
+	"fps" : 60,
+	"game_name" : "Tetris",
 	"tile_size" : 50,
-	"game_size" : [800, 800],
-	"fps" : 30, 
-	"brick_fall_speed" : 0.1,
-	"game_grid_start_x" : 150,
-	"game_grid_start_y" : 0,
-	"grid_color" : [40, 40, 40],
-	"brick_move_speed" : 1,
-	"brick_increased_fall_speed" : 0.3
-}	
+	"grid_color" : [20, 20, 20],
+	"brick_fall_speed" : 2,
+	"brick_move_speed" : 1
+}

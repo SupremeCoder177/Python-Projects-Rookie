@@ -1,19 +1,7 @@
-App is starting, at time 2025-01-30 11:36:00,256
-All good while setting layout variables, at time 2025-01-30 11:36:00,322
-Adding widgets, at time 2025-01-30 11:36:00,322
-UI is completed, at time 2025-01-30 11:36:00,398
-App is initialized, at time 2025-01-30 11:36:00,399
-Search begin for path F:/ to F:/New folder, for extensions ['.wmv', '.mp4'], at time 2025-01-30 11:37:04,419
-Found exception while trying to acces file/folder name F:/System Volume Information, exception name [WinError 5] Access is denied: 'F:/System Volume Information', at time 2025-01-30 11:37:04,554
-Found exception while trying to acces file/folder name F:/$RECYCLE.BIN\S-1-5-18, exception name [WinError 5] Access is denied: 'F:/$RECYCLE.BIN\\S-1-5-18', at time 2025-01-30 11:37:04,571
-Found exception while trying to acces file/folder name F:/$RECYCLE.BIN\S-1-5-21-2839169232-3667447808-1777505683-1000, exception name [WinError 5] Access is denied: 'F:/$RECYCLE.BIN\\S-1-5-21-2839169232-3667447808-1777505683-1000', at time 2025-01-30 11:37:04,653
-Found exception while trying to acces file/folder name F:/$RECYCLE.BIN\S-1-5-21-3186748013-3061612756-3225941963-1000, exception name [WinError 5] Access is denied: 'F:/$RECYCLE.BIN\\S-1-5-21-3186748013-3061612756-3225941963-1000', at time 2025-01-30 11:37:04,653
-Found exception while trying to acces file/folder name F:/$RECYCLE.BIN\S-1-5-21-3760698797-3532675931-404827558-1000, exception name [WinError 5] Access is denied: 'F:/$RECYCLE.BIN\\S-1-5-21-3760698797-3532675931-404827558-1000', at time 2025-01-30 11:37:04,654
-Found exception while trying to acces file/folder name F:/$RECYCLE.BIN\S-1-5-21-3760698797-3532675931-404827558-1001, exception name [WinError 5] Access is denied: 'F:/$RECYCLE.BIN\\S-1-5-21-3760698797-3532675931-404827558-1001', at time 2025-01-30 11:37:04,654
-Found exception while trying to acces file/folder name F:/$RECYCLE.BIN\S-1-5-21-3760698797-3532675931-404827558-1002, exception name [WinError 5] Access is denied: 'F:/$RECYCLE.BIN\\S-1-5-21-3760698797-3532675931-404827558-1002', at time 2025-01-30 11:37:04,654
-Found exception while trying to acces file/folder name F:/$RECYCLE.BIN\S-1-5-21-3760698797-3532675931-404827558-1003, exception name [WinError 5] Access is denied: 'F:/$RECYCLE.BIN\\S-1-5-21-3760698797-3532675931-404827558-1003', at time 2025-01-30 11:37:04,654
-Found exception while trying to acces file/folder name F:/$RECYCLE.BIN\S-1-5-21-4291389180-1686030167-1744753095-1000, exception name [WinError 5] Access is denied: 'F:/$RECYCLE.BIN\\S-1-5-21-4291389180-1686030167-1744753095-1000', at time 2025-01-30 11:37:04,654
-Found exception while trying to acces file/folder name F:/$RECYCLE.BIN\S-1-5-21-839538604-1050459297-1497720883-1001, exception name [WinError 5] Access is denied: 'F:/$RECYCLE.BIN\\S-1-5-21-839538604-1050459297-1497720883-1001', at time 2025-01-30 11:37:04,655
-Found 131, preparing for extraction, at time 2025-01-30 11:37:06,425
-Completed extraction with 0 erros during copying, at time 2025-01-30 11:38:25,832
-Search terminated, at time 2025-01-30 11:38:32,653
+App is starting, at time 2025-02-15 00:01:57,574
+All good while setting layout variables, at time 2025-02-15 00:01:57,643
+Adding widgets, at time 2025-02-15 00:01:57,643
+UI is completed, at time 2025-02-15 00:01:57,743
+App is initialized, at time 2025-02-15 00:01:57,743
+Search begin for path  to , for extensions [], at time 2025-02-15 00:02:25,994
+Search terminated, at time 2025-02-15 00:02:26,039
