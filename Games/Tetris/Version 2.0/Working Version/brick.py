@@ -64,6 +64,10 @@ class BrickFactory:
 	def get_brick(cls):
 		return choice(cls.types), choice(list(cls.imgs.items()))
 
+	@classmethod
+	def get_top_tile(cls, func, index, coor, tile_size):
+		return min([tile[1] for tile in func[index](coor[0], coor[1], tile_size)])
+
 
 class Brick:
 
@@ -104,6 +108,7 @@ class Brick:
 
 	def move_right(self, inc):
 		self.coor[0]  += inc
+				
 
 
 class BricksManager:
@@ -124,6 +129,7 @@ class BricksManager:
 		index = randint(0, len(temp[0]) - 1)
 		width = self.data["grid_size"][0] // self.data["tile_size"]
 		coor = [width // 2, 0]
+
 		self.curr_brick = Brick(self.surf, temp, coor, index, self.data["tile_size"])
 
 	def render(self):
@@ -141,14 +147,14 @@ class BricksManager:
 			self.curr_brick.move_up(1)
 			self.add_brick()
 			self.game.reset_timer()
-			self.game.score += 100
+			self.game.score += 100 * len(self.curr_brick.get_tiles())
 
 	def check_brick_contact(self):
 		if self.check_brick_offset(self.curr_brick):
 			self.curr_brick.move_up(1)
 			self.add_brick()
 			self.game.reset_timer()
-			self.game.score += 100
+			self.game.score += 100 * len(self.curr_brick.get_tiles())
 
 	def update(self):
 		if not self.curr_brick: self.add_brick()
@@ -163,7 +169,9 @@ class BricksManager:
 		for tile in brick.get_tiles():
 			if not 0 + self.data["grid_x_offset"] <= tile[0]: return True
 			if not self.data["grid_size"][0] + self.data["grid_x_offset"] >= tile[0] + self.data["tile_size"]: return True
-			if not 0 + self.data["grid_y_offset"] <= tile[1]: return True
+			if not 0 + self.data["grid_y_offset"] <= tile[1]:
+				if self.check_brick_offset(self.curr_brick) :
+					return True
 			if not self.data["grid_size"][1] + self.data["grid_y_offset"] >= tile[1] + self.data["tile_size"]: return True
 		return False
 
@@ -219,5 +227,9 @@ class BricksManager:
 	def delete_all(self):
 		self.curr_brick = None
 		self.occupied = {}
+
+	def get_min_y(self):
+		if not self.occupied: return self.data["grid_size"][1] // self.data["tile_size"]
+		return min([tile[1] for tile in self.occupied])
 
 

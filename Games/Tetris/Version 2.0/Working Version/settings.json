@@ -46,12 +46,12 @@
     "brick_inc_fall_speed": 4,
     "score_rect_pos": [
         825,
-        550
+        525
     ],
-    "high_score": 5600,
+    "high_score": 8600,
     "high_score_pos": [
         825,
-        700
+        750
     ],
     "score_color": [
         200,
@@ -62,5 +62,7 @@
         0,
         0,
         0
-    ]
+    ],
+    "level_up_mark": 5000,
+    "level_up_pos" : [825, 625]
 }

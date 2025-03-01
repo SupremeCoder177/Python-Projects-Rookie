@@ -8,6 +8,7 @@ from random import randint
 from brick import *
 from handler import Handler
 from widgets import Button
+from sound import Sounds
 
 # exiting if json file not in cwd
 if not "settings.json" in listdir(getcwd()):
@@ -39,7 +40,10 @@ class Game:
 		self.running = False
 		self.paused = False
 		self.played_once = False
+		self.last_bgm_time = 0
 		self.score = 0
+		self.lvl = 1
+		Sounds.play_bgm()
 
 	# method to draw a grid on the screen
 	def draw_grid(self):
@@ -53,6 +57,12 @@ class Game:
 			for j in range(grid_size[1] // tile_size):
 				pg.draw.rect(self.screen, colour, (i * tile_size, j * tile_size, tile_size, tile_size), 1)
 
+	def check_lvl_up(self):
+		if self.score == 0: return
+		if self.score -  self.lvl * self.data["level_up_mark"] > 0:
+			self.lvl += 1
+			Sounds.level_up()
+		
 	def check_line(self):
 		rows = self.data["grid_size"][0] // self.data["tile_size"] 
 		columns = self.data["grid_size"][0] // self.data["tile_size"]
@@ -64,9 +74,13 @@ class Game:
 					break
 			if full_line:
 				self.manager.move_down_occupied(i)
+				Sounds.full_line()
+
+		self.check_lvl_up()
 
 	def reset_timer(self):
 		self.timer = 1 / self.data["brick_fall_speed"]
+		Sounds.block_fall()
 
 	def ui_init(self):
 		self.play_btn = Button(self.screen, "Play", "#151ec2", "#9395b8", "#0c1175", self.btn_font, self.data["play_btn_pos"][0], self.data["play_btn_pos"][1], self.data["play_btn_dimensions"][0], self.data["play_btn_dimensions"][1])
@@ -84,8 +98,22 @@ class Game:
 		high_score_surf = self.score_font.render(f'High Score:\n{self.data["high_score"]}', False, self.data["score_color"])
 		high_score_rect = high_score_surf.get_rect(topleft = self.data["high_score_pos"])
 
+		lvl_surf = self.score_font.render(f"Level\n{self.lvl}", False, self.data["score_color"])
+		lvl_rect = lvl_surf.get_rect(topleft = self.data["level_up_pos"])
+
 		self.screen.blit(score_surf, score_rect)
 		self.screen.blit(high_score_surf, high_score_rect)
+		self.screen.blit(lvl_surf, lvl_rect)
+
+	def check_over(self):
+		if self.manager.get_min_y() <= 0 and self.manager.check_brick_offset(self.manager.curr_brick):
+
+			self.running = False
+			self.paused = False
+			self.score = 0
+			self.lvl = 1
+			self.manager.delete_all()
+			Sounds.game_over()
 
 	def update_ui(self):
 		self.play_btn.update()
@@ -137,14 +165,22 @@ class Game:
 			self.update_ui()
 
 			if self.running:
-				# logic updates
 				current_time = pg.time.get_ticks() / 1000
+
+				#bgm updates
+				if current_time - self.last_bgm_time >= Sounds.curr_bgm_len():
+					Sounds.play_bgm()
+					self.last_bgm_time = current_time
+
+				# logic updates
 				if current_time - self.last_update_time >= self.timer:
 					self.manager.update()
 					self.last_update_time = current_time
 				if current_time - self.last_handle_time >= self.input_timer:
 					self.handler.handle()
 					self.last_handle_time = current_time
+
+				self.check_over()
 
 				# checking is new high score is reached
 				if self.score > self.data["high_score"]:
