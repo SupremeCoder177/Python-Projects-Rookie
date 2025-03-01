@@ -1,19 +1,66 @@
 {
-	"screen_size" : [1000, 800],
-	"grid_size" : [800, 800],
-	"grid_x_offset" : 0,
-	"grid_y_offset" : 0,
-	"fps" : 60,
-	"game_name" : "Tetris",
-	"tile_size" : 50,
-	"grid_color" : [20, 20, 20],
-	"brick_fall_speed" : 2,
-	"brick_move_speed" : 1,
-	"play_btn_pos" : [825, 100],
-	"play_btn_dimensions" : [150, 75],
-	"pause_btn_pos" : [825, 250],
-	"pause_btn_dimensions" : [150, 75],
-	"restart_btn_pos" : [825, 400],
-	"restart_btn_dimensions" : [150, 75],
-	"brick_inc_fall_speed" : 4
+    "screen_size": [
+        1000,
+        800
+    ],
+    "grid_size": [
+        800,
+        800
+    ],
+    "grid_x_offset": 0,
+    "grid_y_offset": 0,
+    "fps": 60,
+    "game_name": "Tetris",
+    "tile_size": 50,
+    "grid_color": [
+        20,
+        20,
+        20
+    ],
+    "brick_fall_speed": 2,
+    "brick_move_speed": 1,
+    "play_btn_pos": [
+        825,
+        100
+    ],
+    "play_btn_dimensions": [
+        150,
+        75
+    ],
+    "pause_btn_pos": [
+        825,
+        250
+    ],
+    "pause_btn_dimensions": [
+        150,
+        75
+    ],
+    "restart_btn_pos": [
+        825,
+        400
+    ],
+    "restart_btn_dimensions": [
+        150,
+        75
+    ],
+    "brick_inc_fall_speed": 4,
+    "score_rect_pos": [
+        825,
+        550
+    ],
+    "high_score": 5600,
+    "high_score_pos": [
+        825,
+        700
+    ],
+    "score_color": [
+        200,
+        200,
+        200
+    ],
+    "game_bg": [
+        0,
+        0,
+        0
+    ]
 }

@@ -1,7 +1,7 @@
 # Working version of tetris 2.0
 
 import pygame as pg
-from json import load
+from json import load, dump
 from os import listdir, getcwd
 from sys import exit
 from random import randint
@@ -33,11 +33,13 @@ class Game:
 		self.input_timer = 0.3
 		self.last_update_time = 0
 		self.last_handle_time = 0
-		self.font = pg.font.Font("Fonts/StayPixel.ttf", 40)
+		self.btn_font = pg.font.Font("Fonts/StayPixel.ttf", 40)
+		self.score_font = pg.font.Font("Fonts/Chalice.ttf", 20)
 		self.ui_init()
 		self.running = False
 		self.paused = False
 		self.played_once = False
+		self.score = 0
 
 	# method to draw a grid on the screen
 	def draw_grid(self):
@@ -67,19 +69,33 @@ class Game:
 		self.timer = 1 / self.data["brick_fall_speed"]
 
 	def ui_init(self):
-		self.play_btn = Button(self.screen, "Play", "#151ec2", "#9395b8", "#0c1175", self.font, self.data["play_btn_pos"][0], self.data["play_btn_pos"][1], self.data["play_btn_dimensions"][0], self.data["play_btn_dimensions"][1])
-		self.pause_btn = Button(self.screen, "Pause", "#151ec2", "#9395b8", "#0c1175", self.font, self.data["pause_btn_pos"][0], self.data["pause_btn_pos"][1], self.data["pause_btn_dimensions"][0], self.data["pause_btn_dimensions"][1])
-		self.restart_btn = Button(self.screen, "Restart", "#151ec2", "#9395b8", "#0c1175", self.font, self.data["restart_btn_pos"][0], self.data["restart_btn_pos"][1], self.data["restart_btn_dimensions"][0], self.data["restart_btn_dimensions"][1])
+		self.play_btn = Button(self.screen, "Play", "#151ec2", "#9395b8", "#0c1175", self.btn_font, self.data["play_btn_pos"][0], self.data["play_btn_pos"][1], self.data["play_btn_dimensions"][0], self.data["play_btn_dimensions"][1])
+		self.pause_btn = Button(self.screen, "Pause", "#151ec2", "#9395b8", "#0c1175", self.btn_font, self.data["pause_btn_pos"][0], self.data["pause_btn_pos"][1], self.data["pause_btn_dimensions"][0], self.data["pause_btn_dimensions"][1])
+		self.restart_btn = Button(self.screen, "Restart", "#151ec2", "#9395b8", "#0c1175", self.btn_font, self.data["restart_btn_pos"][0], self.data["restart_btn_pos"][1], self.data["restart_btn_dimensions"][0], self.data["restart_btn_dimensions"][1])
 
 	def draw_ui(self):
 		self.play_btn.render()
 		self.pause_btn.render()
 		self.restart_btn.render()
 
+		score_surf = self.score_font.render(f'Score\n{self.score}', False, self.data["score_color"])
+		score_rect = score_surf.get_rect(topleft = self.data["score_rect_pos"])
+
+		high_score_surf = self.score_font.render(f'High Score:\n{self.data["high_score"]}', False, self.data["score_color"])
+		high_score_rect = high_score_surf.get_rect(topleft = self.data["high_score_pos"])
+
+		self.screen.blit(score_surf, score_rect)
+		self.screen.blit(high_score_surf, high_score_rect)
+
 	def update_ui(self):
 		self.play_btn.update()
 		self.pause_btn.update()
 		if self.played_once: self.restart_btn.update()
+
+	def update_high_score(self):
+		with open("settings.json", 'w')  as file:
+			self.data["high_score"] = self.score
+			dump(self.data, file, indent = 4)
 
 	# method to run the main game window
 	def run(self):
@@ -105,10 +121,11 @@ class Game:
 					self.running = False
 					self.paused = False
 					self.played_once = False
+					self.score = 0
 					self.manager.delete_all()
 
 			# clearing the screen
-			self.screen.fill((0, 0, 0)) # black
+			self.screen.fill(self.data["game_bg"])
 
 			# drawing a grid
 			self.draw_grid()
@@ -128,6 +145,10 @@ class Game:
 				if current_time - self.last_handle_time >= self.input_timer:
 					self.handler.handle()
 					self.last_handle_time = current_time
+
+				# checking is new high score is reached
+				if self.score > self.data["high_score"]:
+					self.update_high_score()
 
 			# rendeting updates
 			if self.running or (not self.running and self.paused):

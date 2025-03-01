@@ -141,12 +141,14 @@ class BricksManager:
 			self.curr_brick.move_up(1)
 			self.add_brick()
 			self.game.reset_timer()
+			self.game.score += 100
 
 	def check_brick_contact(self):
 		if self.check_brick_offset(self.curr_brick):
 			self.curr_brick.move_up(1)
 			self.add_brick()
 			self.game.reset_timer()
+			self.game.score += 100
 
 	def update(self):
 		if not self.curr_brick: self.add_brick()
@@ -212,6 +214,7 @@ class BricksManager:
 			del self.occupied[tile]
 			new_tile = (tile[0], tile[1] + self.data["tile_size"])
 			self.occupied[new_tile] = img
+		self.game.score += 1000
 
 	def delete_all(self):
 		self.curr_brick = None
