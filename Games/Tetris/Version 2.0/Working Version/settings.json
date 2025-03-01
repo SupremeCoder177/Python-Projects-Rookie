@@ -8,5 +8,12 @@
 	"tile_size" : 50,
 	"grid_color" : [20, 20, 20],
 	"brick_fall_speed" : 2,
-	"brick_move_speed" : 1
+	"brick_move_speed" : 1,
+	"play_btn_pos" : [825, 100],
+	"play_btn_dimensions" : [150, 75],
+	"pause_btn_pos" : [825, 250],
+	"pause_btn_dimensions" : [150, 75],
+	"restart_btn_pos" : [825, 400],
+	"restart_btn_dimensions" : [150, 75],
+	"brick_inc_fall_speed" : 4
 }

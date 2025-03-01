@@ -108,8 +108,9 @@ class Brick:
 
 class BricksManager:
 
-	def __init__(self, surf, data):
+	def __init__(self, game, surf, data):
 		self.surf = surf
+		self.game = game
 		self.data = data
 		self.curr_brick = None
 		self.occupied = {}
@@ -126,6 +127,7 @@ class BricksManager:
 		self.curr_brick = Brick(self.surf, temp, coor, index, self.data["tile_size"])
 
 	def render(self):
+		if not self.curr_brick: return
 		self.curr_brick.render()
 
 		for tile in self.occupied:
@@ -138,13 +140,16 @@ class BricksManager:
 		if self.check_offset(self.curr_brick):
 			self.curr_brick.move_up(1)
 			self.add_brick()
+			self.game.reset_timer()
 
 	def check_brick_contact(self):
 		if self.check_brick_offset(self.curr_brick):
 			self.curr_brick.move_up(1)
 			self.add_brick()
+			self.game.reset_timer()
 
 	def update(self):
+		if not self.curr_brick: self.add_brick()
 		self.apply_gravity()
 		self.check_collision()
 
@@ -193,21 +198,23 @@ class BricksManager:
 		return list(self.occupied.keys())
 
 	def move_down_occupied(self, row):
-		temp = self.occupied.copy()
-		for tile in temp:
-			if tile[1] < row * self.data["tile_size"]:
-				img = self.occupied[tile]
-				del self.occupied[tile]
-				new_tile = (tile[0], tile[1] + self.data["tile_size"])
-				self.occupied[new_tile] = img
-			if tile[1] == row * self.data["tile_size"]:
-				del self.occupied[tile]
+		deletion = []
+		move_down = []
+		for tile in self.occupied:
+			if tile[1] // self.data["tile_size"] < row: move_down.append(tile)
+			if tile[1] // self.data["tile_size"] == row: deletion.append(tile)
 
+		for tile in deletion:
+			del self.occupied[tile]
 
+		for tile in move_down:
+			img = self.occupied[tile]
+			del self.occupied[tile]
+			new_tile = (tile[0], tile[1] + self.data["tile_size"])
+			self.occupied[new_tile] = img
 
-
-
-
-
+	def delete_all(self):
+		self.curr_brick = None
+		self.occupied = {}
 
 
