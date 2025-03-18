@@ -48,7 +48,7 @@
         825,
         525
     ],
-    "high_score": 8600,
+    "high_score": 14400,
     "high_score_pos": [
         825,
         750
@@ -64,5 +64,8 @@
         0
     ],
     "level_up_mark": 5000,
-    "level_up_pos" : [825, 625]
+    "level_up_pos": [
+        825,
+        625
+    ]
 }
