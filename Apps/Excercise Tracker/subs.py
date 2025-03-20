@@ -7,6 +7,21 @@ import customtkinter as ctk
 from animations import Move
 from widgets import *
 
+# some function which I used in these sub-apps
+
+# function to see if a string has a digit in it
+def has_digit(string : str) -> bool:
+	seen_error = True
+	for ch in string:
+		try: 
+			int(ch)
+			seen_error = False
+			break
+		except ValueError as e:  
+			seen_error = True
+	return not seen_error
+
+
 '''
 Template class to define every sub app in this file
 Uses Move class from animations.py to animate its movement
@@ -135,10 +150,7 @@ class BMI(Subs):
 			height = float(self.height.get())
 			weight = float(self.weight.get())
 			bmi = None
-			if height == 0:
-				self.display("Invalid Weight !!", 1500)
-				return
-			elif height < 0 or weight < 0:
+			if height <= 0 or weight <= 0:
 				self.display("Ht/Wt less than 0!!", 1500)
 				return
 			else:
@@ -321,3 +333,183 @@ class BMR(Subs):
 			self.display_label.grid(row = 0, column = 1, sticky = "NSEW")
 
 		self.master.after(time, self.display_label.grid_forget)
+ 
+
+'''
+Contrary to what you might think, this is well not a logger.
+It's a frame for logging in the user account.
+I kind of forgot that these kind of apps usually can be used by more than
+one person and that they often have accounts with passwords and sign-up systems etc.
+
+
+The callback function is not optional, because the UI needs to change after user
+has succesfully logged in or signed up
+'''
+class Logger(ctk.CTkFrame):
+
+	def __init__(self, window : ctk.CTk, data : dict, callback):
+		super().__init__(master = window, fg_color = data["log_bg"])
+
+		self.callback = callback
+		self.add_widgets(data)
+		self.place(relx = 0, rely = 0, relwidth = 1, relheight = 1)
+
+	# one time call function to add sub-app widgets 
+	def add_widgets(self, data : dict):
+
+		ctk.CTkLabel(self,
+			text = "Alrighty Then !\n Let's log in real quick !",
+			font = ctk.CTkFont(family = data["font"], size = data["log_font_size"]),
+			fg_color = "transparent").place(relx = 0.5, rely = 0.1, anchor = "center")
+
+		input_frame = ctk.CTkFrame(self, fg_color = "transparent", border_color = data["log_input_frame_bd_clr"],
+			border_width = data["log_input_frame_bd_width"])
+
+		self.usr_name = ctk.StringVar(value = "Name")
+		self.key = ctk.StringVar(value = "Password")
+
+		ctk.CTkLabel(input_frame,
+			text = "Enter Account Name",
+			font = ctk.CTkFont(family = data["font"], size = data["log_font_size"]),
+			fg_color = "transparent").place(relx = 0.1, rely = 0.15)
+
+		name = ctk.CTkEntry(input_frame,
+			textvariable = self.usr_name,
+			font = ctk.CTkFont(family = data["font"], size = data["log_input_font_size"]),
+			corner_radius = 15)
+
+		name.place(relx = 0.1, rely = 0.3, relwidth = 0.8)
+		name.bind("<Button-1>", self.check_name)
+		name.bind("<FocusOut>", self.check_name)
+
+		self.warning_label = ctk.CTkLabel(input_frame,
+			text = "",
+			fg_color = "transparent",
+			font = ctk.CTkFont(family = data["font"], size = data["log_war_label_font_size"]),
+			text_color = data["log_war_label_txt_clr"])
+		self.warning_label.place(relx = 0.5, rely = 0.5, anchor = "center")
+
+		ctk.CTkLabel(input_frame,
+			text = "Enter Account Password",
+			font = ctk.CTkFont(family = data["font"], size = data["log_font_size"]),
+			fg_color = "transparent").place(relx = 0.1, rely = 0.65)
+
+		password = ctk.CTkEntry(input_frame,
+			textvariable = self.key,
+			font = ctk.CTkFont(family = data["font"], size = data["log_input_font_size"]),
+			corner_radius = 15)
+		password.place(relx = 0.1, rely = 0.8, relwidth = 0.8)
+		password.bind("<Button-1>", self.check_key)
+		password.bind("<FocusOut>", self.check_key)
+
+		input_frame.place(relx = 0.2, rely = 0.2, relwidth = 0.6, relheight = 0.6)
+
+		ctk.CTkButton(self,
+			text = "Login",
+			font = ctk.CTkFont(family = data["font"], size = data["log_font_size"]),
+			fg_color = data["log_btn_bg"],
+			text_color = data["log_btn_txt_clr"],
+			hover_color = data["log_btn_hvr_clr"],
+			command = self.login,
+			corner_radius = 15).place(relx = 0.2, rely = 0.85, relwidth = 0.29)
+
+		ctk.CTkButton(self,
+			text = "Sign Up",
+			font = ctk.CTkFont(family = data["font"], size = data["log_font_size"]),
+			fg_color = data["log_btn_bg"],
+			text_color = data["log_btn_txt_clr"],
+			hover_color = data["log_btn_hvr_clr"],
+			command = self.sign_up,
+			corner_radius = 15).place(relx = 0.51, rely = 0.85, relwidth = 0.29)
+
+	# removes the sub-app from main window
+	def remove(self):
+		self.place_forget()
+
+	# changes name value when entry is selected and unselected
+	def check_name(self, event):
+		if not self.usr_name.get():
+			self.usr_name.set("Name")
+			return
+		if self.usr_name.get() == "Name":
+			self.usr_name.set("")
+
+	# changes key value when entry is selected and unselected
+	def check_key(self, event):
+		if not self.key.get():
+			self.key.set("Password")
+			return
+		if self.key.get() == "Password":
+			self.key.set("")
+
+	# displays warning to user if wrong input is entered,
+	# for given amount of time
+	def warn(self, text : str, time : int):
+		self.warning_label.configure(text = text)
+		self.master.after(time, lambda: self.warning_label.configure(text = ""))
+
+	# checks the validity of the name and password input
+	def check_input(self) -> bool:
+		if not self.usr_name.get():
+			self.warn("You Need A Name !!", 2500)
+			return False
+		if not self.key.get():
+			self.warn("You Need A Password !!", 2500)
+			return False
+		if self.usr_name.get().lower() == "name":
+			self.warn("Bruh, be serious.", 2500)
+			return False
+		if self.key.get().lower() == "password":
+			self.warn("That's actually not a bad idea\nbut nah you can't set that as your\npassword !!", 3500)
+			return False
+		if len(self.usr_name.get()) < 7:
+			self.warn("Name cannot be less than 7 letters", 2500)
+			return False
+		if len(self.key.get()) < 10:
+			self.warn("Password needs to be at least 10 letter", 2500)
+			return False
+		if not has_digit(self.key.get()):
+			self.warn("You need at least one number in password", 2500)
+			return False
+		return True
+
+	# function to log in to an account
+	def login(self):
+		if not self.check_input(): return
+
+		if self.master.set_user_data(self.usr_name.get(), self.key.get()):
+			self.remove()
+			self.callback()
+		else:
+			self.warn("No Matching Credentials", 2000)
+		
+	# signs up entered data for an account
+	def sign_up(self):
+		if not self.check_input(): return
+		
+		if self.master.set_user_data(self.usr_name.get(), self.key.get(), sign_up = True):
+			self.remove()
+			self.callback()
+		else:
+			self.warn("Already Matching Credentials Found", 2000)
+
+
+
+'''
+A sub app to calculate body fat percentage
+'''
+class BodyFatCalc(Subs):
+
+	def __init__(self, master : ctk.CTk, x : float, y : float, bg : str, width : float, height : float, axis : str, shown=False, time=300, pos_axis=True):
+		super().__init__(master, x, y, bg, width, height, axis, shown = shown, time = time, pos_axis = pos_axis)
+		self.configure(border_color = data["sub_app_bd_clr"], border_width = data["sub_app_bd_width"])
+
+
+
+
+
+
+
+
+
+

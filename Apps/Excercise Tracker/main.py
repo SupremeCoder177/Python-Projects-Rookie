@@ -1,11 +1,11 @@
 # Making an excercise tracker 
 
 import customtkinter as ctk
-from darkdetect import isDark
-from json import load
+from json import load, dump
 from animations import FadeAnimation
 from widgets import ToggleFrame, Clock, Button
-from subs import BMI, BMR
+from subs import BMI, BMR, Logger
+import csv
 
 # main app class
 # P.S. There is no load_data function pre-built in this class unlike my other apps
@@ -25,12 +25,23 @@ class App(ctk.CTk):
 		self.resizable(False, False)
 		self.title(self.data["app_name"])
 
+		# dict to store current logged in user data
+		self.user_data = {}
+
+		# list to store current user excercise data
+		self.excercise_data = []
+
+		# excercise data field names
+		self.field_names = ["Date", "Excercise Name", "Sets", "Reps/Set", "Work Volume"]
+		self.field_name_type_map = {"Date" : str, "Excercise Name" : str, "Sets" : int, "Reps/Set" : int, "Work Volume" : int}
+
 		#playing all the start animations
 		self.anim_count = 0
 		self.anim_index = 0
 		self.make_animations()		
-		#self.play_animations()
-		self.add_widgets()
+		self.play_animations()
+		#self.add_widgets()
+		#self.ask_login()
 
 		self.bind('<Escape>', lambda event: self.quit())
 		self.mainloop()
@@ -52,8 +63,15 @@ class App(ctk.CTk):
 			callback = self.animation_done
 			),
 		2 : FadeAnimation(window = self, 
-			anim_length = 3500,
+			anim_length = 1800,
 			text = self.data["start_text_3"],
+			text_clr = self.data["start_label_color"],
+			font = ctk.CTkFont(family = self.data["font"], size = self.data["main_label_font_size"]),
+			callback = self.animation_done
+			),
+		3 : FadeAnimation(window = self, 
+			anim_length = 3500,
+			text = self.data["start_text_4"],
 			text_clr = self.data["start_label_color"],
 			font = ctk.CTkFont(family = self.data["font"], size = self.data["main_label_font_size"]),
 			callback = self.animation_done
@@ -73,12 +91,25 @@ class App(ctk.CTk):
 		self.anim_count -= 1
 		if self.anim_count == 0:
 			self.clear_animations()
-			self.add_widgets()
+			self.ask_login()
 		else:
 			self.anims[self.anim_index].clear()
 			self.anim_index += 1
 			self.play_animations()
 
+	# asks user for login/sign up before adding main widgets to screen
+	def ask_login(self):
+		Logger(window = self, data = self.data, callback = self.add_widgets)
+
+	# removes all UI when log out button is pressed
+	def delete_ui(self):
+		for child in self.winfo_children():
+			child.destroy()
+
+		# asking for login/sign up again 
+		self.ask_login()
+
+	# this adds all the widgets to the screen after user has logged in
 	def add_widgets(self):
 		# main frame to toggle between logs and add frames
 		self.option_frame = ToggleFrame(master = self,
@@ -95,9 +126,10 @@ class App(ctk.CTk):
 		# button to animate option frame
 		Button(self, "Option Menu", self.data, self.data["option_frame_toggle_btn_font_size"], self.option_frame.animate).place(relx = 0, rely = 0, relwidth = 0.2, relheight = 0.05)
 
-		# option frame buttons to open sub apps
-		Button(self.option_frame, self.data["option_btn_text"][0], self.data, self.data["option_btn_font_size"], lambda: None).pack(expand = True, side = "left")
-		Button(self.option_frame, self.data["option_btn_text"][1], self.data, self.data["option_btn_font_size"], lambda: None).pack(expand = True, side = "left")
+		# option frame buttons to open sub apps related to data 
+		Button(self.option_frame, self.data["option_btn_text"][0], self.data, self.data["option_btn_font_size"], lambda: None).pack(expand = True)
+		Button(self.option_frame, self.data["option_btn_text"][1], self.data, self.data["option_btn_font_size"], lambda: None).pack(expand = True)
+		Button(self.option_frame, self.data["option_btn_text"][2], self.data, self.data["option_btn_font_size"], lambda: None).pack(expand = True)
 
 		# adding the clock at the right bottom
 		Clock(window = self, bg = self.data["clock_bg"], 
@@ -122,12 +154,72 @@ class App(ctk.CTk):
 			hover_color = self.data["bmi_open_btn_hvr_clr"],
 			text_color = self.data["bmi_open_btn_txt_clr"]).place(relx = 0, rely = 1, relwidth = 0.05, relheight = 0.05, anchor = "sw")
 
+		# button to open/close the BMR sub app
 		ctk.CTkButton(self, text = "BMR", command = bmr.toggle_animation,
 			font = ctk.CTkFont(family = self.data["font"], size = self.data["sub_apps_open_btn_font_size"]),
 			fg_color = self.data["bmr_open_btn_bg"],
 			hover_color = self.data["bmr_open_btn_hvr_clr"],
 			text_color = self.data["bmr_open_btn_txt_clr"]).place(relx = 0, rely = 0.94, relwidth = 0.05, relheight = 0.05, anchor = "sw")
 
+	# sets the user data to provided data and login or sign up according to given
+	# argument, returns true if the login/sign-up was sucessful
+	# loads user excercise data if sign-up or login was sucessful too
+	def set_user_data(self, name : str, password : str, sign_up=False) -> bool:
+		self.user_data = {"name" : name, "password" : password}
+		dat = None
+		with open("data/csv_mapper.json", "r") as f:
+			dat = load(f)
+		if sign_up:
+			# returning if the user is already registered in data/csv_mapper.json
+			if self.user_data["name"] in dat.keys(): return False
+
+			# adding a new user to csv_mapper
+			dat[self.user_data["name"]] = {"path" : f"data/csv/{name}.csv", "password" : self.user_data["password"]}
+			with open("data/csv_mapper.json", 'w') as f:
+				dump(dat, f, sort_keys = True, indent = 4)
+
+			# making a new csv file for new user
+			with open(f"data/csv/{name}.csv", 'w') as file: pass
+			self.excercise_data = []
+			return True
+		else:
+			# returning if user credentials don't match or doesn't exist
+			if self.user_data["name"] not in dat.keys(): return False
+			if self.user_data["password"] != dat[self.user_data["name"]]["password"]: return False
+			
+			# loading excercise data from csv files
+			with open(dat[self.user_data["name"]]["path"], 'r', newline="") as f:
+				reader = csv.DictReader(f)
+				for row in reader:
+					self.excercise_data.append(row)
+			return True
+
+	# adds new excercise data and uploads to csv files too
+	# return true if input data was in right format
+	# this function doesn't update the UI because of how the UI is structured
+	# it automatically updates the next time user access the data
+	def add_excercise_data(self, data : dict) -> bool:
+
+		# checking data validity
+		for field in zip(data, self.field_names):
+			# checking all the field names match (which they always should but still better be safe than sorry)
+			if field[0] != field[1]:
+				return False
+
+			# seeing if the data has the correct format (which again they always should be, but still better be safe than sorry)
+			if not isinstance(data[field[0]], self.field_name_type_map[field[0]]): return False
+
+		# adding data to excercise data
+		self.excercise_data.append(data)
+
+		# WARNING : The csv file that hold data should not be opened while editing the contents
+		# 			or an error will be thrown and user will see a warning on UI
+		name = self.user_data["name"]
+		with open(f"data/csv/{name}.csv", "a", newline="") as f:
+			writer = csv.DictWriter(f, fieldnames = self.field_names)
+			writer.writerow(data)
+
+		return True
 
 
 if __name__ == '__main__':
