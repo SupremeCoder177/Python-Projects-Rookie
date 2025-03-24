@@ -168,3 +168,21 @@ class Button(ctk.CTkButton):
 			command = command,
 			text = text)
 
+'''
+Just a label in a frame nothing too fancy,
+the reason I made this widget is the fact that there is no option
+to add a boder color to a label, this widget creates the illusion
+of the label having a border color, though it would not
+look as good if you add a corner_radius to the internal label
+'''
+class FrameLabel(ctk.CTkFrame):
+
+	def __init__(self, master, text : str, bg : str, txt_clr : str, font : ctk.CTkFont, bd_clr="#eee", bd_width=0, width=100, height=50):
+		super().__init__(master = master, fg_color = "transparent",
+			border_color = bd_clr,
+			border_width = bd_width,
+			width = width,
+			height = height)
+		self.pack_propagate(False)
+		self._label = ctk.CTkLabel(self, text = text, fg_color = bg, font = font, text_color = txt_clr)
+		self._label.pack(expand = True, fill = 'both', padx = bd_width, pady = bd_width)

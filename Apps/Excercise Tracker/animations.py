@@ -131,7 +131,7 @@ class FadeAnimation:
 		self.count += 1
 		self.anim_triggered = True
 		temp = [
-		self.orgiginal_clr[i] + stepper(self.window_bg[i], self.original_clr[i], self.fade_steps) * self.count if self.original_clr[i] < self.window_bg[i] else self.original_clr[i] - stepper(self.window_bg[i], self.original_clr[i], self.fade_steps) * self.count for i in range(len(self.window_bg))
+		self.original_clr[i] + stepper(self.window_bg[i], self.original_clr[i], self.fade_steps) * self.count if self.original_clr[i] < self.window_bg[i] else self.original_clr[i] - stepper(self.window_bg[i], self.original_clr[i], self.fade_steps) * self.count for i in range(len(self.window_bg))
 		] if self.count != self.fade_steps else self.window_bg
 	
 		self.label.configure(text_color = convert_clr_hex(temp))

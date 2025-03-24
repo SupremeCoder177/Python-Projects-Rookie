@@ -25,6 +25,9 @@ def has_digit(string : str) -> bool:
 '''
 Template class to define every sub app in this file
 Uses Move class from animations.py to animate its movement
+
+WARNING : if you set the shown arguemnt to true but then the x and y coordinates you provide are off-screen
+		  then the sliding animation will not function as expected
 '''
 class Subs(ctk.CTkFrame):
 
@@ -500,16 +503,144 @@ A sub app to calculate body fat percentage
 '''
 class BodyFatCalc(Subs):
 
-	def __init__(self, master : ctk.CTk, x : float, y : float, bg : str, width : float, height : float, axis : str, shown=False, time=300, pos_axis=True):
+	def __init__(self, master : ctk.CTk, x : float, y : float, bg : str, width : float, height : float, data : dict, axis : str, shown=False, time=300, pos_axis=True):
 		super().__init__(master, x, y, bg, width, height, axis, shown = shown, time = time, pos_axis = pos_axis)
 		self.configure(border_color = data["sub_app_bd_clr"], border_width = data["sub_app_bd_width"])
+		self.add_widgets(data)
+		self.place(relx = self.x, rely = self.y, relwidth = width, relheight = height)		
 
+	# one time call-function to add sub-app widgets
+	def add_widgets(self, data : dict):
+		self.rowconfigure((0, 1), weight = 2, uniform = 'a')
+		self.rowconfigure(2, weight = 1, uniform = 'a')
+		self.rowconfigure((3, 4), weight = 2, uniform = 'a')
+		self.columnconfigure(0, weight = 1, uniform = 'a')
 
+		self.gender = ctk.StringVar(value = "male")
+		self.age = ctk.IntVar(value = 1)
+		self.bmi = ctk.StringVar(value = "0.0")
 
+		ctk.CTkLabel(self,
+			text = "Body Fat Calculator",
+			font = ctk.CTkFont(family = data["font"], size = data["bft_font_size"]),
+			fg_color = data["bft_main_label_bg"],
+			text_color = data["bft_main_label_txt_clr"],
+			corner_radius = 15).grid(row = 0, column = 0, pady = data["sub_app_bd_width"], padx = data["sub_app_bd_width"])
 
+		age_frame = ctk.CTkFrame(self, fg_color = "transparent")
 
+		ctk.CTkLabel(age_frame,
+			text = "Choose Age",
+			font = ctk.CTkFont(family = data["font"], size = data["bft_age_input_font_size"]),
+			fg_color = "transparent",
+			text_color = data["bft_age_label_txt_clr"]).pack(expand = True)
 
+		ctk.CTkSlider(age_frame,
+			from_ = 1,
+			to = 100,
+			variable = self.age,
+			button_color = data["bft_slider_btn_bg"],
+			button_hover_color = data["bft_slider_btn_hvr_clr"],
+			progress_color = data["bft_slider_slide_clr"]).pack(expand = True, side = "left")
 
+		ctk.CTkLabel(age_frame,
+			textvariable = self.age,
+			fg_color = "transparent",
+			font = ctk.CTkFont(family = data["font"], size = data["bft_age_input_font_size"])).pack(expand = True, side = "left")
+
+		age_frame.grid(row = 1, column = 0, sticky = "NSEW", padx = data["sub_app_bd_width"])
+
+		gender_frame = ctk.CTkFrame(self, fg_color = "transparent")
+
+		ctk.CTkCheckBox(gender_frame,
+			text = "Male",
+			variable = self.gender,
+			onvalue = "male",
+			offvalue = "female",
+			font = ctk.CTkFont(family = data["font"], size = data["bft_gender_input_font_size"]),
+			checkbox_width = data["bft_gender_input_font_size"],
+			checkbox_height  = data["bft_gender_input_font_size"]).place(relx = 0.2, rely = 0, relwidth = 0.3)
+
+		ctk.CTkCheckBox(gender_frame,
+			text = "Female",
+			variable = self.gender,
+			onvalue = "female",
+			offvalue = "male",
+			font = ctk.CTkFont(family = data["font"], size = data["bft_gender_input_font_size"]),
+			checkbox_width = data["bft_gender_input_font_size"],
+			checkbox_height  = data["bft_gender_input_font_size"]).place(relx = 0.6, rely = 0, relwidth = 0.3)
+
+		gender_frame.grid(row = 2, column = 0, sticky = "NSEW", padx = data["sub_app_bd_width"])
+
+		bmi_frame = ctk.CTkFrame(self, fg_color = "transparent")
+
+		ctk.CTkLabel(bmi_frame,
+			text = "Enter BMI",
+			font = ctk.CTkFont(family = data["font"], size = data["bft_bmi_font_size"]),
+			fg_color = "transparent",
+			text_color = data["bft_bmi_label_txt_clr"]).pack(expand = True)
+
+		ctk.CTkEntry(bmi_frame,
+			textvariable = self.bmi,
+			font = ctk.CTkFont(family = data["font"], size = data["bft_bmi_font_size"]),
+			height = data["bft_bmi_font_size"]).pack(expand = True, fill = 'x', padx = data["sub_app_bd_width"])
+
+		bmi_frame.grid(row = 3, column = 0, sticky = "NSEW", padx = data["sub_app_bd_width"])
+
+		calc_frame = ctk.CTkFrame(self, fg_color = "transparent")
+
+		calc_frame.columnconfigure(0, weight = 1, uniform = 'b')
+		calc_frame.columnconfigure(1, weight = 2, uniform = 'b')
+		calc_frame.rowconfigure(0, weight = 1, uniform = 'b')
+
+		ctk.CTkButton(calc_frame,
+			text = "Calculate",
+			font = ctk.CTkFont(family = data["font"], size = data["bft_calc_btn_font_size"]),
+			fg_color = data["bft_calc_btn_bg"],
+			hover_color = data["bft_calc_btn_hvr_clr"],
+			text_color = data["bft_calc_btn_txt_clr"],
+			command = self.calculate).grid(row = 0, column = 0, padx = data["sub_app_bd_width"])
+
+		self.display_label = ctk.CTkLabel(calc_frame,
+			text = "",
+			fg_color = "transparent",
+			font = ctk.CTkFont(family = data["font"], size = data["bft_display_label_font_size"]),
+			text_color = data["bft_display_label_txt_clr"])
+		self.display_label.grid(row = 0, column = 1, sticky = "NSEW", padx = data["sub_app_bd_width"])
+
+		calc_frame.grid(row = 4, column = 0, sticky = "NSEW", padx = data["sub_app_bd_width"], pady = data["sub_app_bd_width"])
+
+	# calculates the body fat percentage (bfp)
+	def calculate(self):
+		bmi = None
+		try:
+			bmi = float(self.bmi.get())
+			if bmi <= 0:
+				self.display("bmi cannot be\nnegative", 2500)
+				return
+		except ValueError:
+			self.display("Invalid bmi !", 2000)
+			return
+
+		bfp = 1.20 * bmi + (0.23 * self.age.get()) if self.gender.get() == "male" else 1.51 * bmi - (0.70 * self.age.get())
+		delta = 0
+		if self.gender.get() == "male":
+			if self.age.get() >= 18:
+				delta = 16.2
+			else:
+				delta = 5.4
+		else:
+			if self.age.get() >= 18:
+				delta = 2.2
+			else:
+				delta = 1.4
+		
+		self.display(round(bfp - delta, 2), 3000)
+
+	# displays given text on display label for specified amount of time
+	def display(self, text : str, time : int) -> None:
+		self.display_label.configure(text = text)
+		self.master.after(time, lambda: self.display_label.configure(text = ""))
 
 
 

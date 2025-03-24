@@ -3,8 +3,8 @@
 import customtkinter as ctk
 from json import load, dump
 from animations import FadeAnimation
-from widgets import ToggleFrame, Clock, Button
-from subs import BMI, BMR, Logger
+from widgets import ToggleFrame, Clock, Button, FrameLabel
+from subs import BMI, BMR, Logger, BodyFatCalc
 import csv
 
 # main app class
@@ -39,8 +39,8 @@ class App(ctk.CTk):
 		self.anim_count = 0
 		self.anim_index = 0
 		self.make_animations()		
-		self.play_animations()
-		#self.add_widgets()
+		#self.play_animations()
+		self.add_widgets()
 		#self.ask_login()
 
 		self.bind('<Escape>', lambda event: self.quit())
@@ -97,9 +97,18 @@ class App(ctk.CTk):
 			self.anim_index += 1
 			self.play_animations()
 
+	# logs the user out and resets global app vars
+	def log_out(self):
+		self.delete_ui()
+		self.user_data = {}
+		self.excercise_data = []
+		self.ask_login()
+
 	# asks user for login/sign up before adding main widgets to screen
 	def ask_login(self):
-		Logger(window = self, data = self.data, callback = self.add_widgets)
+		if hasattr(self, 'logger') and self.logger.winfo_exists():
+			self.logger.destroy()
+		self.logger = Logger(window = self, data = self.data, callback = self.add_widgets)
 
 	# removes all UI when log out button is pressed
 	def delete_ui(self):
@@ -127,7 +136,7 @@ class App(ctk.CTk):
 		Button(self, "Option Menu", self.data, self.data["option_frame_toggle_btn_font_size"], self.option_frame.animate).place(relx = 0, rely = 0, relwidth = 0.2, relheight = 0.05)
 
 		# option frame buttons to open sub apps related to data 
-		Button(self.option_frame, self.data["option_btn_text"][0], self.data, self.data["option_btn_font_size"], lambda: None).pack(expand = True)
+		Button(self.option_frame, self.data["option_btn_text"][0], self.data, self.data["option_btn_font_size"], self.log_out).pack(expand = True)
 		Button(self.option_frame, self.data["option_btn_text"][1], self.data, self.data["option_btn_font_size"], lambda: None).pack(expand = True)
 		Button(self.option_frame, self.data["option_btn_text"][2], self.data, self.data["option_btn_font_size"], lambda: None).pack(expand = True)
 
@@ -144,7 +153,10 @@ class App(ctk.CTk):
 		bmi = BMI(self, self.data["bmi_app_x"], self.data["bmi_app_y"], self.data["sub_app_bg"], self.data["bmi_app_width"], self.data["bmi_app_height"], self.data, "horizontal")
 
 		# a sub app useful for calculating BMR (Basal Metabolic Rate)
-		bmr = BMR(self, self.data["bmr_app_x"], self.data["bmr_app_y"], self.data["sub_app_bg"], self.data["bmr_app_width"], self.data["bmr_app_height"], self.data, "vertical")
+		bmr = BMR(self, self.data["bmr_app_x"], self.data["bmr_app_y"], self.data["sub_app_bg"], self.data["bmr_app_width"], self.data["bmr_app_height"], self.data, "vertical", pos_axis=False)
+
+		# a sub app useful for calculating Body Fat Percentage
+		bft = BodyFatCalc(self, self.data["bft_app_x"], self.data["bft_app_y"], self.data["sub_app_bg"], self.data["bft_app_width"], self.data["bft_app_height"], self.data, "horizontal", pos_axis=False)
 
 		# button to open/close the BMI sub app
 		# not using the Button class because of custom coloring
@@ -160,6 +172,13 @@ class App(ctk.CTk):
 			fg_color = self.data["bmr_open_btn_bg"],
 			hover_color = self.data["bmr_open_btn_hvr_clr"],
 			text_color = self.data["bmr_open_btn_txt_clr"]).place(relx = 0, rely = 0.94, relwidth = 0.05, relheight = 0.05, anchor = "sw")
+
+		# button to open/close the Body Fat calculactor sub app
+		ctk.CTkButton(self, text = "BFT", command = bft.toggle_animation,
+			font = ctk.CTkFont(family = self.data["font"], size = self.data["sub_apps_open_btn_font_size"]),
+			fg_color = self.data["bft_open_btn_bg"],
+			hover_color = self.data["bft_open_btn_hvr_clr"],
+			text_color = self.data["bft_open_btn_txt_clr"]).place(relx = 0, rely = 0.88, relwidth = 0.05, relheight = 0.05, anchor = "sw")
 
 	# sets the user data to provided data and login or sign up according to given
 	# argument, returns true if the login/sign-up was sucessful
@@ -218,7 +237,6 @@ class App(ctk.CTk):
 		with open(f"data/csv/{name}.csv", "a", newline="") as f:
 			writer = csv.DictWriter(f, fieldnames = self.field_names)
 			writer.writerow(data)
-
 		return True
 
 
