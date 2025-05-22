@@ -1,4 +1,8 @@
 {
+    "Fairy001": {
+        "password": "gfdgfxghxffg4",
+        "path": "data/csv/Fairy001.csv"
+    },
     "Skullfire": {
         "password": "something12",
         "path": "data/csv/Skullfire.csv"

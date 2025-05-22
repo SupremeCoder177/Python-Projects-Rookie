@@ -99,5 +99,15 @@
 	"bft_calc_btn_hvr_clr" : "#116310",
 	"bft_calc_btn_txt_clr" : "#eee",
 	"bft_display_label_font_size" : 15,
-	"bft_display_label_txt_clr" : "#eee"
+	"bft_display_label_txt_clr" : "#eee",
+	"view_bg" : "#0d0d0c",
+	"view_cell_width" : 0.25,
+	"view_cell_height" : 0.2,
+	"view_width" : 1,
+	"view_height" : 1,
+	"view_bd_width" : 2,
+	"view_bd_clr" : "#eee",
+	"view_font_size" : 15,
+	"view_field_names_bg" : "#11b6c2",
+	"view_field_names_txt_clr" : "#eee"
 }

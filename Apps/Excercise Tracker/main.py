@@ -5,6 +5,7 @@ from json import load, dump
 from animations import FadeAnimation
 from widgets import ToggleFrame, Clock, Button, FrameLabel
 from subs import BMI, BMR, Logger, BodyFatCalc
+from tables import Viewer
 import csv
 
 # main app class
@@ -39,8 +40,13 @@ class App(ctk.CTk):
 		self.anim_count = 0
 		self.anim_index = 0
 		self.make_animations()		
-		#self.play_animations()
-		self.add_widgets()
+		# comment to skip to UI
+		self.play_animations()
+
+		# uncomment to see the UI
+		#self.add_widgets()
+
+		# testing the login UI and system
 		#self.ask_login()
 
 		self.bind('<Escape>', lambda event: self.quit())
@@ -130,18 +136,21 @@ class App(ctk.CTk):
 			slide_direction = 'vertical',
 			anim_time = 500)
 
-		self.option_frame.put()
 
 		# button to animate option frame
-		Button(self, "Option Menu", self.data, self.data["option_frame_toggle_btn_font_size"], self.option_frame.animate).place(relx = 0, rely = 0, relwidth = 0.2, relheight = 0.05)
+		self.view = Viewer(self, self.field_names, self.data, "horizontal")
 
 		# option frame buttons to open sub apps related to data 
 		Button(self.option_frame, self.data["option_btn_text"][0], self.data, self.data["option_btn_font_size"], self.log_out).pack(expand = True)
-		Button(self.option_frame, self.data["option_btn_text"][1], self.data, self.data["option_btn_font_size"], lambda: None).pack(expand = True)
+		Button(self.option_frame, self.data["option_btn_text"][1], self.data, self.data["option_btn_font_size"], self.show_table).pack(expand = True)
 		Button(self.option_frame, self.data["option_btn_text"][2], self.data, self.data["option_btn_font_size"], lambda: None).pack(expand = True)
 
+		self.option_frame.put()
+		self.option_frame.tkraise()
+		self.option_btn = Button(self, "Option Menu", self.data, self.data["option_frame_toggle_btn_font_size"], self.option_frame.animate)
+		self.option_btn.place(relx = 0, rely = 0, relwidth = 0.2, relheight = 0.05)
 		# adding the clock at the right bottom
-		Clock(window = self, bg = self.data["clock_bg"], 
+		self.clock = Clock(window = self, bg = self.data["clock_bg"], 
 				x = self.data["clock_x"], 
 				y = self.data["clock_y"], 
 				font = ctk.CTkFont(family = self.data["font"], size = self.data["clock_font_size"]), 
@@ -150,35 +159,47 @@ class App(ctk.CTk):
 
 		# a sub app useful for calculating BMI (Body Mass Index)
 		# the axis argument is purely random, you can have any axis and it would still be the same
-		bmi = BMI(self, self.data["bmi_app_x"], self.data["bmi_app_y"], self.data["sub_app_bg"], self.data["bmi_app_width"], self.data["bmi_app_height"], self.data, "horizontal")
+		self.bmi = BMI(self, self.data["bmi_app_x"], self.data["bmi_app_y"], self.data["sub_app_bg"], self.data["bmi_app_width"], self.data["bmi_app_height"], self.data, "horizontal")
 
 		# a sub app useful for calculating BMR (Basal Metabolic Rate)
-		bmr = BMR(self, self.data["bmr_app_x"], self.data["bmr_app_y"], self.data["sub_app_bg"], self.data["bmr_app_width"], self.data["bmr_app_height"], self.data, "vertical", pos_axis=False)
+		self.bmr = BMR(self, self.data["bmr_app_x"], self.data["bmr_app_y"], self.data["sub_app_bg"], self.data["bmr_app_width"], self.data["bmr_app_height"], self.data, "vertical", pos_axis=False)
 
 		# a sub app useful for calculating Body Fat Percentage
-		bft = BodyFatCalc(self, self.data["bft_app_x"], self.data["bft_app_y"], self.data["sub_app_bg"], self.data["bft_app_width"], self.data["bft_app_height"], self.data, "horizontal", pos_axis=False)
+		self.bft = BodyFatCalc(self, self.data["bft_app_x"], self.data["bft_app_y"], self.data["sub_app_bg"], self.data["bft_app_width"], self.data["bft_app_height"], self.data, "horizontal", pos_axis=False)
 
 		# button to open/close the BMI sub app
 		# not using the Button class because of custom coloring
-		ctk.CTkButton(self, text = "BMI", command = bmi.toggle_animation,
+		ctk.CTkButton(self, text = "BMI", command = self.bmi.toggle_animation,
 			font = ctk.CTkFont(family = self.data["font"], size = self.data["sub_apps_open_btn_font_size"]),
 			fg_color = self.data["bmi_open_btn_bg"],
 			hover_color = self.data["bmi_open_btn_hvr_clr"],
 			text_color = self.data["bmi_open_btn_txt_clr"]).place(relx = 0, rely = 1, relwidth = 0.05, relheight = 0.05, anchor = "sw")
 
 		# button to open/close the BMR sub app
-		ctk.CTkButton(self, text = "BMR", command = bmr.toggle_animation,
+		ctk.CTkButton(self, text = "BMR", command = self.bmr.toggle_animation,
 			font = ctk.CTkFont(family = self.data["font"], size = self.data["sub_apps_open_btn_font_size"]),
 			fg_color = self.data["bmr_open_btn_bg"],
 			hover_color = self.data["bmr_open_btn_hvr_clr"],
 			text_color = self.data["bmr_open_btn_txt_clr"]).place(relx = 0, rely = 0.94, relwidth = 0.05, relheight = 0.05, anchor = "sw")
 
 		# button to open/close the Body Fat calculactor sub app
-		ctk.CTkButton(self, text = "BFT", command = bft.toggle_animation,
+		ctk.CTkButton(self, text = "BFT", command = self.bft.toggle_animation,
 			font = ctk.CTkFont(family = self.data["font"], size = self.data["sub_apps_open_btn_font_size"]),
 			fg_color = self.data["bft_open_btn_bg"],
 			hover_color = self.data["bft_open_btn_hvr_clr"],
 			text_color = self.data["bft_open_btn_txt_clr"]).place(relx = 0, rely = 0.88, relwidth = 0.05, relheight = 0.05, anchor = "sw")
+
+	def show_table(self):
+		self.view.toggle_animation()
+		if not self.view.shown:
+			self.view.tkraise()
+			self.option_frame.tkraise()
+			self.option_btn.tkraise()
+			self.clock.lower()
+		else:
+			self.bmr.tkraise()
+			self.bft.tkraise()
+			self.bmi.tkraise()
 
 	# sets the user data to provided data and login or sign up according to given
 	# argument, returns true if the login/sign-up was sucessful
@@ -234,9 +255,12 @@ class App(ctk.CTk):
 		# WARNING : The csv file that hold data should not be opened while editing the contents
 		# 			or an error will be thrown and user will see a warning on UI
 		name = self.user_data["name"]
-		with open(f"data/csv/{name}.csv", "a", newline="") as f:
-			writer = csv.DictWriter(f, fieldnames = self.field_names)
-			writer.writerow(data)
+		try:
+			with open(f"data/csv/{name}.csv", "a", newline="") as f:
+				writer = csv.DictWriter(f, fieldnames = self.field_names)
+				writer.writerow(data)
+		except Exception as e:
+			pass
 		return True
 
 
