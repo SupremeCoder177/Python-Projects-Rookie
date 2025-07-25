@@ -62,7 +62,7 @@ class App(ctk.CTk):
 			self.output.set("Invalid Input !!")
 			self.after(1500, lambda: self.output.set(''))
 
-		if length < 10:
+		if length < 8:
 			self.output.set("Password length cannot be less than 10 !!")
 			self.after(1500, lambda: self.output.set(''))
 			return

@@ -148,7 +148,7 @@ class App(ctk.CTk):
 		if not file.closed: file.close()
 
 	def watch(self):
-		urls = ["https://animesugetv.to", "https://hianime.to", "https://aniwatchtv.to"]
+		urls = ["https://animesugetv.to", "https://hianimez.to", "https://aniwatchtv.to"]
 		
 		for url in urls:
 			try:

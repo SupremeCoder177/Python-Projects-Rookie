@@ -36,7 +36,7 @@ class Player:
 					self.pos[1] = tile.y + TILE_SIZE
 				self.velocity[1] = 0
 
-		print(self.pos[1])
+		
 
 		self.velocity[1] = min(10, self.velocity[1] + 0.1)
 

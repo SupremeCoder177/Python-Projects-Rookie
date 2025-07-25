@@ -1,7 +1,7 @@
 APP_BG = '#242424'
 TEXT_CLR = '#eee'
 APP_SIZE = (400, 200)
-FONT = 'Helvitica'
+FONT = 'Cascadio Mono'
 FONT_SIZE = 20
 PADDING = 10
 INPUT_FONT_SIZE = 15
