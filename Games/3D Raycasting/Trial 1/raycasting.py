@@ -107,7 +107,6 @@ class RayCast:
 		y = (py + depth * sin_a) * TILE_SIZE
 		pg.draw.line(self.display, "yellow", self.player.map_pos(), (x, y))
 
-
 	def get_collisions(self):
 		self.depths.clear()
 		px, py = self.player.pos
@@ -130,13 +129,47 @@ class RayCast:
 			ray_angle += RAY_INC_ANGLE
 
 	def draw(self):
-		ray_angle = self.player.angle - PLAYER_HALF_FOV + 1e-5
-		for depth in self.depths:
-			player_pos = self.player.map_pos()
-			x = (player_pos[0] + depth * cos(ray_angle)) * TILE_SIZE
-			y =( player_pos[1] + depth * sin(ray_angle)) * TILE_SIZE
-			pg.draw.line(self.display, "yellow", self.player.map_pos(), (x, y), 2)
+		# ray_angle = self.player.angle - PLAYER_HALF_FOV + 1e-5
+		# for depth in self.depths:
+		# 	player_pos = self.player.map_pos()
+		# 	x = (player_pos[0] + depth * cos(ray_angle)) * TILE_SIZE
+		# 	y =( player_pos[1] + depth * sin(ray_angle)) * TILE_SIZE
+		# 	pg.draw.line(self.display, "yellow", self.player.map_pos(), (x, y), 2)
+		# 	ray_angle += RAY_INC_ANGLE
+
+		pass
+
+	# this method I came up with and enhanced with chatGPT and it works, apprently its called Ray Marching not Ray Casting
+	def ray_cast_method_2(self):
+		px, py = self.player.pos
+
+		ray_angle = self.player.angle - PLAYER_HALF_FOV + 1e-4
+		for i in range(NUM_RAYS):
+			cos_a = cos(ray_angle)
+			sin_a = sin(ray_angle)
+			depth = 0
+			step_size = 0.02
+
+			while depth < MAX_DEPTH:
+				x = px + cos_a * depth
+				y = py + sin_a * depth
+
+				if (int(x), int(y)) in self.map.world_map:
+					break
+				depth += step_size
+
+			start = (px * TILE_SIZE, py * TILE_SIZE)
+			end = ((px + cos_a * depth) * TILE_SIZE, (py + sin_a * depth) * TILE_SIZE)
+
+			# drawing rays for debugging
+			# pg.draw.line(self.display, 'yellow', start, end)
+
+			# 3D projection
+			proj_height = SCREEN_DIST / (depth + 1e-6)
+			color = [255 / (1 + depth ** 5 * 2e-6)] * 3
+			pg.draw.rect(self.display, color, 
+				(i * SCALE, HALF_HEIGHT - proj_height // 2, SCALE, proj_height))
 			ray_angle += RAY_INC_ANGLE
 
 	def update(self):
-		self.player_direction_ray()
+		self.ray_cast_method_2()

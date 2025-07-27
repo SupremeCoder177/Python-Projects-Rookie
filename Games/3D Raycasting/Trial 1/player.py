@@ -12,7 +12,6 @@ class Player:
 		self.game = game
 		self.pos = [PLAYER_POS[0], PLAYER_POS[1]]
 		self.angle = PLAYER_ANGLE
-		self.is_collided = False
 
 	def draw(self):
 		#direction player is looking in
@@ -37,12 +36,10 @@ class Player:
 			self.check_collision(dx, dy)
 
 	def check_collision(self, dx, dy):
-		if not self.map.is_occupied(self.world_pos(self.pos[0] + dx, self.pos[1] + dy)):
+		if not self.map.is_occupied(self.world_pos(self.pos[0] + dx, self.pos[1])):
 			self.pos[0] += dx
+		if not self.map.is_occupied(self.world_pos(self.pos[0], self.pos[1] + dy)):
 			self.pos[1] += dy
-			self.is_collided = False
-		else:
-			self.is_collided = True
 		
 	def update(self):
 		self.angle %= math.tau

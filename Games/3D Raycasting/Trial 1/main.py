@@ -26,9 +26,9 @@ class Game:
 
 	# draws every entity on screen
 	def draw(self):
-		self.map.draw()
+		#self.map.draw()
 		self.ray_cast.draw()
-		self.player.draw()
+		#self.player.draw()
 
 	def run(self):
 		while True:
