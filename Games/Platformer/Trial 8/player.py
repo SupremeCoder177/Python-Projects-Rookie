@@ -14,6 +14,7 @@ class Player:
 		self.jump_count = 2
 		self.jump_key_released = True
 		self.x_collide = self.y_collide = 0
+		self.last_horizontal_collide = 0
 
 	def draw(self):
 		tile_size = self.game.settings["tile_size"]
@@ -54,19 +55,22 @@ class Player:
 		 (pg.K_a, pg.K_LEFT) : -self.game.settings["player_move_speed"],
 		 (pg.K_d, pg.K_RIGHT) : self.game.settings["player_move_speed"]
 		}
+		temp = 0
 		# horizontal movement
 		for mag, item in move_map.items():
 			for key in mag:
 				if keys[key]:
 					if self.check_collision_horizontal(item):
-						if item > 0: self.x_collide = -1
-						else: self.x_collide = 1
+						if item > 0: 
+							self.x_collide = 1
+						else: self.x_collide = -1
 					else:
 						self.x_collide = 0
 
 	def check_slide(self):
-		if self.jump_count < 1 and self.x_collide != 0:
+		if self.jump_count < 1 and self.x_collide != self.last_horizontal_collide:
 			self.jump_count += 1
+			self.last_horizontal_collide = self.x_collide
 
 	def take_input_singles(self):
 		events = self.game.keys_held
@@ -107,10 +111,8 @@ class Player:
 		x2 = x1 + self.width
 		y2 = y1 + self.height
 		is_blocked = self.is_blocked
-		if not is_blocked(x1, y1) and not is_blocked(x2, y1) and not is_blocked(x1, y2) and not is_blocked(x2, y2):
+		if not is_blocked(x1, y1) and not is_blocked(x2, y1) and not is_blocked(x1, y2) and not is_blocked(x2, y2) and not self.is_blocked(x1, y1 + (self.height / 2)) and not self.is_blocked(x2, y1 + (self.height / 2)):
 			self.pos[0] += dx
 			return False
 		else:
 			return True
-
-		
