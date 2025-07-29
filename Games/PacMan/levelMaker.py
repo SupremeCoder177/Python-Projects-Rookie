@@ -19,7 +19,7 @@ class LevelMaker:
 		pg.init()
 		pg.display.set_caption("PacMan Level Maker")
 		self.running = False
-		self.tile_size = TILE_SIZE
+		self.tile_size = int(TILE_SIZE)
 		self.level_file = None
 		self.path = ""
 		self.screen = pg.display.set_mode(SCREEN_SIZE)
@@ -30,10 +30,14 @@ class LevelMaker:
 		self.sprites = self.loader.sprites
 		self.current_sprite = 0
 		self.delta_time = 1
+		self.player_added = False
+		self.enemy_count = 0
+		self.max_enemy = 4
+		self.grid = False
 
 		self.current_sprite_surf = list(self.sprites[self.current_sprite].values())[0]
 		self.current_sprite_type = list(self.sprites[self.current_sprite].keys())[0]
-		self.current_sprite_rect = self.current_sprite_surf.get_rect(topleft=(SCREEN_SIZE[0] - self.current_sprite_surf.get_width() + 10, 10))
+		self.current_sprite_rect = self.current_sprite_surf.get_rect(topleft=(SCREEN_SIZE[0] - (self.current_sprite_surf.get_width() * 2), 10))
 
 	# loads data from the json file, should only be called when running = False
 	# and then adds the default things if not present already in the file
@@ -52,12 +56,16 @@ class LevelMaker:
 			self.level_file["player_pos"] = []
 
 		# checking if enemy positions are present in the file
-		if "enemy_postions" not in keys:
-			self.level_file["enemy_postions"] = []
+		if "enemy_info" not in keys:
+			self.level_file["enemy_info"] = {}
 
 		if "coin_positions" not in keys:
 			self.level_file["coin_positions"] = []
 
+		self.enemy_count = len(self.level_file["enemy_info"])
+		if self.level_file["player_pos"]:
+			self.player_added = True
+		
 		self.save()
 
 	def draw_walls(self):
@@ -71,8 +79,32 @@ class LevelMaker:
 					sprite = list(type.values())[0]
 			self.screen.blit(sprite, pos)
 
+	# draws a grid
+	def draw_grid(self):
+		for i in range(SCREEN_SIZE[0] // self.tile_size):
+			for j in range(SCREEN_SIZE[1] // self.tile_size):
+				pg.draw.rect(self.screen, 'grey', (i * self.tile_size, j * self.tile_size, self.tile_size, self.tile_size), 1)
+
+
 	def draw_entities(self):
-		pass
+		# player
+		if self.player_added:
+			surf = None
+			for index, surf_type in self.sprites.items():
+				if list(surf_type.keys())[0].startswith("player"):
+					surf = list(self.sprites[index].values())[0]
+					break
+			pos = self.level_file["player_pos"][0] * self.tile_size + self.offset_x, self.level_file["player_pos"][1] * self.tile_size + self.offset_y
+			self.screen.blit(surf, pos)
+
+		# enemies
+		for type, pos in self.level_file["enemy_info"].items():
+			surf = None
+			for index, surf_type in self.sprites.items():
+				if list(surf_type.keys())[0] == type:
+					surf = list(self.sprites[index].values())[0]
+			map_pos = pos[0] * self.tile_size + self.offset_x, pos[1] * self.tile_size + self.offset_y
+			self.screen.blit(surf, map_pos)
 
 	# save changed to the json file
 	def save(self):
@@ -105,7 +137,7 @@ class LevelMaker:
 					exit()
 				if self.running:
 
-					# changing current chosen sprite or changing magnification (Left Ctrl + mousewheel to change magnification)
+					# changing current chosen sprite
 					if event.type == pg.MOUSEWHEEL:
 						self.current_sprite += 1 if event.y > 0 else -1
 						self.current_sprite = self.sprites_total - 1 if self.current_sprite < 0 else self.current_sprite
@@ -118,17 +150,43 @@ class LevelMaker:
 					# tuples or list as keys
 					if event.type == pg.MOUSEBUTTONDOWN:
 						mouse_pos = pg.mouse.get_pos()
-						tile_pos = mouse_pos[0] // self.tile_size, mouse_pos[1] // self.tile_size
+						tile_pos = int((mouse_pos[0] - self.offset_x) / self.tile_size), int((mouse_pos[1] - self.offset_y) / self.tile_size)
 						str_pos = f'{tile_pos[0]},{tile_pos[1]}'
-						if pg.mouse.get_pressed()[0] and str_pos not in self.level_file["world_map"].keys():
-							self.level_file["world_map"][str_pos] = self.current_sprite_type
-						if pg.mouse.get_pressed()[2] and str_pos in self.level_file["world_map"].keys():
-							del self.level_file["world_map"][str_pos]
+						if self.current_sprite_type.startswith("wall"):
+							if pg.mouse.get_pressed()[0] and str_pos not in self.level_file["world_map"].keys():
+								self.level_file["world_map"][str_pos] = self.current_sprite_type
+							if pg.mouse.get_pressed()[2] and str_pos in self.level_file["world_map"].keys():
+								del self.level_file["world_map"][str_pos]
+
+						if self.current_sprite_type.startswith("player"):
+							if pg.mouse.get_pressed()[0] and str_pos not in self.level_file["world_map"] and not self.player_added:
+								self.level_file["player_pos"] = tile_pos
+								self.player_added = True
+							if pg.mouse.get_pressed()[2] and tile_pos[0] == self.level_file["player_pos"][0] and tile_pos[1] == self.level_file["player_pos"][1]:
+								self.level_file["player_pos"] = []
+								self.player_added = False
+
+						if self.current_sprite_type.startswith("enemy"):
+							if pg.mouse.get_pressed()[0] and str_pos not in self.level_file["world_map"] and self.enemy_count < self.max_enemy and tile_pos not in self.level_file["enemy_info"].values():
+								self.enemy_count += 1
+								self.level_file["enemy_info"][self.current_sprite_type] = tile_pos
+							if pg.mouse.get_pressed()[2] and list(tile_pos) in self.level_file["enemy_info"].values():
+								temp = ""
+								for type, pos in self.level_file["enemy_info"].items():
+									if pos == list(tile_pos):
+										temp = type
+										self.enemy_count -= 1
+										break
+								del self.level_file["enemy_info"][temp]
 
 					# saving changes to file
 					# (its q because s is being used to change y offset)
 					if event.type == pg.KEYDOWN and event.key == pg.K_q:
 						self.save()
+
+					# toggling the drawing of grid
+					if event.type == pg.KEYDOWN and event.key == pg.K_g:
+						self.grid = not self.grid
 
 			if self.running:
 				# clearing the screen
@@ -137,12 +195,17 @@ class LevelMaker:
 				# taking inputs for offset changes
 				self.take_continous_input()
 
+				#drawing grid if turned on
+				if self.grid:
+					self.draw_grid()
+
 				# drawing the walls and entities
 				self.draw_walls()
 				self.draw_entities()
 
 				# displaying the currently selected sprite on the topright corner of the screen
-				self.screen.blit(self.current_sprite_surf, self.current_sprite_rect)
+				surf = pg.transform.scale2x(self.current_sprite_surf)
+				self.screen.blit(surf, self.current_sprite_rect)
 			else:
 				# asking to open the json file to make the level
 				# the file should either be empty or only altered by this program only
@@ -180,4 +243,5 @@ class LevelMaker:
 
 
 if __name__ == '__main__':
-	LevelMaker().run()
+	a = LevelMaker()
+	a.run()
