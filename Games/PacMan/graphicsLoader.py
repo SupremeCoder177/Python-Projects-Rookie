@@ -74,6 +74,7 @@ class GraphicsLoader:
 			for j in range(image.get_width() // PLAYER_WIDTH):
 				temp = pg.Surface((PLAYER_WIDTH, PLAYER_HEIGHT))
 				temp.blit(image, (0, 0), (j * PLAYER_WIDTH, i * PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT))
+				temp = pg.transform.scale(temp, (PLAYER_MAP_WIDTH, PLAYER_MAP_HEIGHT))
 				temp.set_colorkey((0, 0, 0))
 				self.sprites[self.sprites_total] = {"player" + str(i) : temp}
 				frames.append(temp)

@@ -39,6 +39,9 @@ class LevelLoader:
 				self.curr_level += 1
 		return False
 
+	def is_blocked(self, point):
+		return (int(point[0]), int(point[1])) in self.world_map
+
 	def update_wall_data(self):
 		for str_pos in self.data["world_map"]:
 			x, y = str_pos.split(',')

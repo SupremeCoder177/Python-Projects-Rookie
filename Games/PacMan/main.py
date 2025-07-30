@@ -34,6 +34,11 @@ class Game:
 		self.coin_manager = Coins(self)
 		self.delta_time = 0
 
+	def draw_grid(self):
+		for i in range(int(GAME_SCREEN_SIZE[0] // TILE_SIZE)):
+			for j in range(int(GAME_SCREEN_SIZE[1] // TILE_SIZE)):
+				pg.draw.rect(self.screen, 'grey', (i * TILE_SIZE + self.offset_x, j * TILE_SIZE + self.offset_y, TILE_SIZE, TILE_SIZE), 1)
+
 	def draw(self):
 		# clearing the screen
 		self.screen.fill("#000000") # pure black
@@ -41,12 +46,14 @@ class Game:
 		self.level_loader.draw_walls()
 		# drawing the coins
 		self.coin_manager.draw_coins()
+		# drawing a grid for debugging
+		self.draw_grid()
 		# drawing the player
 		self.player.draw()
 
 	def update(self):
 		# changing offset
-		# self.camera.change_offset_centered()
+		self.camera.change_offset_contained()
 
 		# updating the coins
 		self.coin_manager.update()
