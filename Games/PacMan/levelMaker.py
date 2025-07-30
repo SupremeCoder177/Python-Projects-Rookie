@@ -9,7 +9,7 @@
 import pygame as pg
 from sys import exit
 from json import load, dump
-from graphicsLoader import Load
+from graphicsLoader import GraphicsLoader
 from settings import *
 import os
 
@@ -25,15 +25,16 @@ class LevelMaker:
 		self.screen = pg.display.set_mode(SCREEN_SIZE)
 		self.clock = pg.time.Clock()
 		self.offset_x = self.offset_y = 0
-		self.loader = Load()
+		self.loader = GraphicsLoader()
 		self.sprites_total = self.loader.sprites_total
 		self.sprites = self.loader.sprites
 		self.current_sprite = 0
 		self.delta_time = 1
 		self.player_added = False
 		self.enemy_count = 0
-		self.max_enemy = 4
+		self.max_enemy = MAX_ENEMY_COUNT
 		self.grid = False
+		self.occupied = []
 
 		self.current_sprite_surf = list(self.sprites[self.current_sprite].values())[0]
 		self.current_sprite_type = list(self.sprites[self.current_sprite].keys())[0]
@@ -65,6 +66,15 @@ class LevelMaker:
 		self.enemy_count = len(self.level_file["enemy_info"])
 		if self.level_file["player_pos"]:
 			self.player_added = True
+
+		self.occupied.append(self.level_file["player_pos"])
+		self.occupied.extend(self.level_file["coin_positions"])
+		self.occupied.extend(list(self.level_file["enemy_info"].values()))
+
+		for str_pos in self.level_file["world_map"]:
+			x, y = str_pos.split(",")
+			tile_pos = int(x), int(y)
+			self.occupied.append(list(tile_pos))
 		
 		self.save()
 
@@ -105,6 +115,16 @@ class LevelMaker:
 					surf = list(self.sprites[index].values())[0]
 			map_pos = pos[0] * self.tile_size + self.offset_x, pos[1] * self.tile_size + self.offset_y
 			self.screen.blit(surf, map_pos)
+
+		# coins
+		surf = None
+		for index, surf_type in self.sprites.items():
+			if list(surf_type.keys())[0].startswith("coin"):
+				surf = self.sprites[index][list(surf_type.keys())[0]]
+				break
+		for tile in self.level_file["coin_positions"]:
+			pos = tile[0] * self.tile_size + self.offset_x, tile[1] * self.tile_size + self.offset_y
+			self.screen.blit(surf, pos)
 
 	# save changed to the json file
 	def save(self):
@@ -151,33 +171,61 @@ class LevelMaker:
 					if event.type == pg.MOUSEBUTTONDOWN:
 						mouse_pos = pg.mouse.get_pos()
 						tile_pos = int((mouse_pos[0] - self.offset_x) / self.tile_size), int((mouse_pos[1] - self.offset_y) / self.tile_size)
+						tile_pos = list(tile_pos)
 						str_pos = f'{tile_pos[0]},{tile_pos[1]}'
-						if self.current_sprite_type.startswith("wall"):
-							if pg.mouse.get_pressed()[0] and str_pos not in self.level_file["world_map"].keys():
-								self.level_file["world_map"][str_pos] = self.current_sprite_type
-							if pg.mouse.get_pressed()[2] and str_pos in self.level_file["world_map"].keys():
-								del self.level_file["world_map"][str_pos]
 
+						# adding walls
+						if self.current_sprite_type.startswith("wall"):
+							if pg.mouse.get_pressed()[0] and tile_pos not in self.occupied:
+								self.level_file["world_map"][str_pos] = self.current_sprite_type
+								self.occupied.append(tile_pos)
+
+						# adding player
 						if self.current_sprite_type.startswith("player"):
-							if pg.mouse.get_pressed()[0] and str_pos not in self.level_file["world_map"] and not self.player_added:
+							if pg.mouse.get_pressed()[0] and tile_pos not in self.occupied and not self.player_added:
 								self.level_file["player_pos"] = tile_pos
 								self.player_added = True
-							if pg.mouse.get_pressed()[2] and tile_pos[0] == self.level_file["player_pos"][0] and tile_pos[1] == self.level_file["player_pos"][1]:
-								self.level_file["player_pos"] = []
-								self.player_added = False
+								self.occupied.append(tile_pos)
 
+						# adding enemy
 						if self.current_sprite_type.startswith("enemy"):
-							if pg.mouse.get_pressed()[0] and str_pos not in self.level_file["world_map"] and self.enemy_count < self.max_enemy and tile_pos not in self.level_file["enemy_info"].values():
+							if pg.mouse.get_pressed()[0] and tile_pos not in self.occupied and self.enemy_count < self.max_enemy:
 								self.enemy_count += 1
 								self.level_file["enemy_info"][self.current_sprite_type] = tile_pos
-							if pg.mouse.get_pressed()[2] and list(tile_pos) in self.level_file["enemy_info"].values():
-								temp = ""
-								for type, pos in self.level_file["enemy_info"].items():
-									if pos == list(tile_pos):
-										temp = type
-										self.enemy_count -= 1
-										break
+								self.occupied.append(tile_pos)
+
+						# adding coins
+						if self.current_sprite_type.startswith("coin"):
+							if pg.mouse.get_pressed()[0] and tile_pos not in self.occupied:
+								self.level_file["coin_positions"].append(tile_pos)
+								self.occupied.append(tile_pos)
+
+						# removing things
+						if pg.mouse.get_pressed()[2] and tile_pos in self.occupied:
+							# checking for walls
+							if str_pos in self.level_file["world_map"]:
+								del self.level_file["world_map"][str_pos]
+
+							# checking for player
+							if list(tile_pos) == self.level_file["player_pos"]:
+								self.player_added = False
+								self.level_file["player_pos"] = []
+
+							# checking for enemy
+							temp = ""
+							for type_, pos in self.level_file["enemy_info"].items():
+								if pos == list(tile_pos):
+									temp = type_
+									break
+							if temp:
 								del self.level_file["enemy_info"][temp]
+								self.enemy_count -= 1
+
+							# checking for coins
+							if tile_pos in self.level_file["coin_positions"]:
+								self.level_file["coin_positions"].remove(tile_pos)
+
+							self.occupied.remove(tile_pos)
 
 					# saving changes to file
 					# (its q because s is being used to change y offset)
