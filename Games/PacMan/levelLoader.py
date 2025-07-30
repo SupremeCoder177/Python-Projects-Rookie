@@ -3,6 +3,7 @@
 import pygame as pg
 from settings import *
 from json import load
+from math import ceil
 import os
 
 # change this to load levels from another folder
@@ -40,7 +41,8 @@ class LevelLoader:
 		return False
 
 	def is_blocked(self, point):
-		return (int(point[0]), int(point[1])) in self.world_map
+		x, y = int(point[0]), int(point[1])
+		return (x, y) in self.world_map
 
 	def update_wall_data(self):
 		for str_pos in self.data["world_map"]:

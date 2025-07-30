@@ -138,10 +138,11 @@ class GraphicsLoader:
 					temp = pg.Surface((PLAYER_WIDTH, ENEMY_HEIGHT))
 					temp.blit(image, (0, 0), (i * ENEMY_WIDTH, j * ENEMY_HEIGHT, ENEMY_WIDTH, ENEMY_HEIGHT))
 					temp.set_colorkey((0, 0, 0))
+					temp = pg.transform.scale(temp, (ENEMY_MAP_WIDTH, ENEMY_MAP_HEIGHT))
 					self.sprites[self.sprites_total] = {"enemy" + str(count) : temp}
 					self.sprites_total += 1
 					types.append("enemy" + str(count))
-					anims.append("enemy" + str(count))
+					anims.append(temp)
 					count += 1
 				self.enemy_anims[enemey_color_index[enemey_color_index_count]][anim_index[anim_index_count]] = anims
 				anim_index_count += 1

@@ -5,6 +5,8 @@ from player import Player
 from graphicsLoader import GraphicsLoader
 from levelLoader import LevelLoader
 from coinManager import Coins
+from enemyManager import EnemyManager
+from collisonsManager import Collisions
 from camera import Camera
 from sys import exit
 from settings import *
@@ -31,7 +33,9 @@ class Game:
 		self.offset_x = self.offset_y = 0
 		self.player = Player(self)
 		self.camera = Camera(self)
+		self.enemy_manager = EnemyManager(self)
 		self.coin_manager = Coins(self)
+		self.collisions_manager = Collisions(self)
 		self.delta_time = 0
 
 	def draw_grid(self):
@@ -42,14 +46,21 @@ class Game:
 	def draw(self):
 		# clearing the screen
 		self.screen.fill("#000000") # pure black
+
 		# drawing the walls
 		self.level_loader.draw_walls()
+
 		# drawing the coins
 		self.coin_manager.draw_coins()
+
 		# drawing a grid for debugging
-		self.draw_grid()
+		# self.draw_grid()
+
 		# drawing the player
 		self.player.draw()
+
+		# drawing the enemies
+		self.enemy_manager.draw()
 
 	def update(self):
 		# changing offset
@@ -61,6 +72,12 @@ class Game:
 		# updating the player
 		self.player.update()
 
+		# updating the enemies
+		self.enemy_manager.update()
+
+		# updating the collision logic
+		self.collisions_manager.update()
+
 		# updating the screen
 		pg.display.flip()
 		self.delta_time = self.clock.tick(FPS) / 100 # to convert to milliseconds
@@ -71,6 +88,7 @@ class Game:
 				if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
 					pg.quit()
 					exit()
+
 			self.update()
 			self.draw()
 
