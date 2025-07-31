@@ -25,28 +25,45 @@ class Player:
 		self.curr_surf = self.frames[self.direction][int(self.anim_index)]
 		map_pos = self.pos[0] * TILE_SIZE + self.game.offset_x + (PLAYER_WIDTH / 2) - (PLAYER_MAP_WIDTH / 2), self.pos[1] * TILE_SIZE + self.game.offset_y + (PLAYER_HEIGHT / 2) - (PLAYER_MAP_HEIGHT / 2)
 		self.display.blit(self.curr_surf, map_pos)
+		# for debugging
+		# pg.draw.rect(self.display, 'red', (map_pos[0], map_pos[1], TILE_SIZE, TILE_SIZE))
 
 	def update(self):
 		self.take_input()
+		# self.draw_available()
 		self.apply_input()
 		self.animate()
 		self.move()
+
+	# drawing available squares for debugging 
+	def draw_available(self):
+		available = self.game.collisions_manager.get_available_direction(self.get_tile_pos())
+		x1, y1 = self.get_tile_pos()
+		x1, y1 = x1 * TILE_SIZE + self.game.offset_x, y1 * TILE_SIZE + self.game.offset_y
+		if "up" in available:
+			pg.draw.rect(self.display, "green", (x1, y1 - TILE_SIZE, TILE_SIZE, TILE_SIZE))
+		if "down" in available:
+			pg.draw.rect(self.display, "green", (x1, y1 + TILE_SIZE, TILE_SIZE, TILE_SIZE))
+		if "left" in available:
+			pg.draw.rect(self.display, "green", (x1 - TILE_SIZE, y1, TILE_SIZE, TILE_SIZE))
+		if "right" in available:
+			pg.draw.rect(self.display, "green", (x1 + TILE_SIZE, y1, TILE_SIZE, TILE_SIZE))
 
 	def apply_input(self):
 		if not self.next_direction: return
 		available = self.game.collisions_manager.get_available_direction(self.get_tile_pos())
 		if OPP_MAP[self.direction] in available: available.remove(OPP_MAP[self.direction])
+		if not available: return
 		if self.next_direction not in available: return
 
-		vector = 0
-		for direction_ in VECTOR_MAP:
-			if self.next_direction in VECTOR_MAP[direction_]:
-				vector = 0 if VECTOR_MAP[direction_] == "horizontal" else 1
-				break
-		if self.pos[vector] % 1 < 0.1:
+		vector = 1
+		if self.next_direction in VECTOR_MAP["horizontal"]:
+			vector = 0
+
+		if abs(self.pos[vector] % 1) < 0.05:
 			self.direction = self.next_direction
 			self.next_direction = ""
-			self.pos[vector] = self.pos[vector] + (self.pos[vector] % 1)
+			self.pos[vector] = round(self.pos[vector])
 	
 	def animate(self):
 		self.anim_index += PLAYER_ANIM_SPEED * self.game.delta_time
@@ -60,19 +77,16 @@ class Player:
 
 	def take_input(self):
 		keys = pg.key.get_pressed()
-
-		if keys[pg.K_a] or keys[pg.K_LEFT]:
-			self.next_direction = "left"
-		if keys[pg.K_d] or keys[pg.K_RIGHT]:
-			self.next_direction = "right"
-		if keys[pg.K_s] or keys[pg.K_DOWN]:
-			self.next_direction = "down"
-		if keys[pg.K_w] or keys[pg.K_UP]:
-			self.next_direction = "up"
+		for keys_ in KEY_MAP:
+			for key in keys_:
+				if keys[key] and KEY_MAP[keys_] != OPP_MAP[self.direction]:
+					self.next_direction = KEY_MAP[keys_]
 
 	# returns the tile position of the top left tile since int floors floating point values
 	def get_tile_pos(self):
-		return int(self.pos[0]), int(self.pos[1])
+		x = self.pos[0] if abs(self.pos[0] % 1) < 0.5 else self.pos[0] + 1
+		y = self.pos[1] if abs(self.pos[1] % 1) < 0.5 else self.pos[1] + 1
+		return int(x), int(y)
 
 	# return the map positon of the top left point of the player
 	def get_map_pos(self):

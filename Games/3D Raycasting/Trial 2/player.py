@@ -16,8 +16,8 @@ class Player:
 	# draws the player in 2D
 	def draw(self):
 		# direction the player is looking in
-		pg.draw.line(self.display, 'yellow', self.map_pos(),
-			self.end_point(WIDTH))
+		# pg.draw.line(self.display, 'yellow', self.map_pos(),
+		# 	self.end_point(WIDTH))
 
 		# player itself
 		pg.draw.circle(self.display, 'red', self.map_pos(), 10)

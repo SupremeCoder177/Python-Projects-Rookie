@@ -22,14 +22,14 @@ class Game:
 		pg.display.flip()
 		self.player.update()
 		pg.display.set_caption(f'{self.clock.get_fps()}')
-		self.delta_time = self.clock.tick(FPS)
+		self.delta_time = self.clock.tick(FPS) / 100
 
 	def draw(self):
 		self.screen.fill("black")
 		self.map.draw_map()
 		self.player.draw()
-		#self.ray_cast.cast_rays()
-		self.ray_cast.march_rays()
+		self.ray_cast.cast_rays()
+		# self.ray_cast.march_rays()
 
 	def run(self):
 		while True:

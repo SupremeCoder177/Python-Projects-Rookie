@@ -1,6 +1,7 @@
 # settings 
 
 from os import listdir
+import pygame as pg
 
 FPS = 60
 WALL_WIDTH = WALL_HEGIHT = 50 # the sprite height
@@ -60,4 +61,11 @@ DIRECTIONAL_ADDER = {
 	"down": [0, 1],
 	"left": [-1, 0],
 	"right": [1, 0]
+}
+
+KEY_MAP = {
+	(pg.K_a, pg.K_LEFT)	 : "left",
+	(pg.K_s, pg.K_DOWN) : "down",
+	(pg.K_w, pg.K_UP) : "up",
+	(pg.K_d, pg.K_RIGHT) : "right"
 }
