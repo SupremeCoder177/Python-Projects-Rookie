@@ -166,7 +166,7 @@ class RayCast:
 
 			# 3D projection
 			proj_height = SCREEN_DIST / (depth + 1e-6)
-			color = [255 / (1 + depth ** 5 * 2e-6)] * 3
+			color = [255 / (1 + depth ** 5 * 2e-4)] * 3
 			pg.draw.rect(self.display, color, 
 				(i * SCALE, HALF_HEIGHT - proj_height // 2, SCALE, proj_height))
 			ray_angle += RAY_INC_ANGLE
