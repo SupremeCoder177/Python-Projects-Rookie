@@ -1,0 +1,22 @@
+{
+	"app_size" : [1500, 1000],
+	"side_panel_color" : ["#bfbfbf", "#0f0f0f"],
+	"side_panel_width" : 0.25,    
+	"side_panel_height" : 1,
+	"level_panel_width" : 0.75,
+	"level_panel_height" : 1,
+	"level_panel_x" : 0.25,
+	"level_panel_y" : 0,
+	"level_panel_color" : ["#b3eeff", "#000000"],
+	"level_panel_border_color" : ["#000", "#eee"],
+	"level_panel_border_width" : 1,
+	"control_panel_color" : ["#bfbfbf", "#0f0f0f"],
+	"control_panel_width" : 0.3,
+	"control_panel_height" : 1,
+	"control_panel_x" : 1,
+	"control_panel_y" : 0,
+	"control_panel_shown_x" : 0.75,
+	"control_panel_shown_y" : 0,
+	"toggle_btn_color" : ["#cfcfcf", "#1e1e1e"],
+	"toggle_btn_hover_color" : ["#a6a6a6", "#0d0d0d"]
+}

@@ -3,7 +3,7 @@
         1000,
         700
     ],
-    "fps": 60,
+    "fps": 100,
     "game_name": "Platformer Trial 8",
     "tile_size": 38,
     "edit_speed": 4,
