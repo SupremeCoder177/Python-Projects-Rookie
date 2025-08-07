@@ -26,7 +26,8 @@ class App(ctk.CTk):
 		self.title("Specialized Platformer Level Maker")
 
 		# changing theme according to current OS
-		ctk.set_appearance_mode("dark" if isDark() else "light")
+		self.theme = "dark" if isDark() else "light"
+		ctk.set_appearance_mode(self.theme)
 
 		# settings the window size and position on screen
 		size = self.settings["app_size"]
@@ -53,15 +54,20 @@ class App(ctk.CTk):
 		self.control_panel = ctk.CTkFrame(self)
 
 		# applying default color themes to all panels
-		self.reset_panel_themes()
+		self.set_panel_themes()
 
 		# placing the panels on the app
 		self.side_panel.place(relx = 0, rely = 0, relwidth = self.settings["side_panel_width"], relheight = self.settings["side_panel_height"])
 		self.level_panel.place(relx = self.settings["level_panel_x"], rely = self.settings["level_panel_y"], relwidth = self.settings["level_panel_width"], relheight = self.settings["level_panel_height"])
 		self.control_panel.place(relx = self.settings["control_panel_x"], rely = self.settings["control_panel_y"], relwidth = self.settings["control_panel_width"], relheight = self.settings["control_panel_height"])
 
+		# sprite variables
+		self.sprites = {}
+		self.num_sprites = 0
+		self.curr_sprite = None
+
 		# adding GUI
-		SidePanel(self.side_panel, self.reset_side_panel_theme, self.settings)
+		self.side = SidePanel(self.side_panel, self.settings)
 
 		# only for debugging 
 		self.bind('<Escape>', lambda event: self.quit())
@@ -70,25 +76,38 @@ class App(ctk.CTk):
 		with open("settings.json", "r") as f:
 			self.settings = load(f)
 
-	# resets all panels to original theme
-	def reset_panel_themes(self):
-		self.reset_side_panel_theme()
-		self.reset_level_panel_theme()
-		self.reset_control_panel_theme()
-
-	def reset_side_panel_theme(self):
+	# sets all panels to initial theme
+	def set_panel_themes(self):
 		self.side_panel.configure(fg_color = self.settings["side_panel_color"])
-
-	def reset_level_panel_theme(self):
 		self.level_panel.configure(fg_color = self.settings["level_panel_color"],
 			border_color = self.settings["level_panel_border_color"])
-
-	def reset_control_panel_theme(self):
 		self.control_panel.configure(fg_color = self.settings["control_panel_color"])	
+
+	def change_theme(self):
+		if self.theme == "light":
+			ctk.set_appearance_mode("dark")
+			self.theme = "dark"
+		else:
+			ctk.set_appearance_mode("light")
+			self.theme = "light"
 
 	def run(self):
 		self.mainloop()
 
+	def set_sprite(self, ind):
+		self.curr_sprite = ind
+
+	def del_sprite(self):
+		if not self.curr_sprite: return
+		if not self.curr_sprite in self.sprites: return
+		del self.sprites[self.curr_sprite]
+		self.num_sprites -= 1
+		self.side.re_render_sprites()
+
+	def del_sprites(self):
+		self.num_sprites = 0
+		self.sprites = {}
+		self.side.re_render_sprites()
 
 if __name__ == '__main__':
 	a = App()

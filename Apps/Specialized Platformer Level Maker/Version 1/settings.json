@@ -18,5 +18,14 @@
 	"control_panel_shown_x" : 0.75,
 	"control_panel_shown_y" : 0,
 	"toggle_btn_color" : ["#cfcfcf", "#1e1e1e"],
-	"toggle_btn_hover_color" : ["#a6a6a6", "#0d0d0d"]
+	"toggle_btn_hover_color" : ["#a6a6a6", "#0d0d0d"],
+	"theme_switch_color" : ["#cfcfcf", "#1e1e1e"],
+	"font" : "Cascadia Mono",
+	"sprites_frame_color" : ["#bfffe8", "#242424"],
+	"sprites_loader_color" : ["#6effd1", "#050505"],
+	"normal_btn_color" : ["#3b3b3b", "#bababa"],
+	"normal_btn_hover_color" : ["#121212", "#dbdbdb"],
+	"normal_btn_text_color" : ["#eee", "#111"],
+	"slider_color" : ["#003cc9", "#cccccc"],
+	"slider_hover_color" : ["#002885", "#a1a1a1"]
 }
