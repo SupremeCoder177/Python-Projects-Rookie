@@ -39,9 +39,9 @@ class Controls(ctk.CTkFrame):
 
 	def toggle_show_self(self):
 		if not self.shown:
-			move_frame(self, 200, self.hidden_pos, self.shown_pos, None)
+			move_frame(self, 300, self.hidden_pos, self.shown_pos, None)
 		else:
-			move_frame(self, 200, self.shown_pos, self.hidden_pos, None)
+			move_frame(self, 300, self.shown_pos, self.hidden_pos, None)
 		self.shown = not self.shown
 
 
@@ -121,7 +121,7 @@ class SidePanel(ctk.CTkFrame):
 			command = master.delete_all).grid(row = 3, column = 0, sticky = "SW")
 
 		# creating a frame which shows all keyboard bindings
-		self.controls = Controls(self)
+		self.controls = Controls(self.master)
 
 		# button to show controls
 		ctk.CTkButton(self,
@@ -136,7 +136,7 @@ class SidePanel(ctk.CTkFrame):
 
 		# placing panel on screen
 		self.place(relx = self.settings["side_panel_pos"][0], rely = self.settings["side_panel_pos"][1], relwidth = self.settings["side_panel_size"][0], relheight = self.settings["side_panel_size"][1])
-		
+		self.lift(aboveThis = self.controls)
 
 	# displays the sprites passed in on the frame as images on buttons
 	def display_sprites(self, sprites):

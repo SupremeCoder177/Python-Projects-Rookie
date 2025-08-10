@@ -32,7 +32,7 @@ def move_frame(frame : ctk.CTkFrame, time : int, _from : List[float], to : List[
 			move_x = False
 		else:
 			x += step_size if _from[0] < to[0] else -step_size
-		if y - step_size < to[1] < x + step_size:
+		if y - step_size < to[1] < y + step_size:
 			move_y = False
 		else:
 			y += step_size if _from[1] < to[1] else -step_size

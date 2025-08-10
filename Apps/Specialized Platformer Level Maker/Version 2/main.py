@@ -11,6 +11,7 @@ from scripts.sidePanel import SidePanel
 from scripts.controlPanel import ControlPanel
 from scripts.animations import move_frame
 from scripts.spriteHandler import SpriteHandler
+from scripts.worldPanel import WorldPanel
 
 # main app class
 class App(ctk.CTk):
@@ -29,6 +30,7 @@ class App(ctk.CTk):
 			self.settings = load(f)
 
 		# instantiating the panels
+		self.world = WorldPanel(self)
 		self.side_panel = SidePanel(self)
 		self.control = ControlPanel(self)
 
@@ -51,6 +53,7 @@ class App(ctk.CTk):
 		else:
 			ctk.set_appearance_mode("light")
 			self.theme = "light"
+		self.world.change_bg()
 
 	# shows/hides the control panel
 	def toggle_control(self):

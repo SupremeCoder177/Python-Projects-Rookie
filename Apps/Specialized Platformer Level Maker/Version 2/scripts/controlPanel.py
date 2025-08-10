@@ -71,4 +71,27 @@ class ControlPanel(ctk.CTkFrame):
 			state = "disabled")
 		self.console.grid(row = 1, column = 0, columnspan = 2, sticky = "NSEW")
 
+		# a button to save and build level dependencies (work in progress)
+		ctk.CTkButton(self,
+			text = "Save",
+			font = ctk.CTkFont(family = self.settings["font"], size = 20),
+			text_color = self.settings["btn_txt_color"],
+			fg_color = self.settings["btn_color"],
+			hover_color = self.settings["btn_hover_color"],
+			width = self.settings["btn_size"][0],
+			height = self.settings["btn_size"][1]).grid(row = 2, column = 0, sticky = "NW")
+
+		# a button to load a pre-build level (work in progress)
+		ctk.CTkButton(self,
+			text = "Load",
+			font = ctk.CTkFont(family = self.settings["font"], size = 20),
+			text_color = self.settings["btn_txt_color"],
+			fg_color = self.settings["btn_color"],
+			hover_color = self.settings["btn_hover_color"],
+			width = self.settings["btn_size"][0],
+			height = self.settings["btn_size"][1]).grid(row = 2, column = 1, sticky = "NE")
+
 		self.place(relx = self.settings["control_panel_pos"][0], rely = self.settings["control_panel_pos"][1], relwidth = self.settings["control_panel_size"][0], relheight = self.settings["control_panel_size"][1])
+
+
+

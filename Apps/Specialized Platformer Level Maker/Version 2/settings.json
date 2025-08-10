@@ -3,7 +3,7 @@
 	"control_panel_size" : [0.25, 1],
 	"world_panel_size" : [0.8, 1],
 	"side_panel_pos" : [0, 0],
-	"world_panel_pos" : [0.25, 0],
+	"world_panel_pos" : [0.2, 0],
 	"control_panel_pos" : [1.25, 0],
 	"control_panel_show_pos": [0.75, 0],
 	"btn_color" : ["#F7FFF6", "#7BDFF2"],
@@ -18,5 +18,6 @@
 	"sprite_display_hover_color" : ["#7BDFF2", "#0C1821"],
 	"controls_show_panel_pos" : [0, 0.55],
 	"controls_show_panel_size" : [0.2, 0.45],
-	"controls_show_panel_show_pos" : [0.4, 0.55]
+	"controls_show_panel_show_pos" : [0.2, 0.55],
+	"world_color" : ["#CCC9DC", "#191716"]
 }
