@@ -1,0 +1,74 @@
+# this module defines the GUI for the control panel
+
+import customtkinter as ctk
+
+
+# a custom widget to change cell size
+class CustomWidget(ctk.CTkFrame):
+
+	def __init__(self, master, var, settings, command):
+		super().__init__(master = master)	
+
+		# label to tell the user what this widget is for
+		ctk.CTkLabel(self,
+			text = "Change Cell Size Here:",
+			font = ctk.CTkFont(family = settings["font"], size = 30),
+			fg_color = "transparent").pack(pady = 10)
+
+		# entry for user to type in cell size (it will only work if they type in integers)
+		ctk.CTkEntry(self,
+			textvariable = var,
+			font = ctk.CTkFont(family = settings["font"], size = 20),
+			fg_color = "transparent").pack(fill = 'x', pady = 10)
+
+		# button to apply changes to cell size
+		ctk.CTkButton(self,
+			text = "Change",
+			font = ctk.CTkFont(family = settings["font"], size = 20),
+			fg_color = settings["btn_color"],
+			hover_color = settings["btn_hover_color"],
+			text_color = settings["btn_txt_color"],
+			command = command).pack()
+
+		# a label to tell the user that cell size has been changed
+		self.msg_label = ctk.CTkLabel(self,
+			text = "",
+			fg_color = "transparent",
+			font = ctk.CTkFont(family = settings["font"], size = 25))
+		self.msg_label.pack(pady = 20)
+
+	# shows a msg on the msg label
+	def show_msg(self, msg, time):
+		self.msg_label.configure(text = msg)
+		self.master.after(time, lambda: self.msg_label.configure(text = ""))
+
+
+class ControlPanel(ctk.CTkFrame):
+
+	def __init__(self, master):
+		super().__init__(master = master)
+		self.settings = master.settings
+		self.shown = False
+
+		# variables
+		self.var = ctk.StringVar(value = self.settings["cell_size"])
+
+		# defining the GUI layout
+		self.columnconfigure((0, 1), weight = 1, uniform = 'a')
+		self.rowconfigure(0, weight = 2, uniform = 'a')
+		self.rowconfigure(1, weight = 3, uniform = 'a')
+		self.rowconfigure((2, 3, 4), weight = 1, uniform = 'a')
+
+		# adding widgets
+
+		# custom frame widget to alter cell size
+		self.custom = CustomWidget(self, self.var, self.settings, master.change_cell_size)
+		self.custom.grid(row = 0, column = 0, columnspan = 2, sticky = "NSEW")
+
+		# console to show errors
+		self.console = ctk.CTkTextbox(self,
+			font = ctk.CTkFont(family = self.settings["font"], size = 22),
+			state = "disabled")
+		self.console.grid(row = 1, column = 0, columnspan = 2, sticky = "NSEW")
+
+		self.place(relx = self.settings["control_panel_pos"][0], rely = self.settings["control_panel_pos"][1], relwidth = self.settings["control_panel_size"][0], relheight = self.settings["control_panel_size"][1])

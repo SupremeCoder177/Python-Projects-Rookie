@@ -1,0 +1,22 @@
+{
+	"side_panel_size" : [0.2, 1],
+	"control_panel_size" : [0.25, 1],
+	"world_panel_size" : [0.8, 1],
+	"side_panel_pos" : [0, 0],
+	"world_panel_pos" : [0.25, 0],
+	"control_panel_pos" : [1.25, 0],
+	"control_panel_show_pos": [0.75, 0],
+	"btn_color" : ["#F7FFF6", "#7BDFF2"],
+	"btn_hover_color" : ["#7C7C7C", "#B2F7EF"],
+	"btn_txt_color" : ["#000F08", "#0D1821"],
+	"btn_size" : [175, 75],
+	"font" : "Cascadia Mono",
+	"cell_size" : 50,
+	"sprite_display_cell_size" : [50, 50],
+	"min_cell_size" : 10,
+	"sprite_display_color" : ["#B2F7EF", "#1B2A41"],
+	"sprite_display_hover_color" : ["#7BDFF2", "#0C1821"],
+	"controls_show_panel_pos" : [0, 0.55],
+	"controls_show_panel_size" : [0.2, 0.45],
+	"controls_show_panel_show_pos" : [0.4, 0.55]
+}
