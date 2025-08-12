@@ -8,7 +8,7 @@ class SpriteHandler:
 	def __init__(self, master):
 		self.show_err = master.show_err
 		self.cell_size = master.settings["cell_size"]
-		self.min_cell_size = master.settings["min_cell_size"]
+		self.min_size = master.settings["min_cell_size"]
 		self.sprites = dict()
 		self.final_sprites = dict()
 		self.curr_sprite = None
@@ -30,7 +30,11 @@ class SpriteHandler:
 			self.show_err("Either lower cell size or choose another file.")
 
 	def change_cell_size(self, new_size):
-		self.cell_size = new_size if new_size >= self.min_cell_size else self.cell_size
+		if new_size < self.min_size:
+			self.show_err("Cell Size Cannot be less than 10 !")
+			return False
+		self.cell_size = new_size
+		return True
 
 	def set_current_sprite(self, tag):
 		self.curr_sprite = tag if tag in self.sprites else self.curr_sprite

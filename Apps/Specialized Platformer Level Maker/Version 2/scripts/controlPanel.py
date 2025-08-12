@@ -52,6 +52,7 @@ class ControlPanel(ctk.CTkFrame):
 
 		# variables
 		self.var = ctk.StringVar(value = self.settings["cell_size"])
+		self.file_name = None
 
 		# defining the GUI layout
 		self.columnconfigure((0, 1), weight = 1, uniform = 'a')
@@ -79,7 +80,8 @@ class ControlPanel(ctk.CTkFrame):
 			fg_color = self.settings["btn_color"],
 			hover_color = self.settings["btn_hover_color"],
 			width = self.settings["btn_size"][0],
-			height = self.settings["btn_size"][1]).grid(row = 2, column = 0, sticky = "NW")
+			height = self.settings["btn_size"][1],
+			command = self.get_file_name).grid(row = 2, column = 0, sticky = "NW")
 
 		# a button to load a pre-build level (work in progress)
 		ctk.CTkButton(self,
@@ -91,7 +93,31 @@ class ControlPanel(ctk.CTkFrame):
 			width = self.settings["btn_size"][0],
 			height = self.settings["btn_size"][1]).grid(row = 2, column = 1, sticky = "NE")
 
+		self.grid_pos = ctk.CTkLabel(self,
+			font = ctk.CTkFont(self.settings["font"], size = 25),
+			text_color = self.settings["label_txt_color"],
+			fg_color = self.settings["label_color"],
+			corner_radius = 10)
+		self.grid_pos.grid(row = 3, column = 0, columnspan = 2, sticky = "NSEW")
+
+		self.world_pos = ctk.CTkLabel(self,
+			font = ctk.CTkFont(self.settings["font"], size = 25),
+			text_color = self.settings["label_txt_color"],
+			fg_color = self.settings["label_color"],
+			corner_radius = 10)
+		self.world_pos.grid(row = 4, column = 0, columnspan = 2, sticky = "NSEW")
+
 		self.place(relx = self.settings["control_panel_pos"][0], rely = self.settings["control_panel_pos"][1], relwidth = self.settings["control_panel_size"][0], relheight = self.settings["control_panel_size"][1])
 
+	def get_file_name(self):
+		user_input = ctk.CTkInputDialog(text = "Enter Level Name", title = "Level Name")
+		if user_input:
+			self.file_name = user_input.get_input()
+			self.master.builder.finalize()
 
+	def update_mouse_info(self):
+		w_pos = self.master.world.get_world_pos()
+		g_pos = self.master.world.get_grid_pos()
+		self.grid_pos.configure(text = f"Grid Pos : {g_pos[0]}, {g_pos[1]}")
+		self.world_pos.configure(text = f"World Pos : {w_pos[0]}, {w_pos[1]}")
 

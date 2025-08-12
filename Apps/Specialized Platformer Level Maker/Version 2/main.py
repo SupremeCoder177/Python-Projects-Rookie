@@ -12,6 +12,7 @@ from scripts.controlPanel import ControlPanel
 from scripts.animations import move_frame
 from scripts.spriteHandler import SpriteHandler
 from scripts.worldPanel import WorldPanel
+from scripts.levelBuilder import Builder
 
 # main app class
 class App(ctk.CTk):
@@ -36,11 +37,16 @@ class App(ctk.CTk):
 
 		# instantiating the handler and builders and loaders
 		self.handler = SpriteHandler(self)
+		self.builder = Builder(self)
 
 		# binding key controls to window
 		self.bind("<Escape>", lambda event: self.quit())
 		self.bind("<Alt-KeyPress-Up>", lambda event: self.attributes("-fullscreen", True))
 		self.bind("<Alt-KeyPress-Down>", lambda event: self.attributes("-fullscreen", False))
+		self.bind("<KeyPress-c>", lambda event: self.toggle_control())
+		self.bind("<Alt-KeyPress-c>", lambda event: self.side_panel.controls.toggle_show_self())
+		self.bind("<KeyPress-r>", lambda event: self.delete_sprite())
+		self.bind("<Control-KeyPress-o>", lambda event: self.load_sprites())
 
 		# running the app
 		self.mainloop()
@@ -78,11 +84,13 @@ class App(ctk.CTk):
 	# deletes a sprite from loaded ones and updates display on side_panel
 	def delete_sprite(self):
 		self.handler.delete_sprite()
+		self.handler.curr_sprite = None
 		self.update_load_sprites()
 
 	# deletes all sprites from loaded and updates display on side_panel
 	def delete_all(self):
 		self.handler.delete_all()
+		self.handler.curr_sprite = None
 		self.update_load_sprites()
 
 	# shows an error message on the console in the control_panel
@@ -100,14 +108,17 @@ class App(ctk.CTk):
 		try:
 			temp = int(self.control.var.get())
 			if temp == self.handler.get_cell_size(): return
-			self.handler.change_cell_size(temp)
-			self.control.custom.show_msg("Cell Size Has been changed", 3000)
+			if temp <= 0:
+				self.show_err("Cell Size Cannot be negative !!")
+				return
+			if self.handler.change_cell_size(temp):
+				self.control.custom.show_msg("Cell Size Has been changed", 3000)
 		except Exception as e:
+			print(e)
 			self.show_err("Please enter only integer values")
 
 	# changes current selected sprite
 	def change_curr_sprite(self, tag):
-		print(tag)
 		self.handler.set_current_sprite(tag)
 
 

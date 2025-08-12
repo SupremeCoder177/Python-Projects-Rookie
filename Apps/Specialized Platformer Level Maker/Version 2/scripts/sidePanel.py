@@ -35,7 +35,24 @@ class Controls(ctk.CTkFrame):
 		self.hidden_pos = settings["controls_show_panel_pos"]
 		self.shown = False
 
+		# adding the labels to show controls
+		self.add_instruction("Here are the commands :", 25)
+		self.add_instruction("(i) Move around with wasd", 15)
+		self.add_instruction("(ii) Alt + Up Arrow = Full Screen Mode", 15)
+		self.add_instruction("(iii) Alt + Down Arrow = Escape Full Screen", 15)
+		self.add_instruction("(iv) Escape = Exit", 15)
+		self.add_instruction("(v) Press C for control panel", 15)
+		self.add_instruction("(vi) Press Ctrl + O to open an image", 15)
+		self.add_instruction("(vii) Press Alt + C to show this command panel", 15)
+
 		self.place(relx = settings["controls_show_panel_pos"][0], rely = settings["controls_show_panel_pos"][1], relwidth = settings["controls_show_panel_size"][0], relheight = settings["controls_show_panel_size"][1])
+
+	def add_instruction(self, text, font_size):
+		ctk.CTkLabel(self,
+			font = ctk.CTkFont(family = self.master.settings["font"], size = font_size),
+			text_color = self.master.settings["label_txt_color"],
+			fg_color = "transparent",
+			text = text).pack(pady = 10, padx = 10, fill = 'x')
 
 	def toggle_show_self(self):
 		if not self.shown:
