@@ -72,7 +72,7 @@ class ControlPanel(ctk.CTkFrame):
 			state = "disabled")
 		self.console.grid(row = 1, column = 0, columnspan = 2, sticky = "NSEW")
 
-		# a button to save and build level dependencies (work in progress)
+		# a button to save and build level dependencies 
 		ctk.CTkButton(self,
 			text = "Save",
 			font = ctk.CTkFont(family = self.settings["font"], size = 20),

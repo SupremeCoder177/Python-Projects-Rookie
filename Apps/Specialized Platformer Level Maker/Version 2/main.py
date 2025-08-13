@@ -47,6 +47,11 @@ class App(ctk.CTk):
 		self.bind("<Alt-KeyPress-c>", lambda event: self.side_panel.controls.toggle_show_self())
 		self.bind("<KeyPress-r>", lambda event: self.delete_sprite())
 		self.bind("<Control-KeyPress-o>", lambda event: self.load_sprites())
+		self.bind("<Control-KeyPress-s>", lambda event: self.control.get_file_name())
+		self.bind("<KeyPress-w>", lambda event: self.world.change_offset(0, self.settings["offset_change_speed"]))
+		self.bind("<KeyPress-s>", lambda event: self.world.change_offset(0, -self.settings["offset_change_speed"]))
+		self.bind("<KeyPress-a>", lambda event: self.world.change_offset(self.settings["offset_change_speed"], 0))
+		self.bind("<KeyPress-d>", lambda event: self.world.change_offset(-self.settings["offset_change_speed"], 0))
 
 		# running the app
 		self.mainloop()

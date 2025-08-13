@@ -44,6 +44,7 @@ class Controls(ctk.CTkFrame):
 		self.add_instruction("(v) Press C for control panel", 15)
 		self.add_instruction("(vi) Press Ctrl + O to open an image", 15)
 		self.add_instruction("(vii) Press Alt + C to show this command panel", 15)
+		self.add_instruction("(viii) Press Ctrl + S to save.", 15)
 
 		self.place(relx = settings["controls_show_panel_pos"][0], rely = settings["controls_show_panel_pos"][1], relwidth = settings["controls_show_panel_size"][0], relheight = settings["controls_show_panel_size"][1])
 

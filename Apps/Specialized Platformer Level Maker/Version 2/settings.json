@@ -19,7 +19,7 @@
 	"controls_show_panel_size" : [0.2, 0.45],
 	"controls_show_panel_show_pos" : [0.2, 0.55],
 	"world_color" : ["#CCC9DC", "#191716"],
-	"offset_change_speed" : 5,
+	"offset_change_speed" : 50,
 	"min_cell_size" : 10,
 	"world_grid_size" : 50,
 	"label_txt_color" : ["#222", "#ddd"],
