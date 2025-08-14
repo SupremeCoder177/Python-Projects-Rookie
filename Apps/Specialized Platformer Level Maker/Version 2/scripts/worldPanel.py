@@ -45,12 +45,15 @@ class WorldPanel(ctk.CTkCanvas):
 		if (self.grid_pos_x, self.grid_pos_y) not in self.occupied:
 			self.master.builder.add_cell((self.grid_pos_x, self.grid_pos_y))
 			img = ImageTk.PhotoImage(self.master.handler.sprites[self.master.handler.curr_sprite]["sprite"])
-			x = self.grid_pos_x * self.tile_size + (self.tile_size / 2)
-			y = self.grid_pos_y * self.tile_size + (self.tile_size / 2)
+			x = self.grid_pos_x * self.tile_size + (self.tile_size / 2) - self.offset_x
+			y = self.grid_pos_y * self.tile_size + (self.tile_size / 2) - self.offset_y
 			img_id = self.create_image(x, y, image=img)
 			self.occupied[(self.grid_pos_x, self.grid_pos_y)] = img, img_id
 		else:
 			self.master.show_err("Cell already occupied !")
+
+	def draw_stack(self, list):
+		pass
 
 	def erase(self):
 		if tuple(self.get_grid_pos()) in self.occupied:
@@ -65,3 +68,7 @@ class WorldPanel(ctk.CTkCanvas):
 		self.offset_y -= dy
 		self.change_pos(self.x, self.y)
 		
+	def clear(self):
+		self.occupied = dict()
+		self.x = self.y = self.offset_y = self.offset_x = 0
+		self.master.control.update_mouse_info()

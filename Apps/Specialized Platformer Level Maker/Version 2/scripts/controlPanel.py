@@ -91,7 +91,8 @@ class ControlPanel(ctk.CTkFrame):
 			fg_color = self.settings["btn_color"],
 			hover_color = self.settings["btn_hover_color"],
 			width = self.settings["btn_size"][0],
-			height = self.settings["btn_size"][1]).grid(row = 2, column = 1, sticky = "NE")
+			height = self.settings["btn_size"][1],
+			command = self.master.loader.load_level).grid(row = 2, column = 1, sticky = "NE")
 
 		self.grid_pos = ctk.CTkLabel(self,
 			font = ctk.CTkFont(self.settings["font"], size = 25),

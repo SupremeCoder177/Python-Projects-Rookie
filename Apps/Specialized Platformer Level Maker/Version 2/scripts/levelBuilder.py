@@ -10,6 +10,7 @@ class Builder:
 	def __init__(self, app):
 		self.app = app
 		self.occupied = dict()
+		self.stacked = list()
 		self.nothing_changed = False
 
 	# adds a cell to occupied
@@ -70,9 +71,13 @@ class Builder:
 						"pos" : key
 						}
 						count += 1
+				for stack in self.stacked:
+					temp[count] = stack
+					count += 1
 				with open(os.path.join(path, f"{name}.json"), "w") as f:
 						j.dump(temp, f, indent = True)
 				self.nothing_changed = True
+				self.app.show_err("File Has Been Saved.")
 			except Exception as e:
 				self.app.show_err("Something went wrong !")	
 		else:

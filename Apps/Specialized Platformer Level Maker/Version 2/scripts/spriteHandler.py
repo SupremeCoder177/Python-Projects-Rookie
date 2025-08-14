@@ -52,3 +52,10 @@ class SpriteHandler:
 
 	def get_cell_size(self):
 		return self.cell_size
+
+	def clear(self):
+		self.curr_sprite = None
+		self.sprites = dict()
+
+	def get_images(self):
+		pass

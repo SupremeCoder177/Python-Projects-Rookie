@@ -13,6 +13,7 @@ from scripts.animations import move_frame
 from scripts.spriteHandler import SpriteHandler
 from scripts.worldPanel import WorldPanel
 from scripts.levelBuilder import Builder
+from scripts.levelMaker import Maker
 
 # main app class
 class App(ctk.CTk):
@@ -30,14 +31,15 @@ class App(ctk.CTk):
 		with open("settings.json", "r") as f:
 			self.settings = load(f)
 
+		# instantiating the handler and builders and loaders
+		self.handler = SpriteHandler(self)
+		self.builder = Builder(self)
+		self.loader = Maker(self)
+
 		# instantiating the panels
 		self.world = WorldPanel(self)
 		self.side_panel = SidePanel(self)
 		self.control = ControlPanel(self)
-
-		# instantiating the handler and builders and loaders
-		self.handler = SpriteHandler(self)
-		self.builder = Builder(self)
 
 		# binding key controls to window
 		self.bind("<Escape>", lambda event: self.quit())
