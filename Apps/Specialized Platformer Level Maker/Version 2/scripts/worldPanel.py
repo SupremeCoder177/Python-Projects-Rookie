@@ -15,7 +15,9 @@ class WorldPanel(ctk.CTkCanvas):
 		self.offset_x = self.offset_y = 0
 		self.grid_pos_x = self.grid_pos_y = 0
 		self.tile_size = self.settings["world_grid_size"]
-		self.occupied = dict()
+		self.items = dict()
+		self.placed = dict()
+		self.count = 0
 
 		self.place(relx = self.settings["world_panel_pos"][0], rely = self.settings["world_panel_pos"][1], relwidth = self.settings["world_panel_size"][0], relheight = self.settings["world_panel_size"][1])
 		self.bind("<Motion>", lambda event: self.change_pos(event.x, event.y))
@@ -42,23 +44,35 @@ class WorldPanel(ctk.CTkCanvas):
 
 	def draw(self):
 		if not self.master.handler.curr_sprite: return
-		if (self.grid_pos_x, self.grid_pos_y) not in self.occupied:
-			self.master.builder.add_cell((self.grid_pos_x, self.grid_pos_y))
-			img = ImageTk.PhotoImage(self.master.handler.sprites[self.master.handler.curr_sprite]["sprite"])
-			x = self.grid_pos_x * self.tile_size + (self.tile_size / 2) - self.offset_x
-			y = self.grid_pos_y * self.tile_size + (self.tile_size / 2) - self.offset_y
-			img_id = self.create_image(x, y, image=img)
-			self.occupied[(self.grid_pos_x, self.grid_pos_y)] = img, img_id
+		self.master.builder.add_cell((self.grid_pos_x, self.grid_pos_y))
+		img = ImageTk.PhotoImage(self.master.handler.sprites[self.master.handler.curr_sprite]["sprite"])
+		x = self.grid_pos_x * self.tile_size + (self.tile_size / 2) - self.offset_x
+		y = self.grid_pos_y * self.tile_size + (self.tile_size / 2) - self.offset_y
+		img_id = self.create_image(x, y, image=img)
+		if (self.grid_pos_x, self.grid_pos_y) not in self.placed:
+			self.placed[(self.grid_pos_x, self.grid_pos_y)] = {"stack_level" : 1, "counts" : [self.count]}
 		else:
-			self.master.show_err("Cell already occupied !")
-
-	def draw_stack(self, list):
-		pass
+			self.placed[(self.grid_pos_x, self.grid_pos_y)]["stack_level"] += 1
+			self.placed[(self.grid_pos_x, self.grid_pos_y)]["counts"].append(self.count)
+		self.items[self.count] = {
+		"img" : img,
+		"id" : img_id,
+		"pos" : tuple(self.get_grid_pos()),
+		"level" : self.placed[tuple(self.get_grid_pos())]["stack_level"]
+		}
+		self.count += 1
 
 	def erase(self):
-		if tuple(self.get_grid_pos()) in self.occupied:
-			del self.occupied[tuple(self.get_grid_pos())]
-			self.master.builder.delete_cell(tuple(self.get_grid_pos()))
+		if tuple(self.get_grid_pos()) in self.placed:
+			for count in self.placed[tuple(self.get_grid_pos())]["counts"]:
+				if self.items[count]["level"] == self.placed[tuple(self.get_grid_pos())]["stack_level"]:
+					del self.items[count]
+					self.master.builder.delete_cell(tuple(self.get_grid_pos()))
+					self.placed[tuple(self.get_grid_pos())]["stack_level"] -= 1
+					if self.placed[tuple(self.get_grid_pos())]["stack_level"] >= 1:
+						self.placed[tuple(self.get_grid_pos())]["counts"].pop()
+					else:
+						del self.placed[tuple(self.get_grid_pos())]
 		else:
 			self.master.show_err("Nothing to erase !")
 
@@ -69,6 +83,7 @@ class WorldPanel(ctk.CTkCanvas):
 		self.change_pos(self.x, self.y)
 		
 	def clear(self):
-		self.occupied = dict()
-		self.x = self.y = self.offset_y = self.offset_x = 0
+		self.items = dict()
+		self.placed = dict()
+		self.x = self.y = self.offset_y = self.offset_x = self.count = 0
 		self.master.control.update_mouse_info()

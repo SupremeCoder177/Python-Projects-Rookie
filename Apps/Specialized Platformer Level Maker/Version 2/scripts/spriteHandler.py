@@ -10,7 +10,6 @@ class SpriteHandler:
 		self.cell_size = master.settings["cell_size"]
 		self.min_size = master.settings["min_cell_size"]
 		self.sprites = dict()
-		self.final_sprites = dict()
 		self.curr_sprite = None
 
 	def get_sprites(self, path : str):
@@ -57,5 +56,5 @@ class SpriteHandler:
 		self.curr_sprite = None
 		self.sprites = dict()
 
-	def get_images(self):
-		pass
+	def get_images(self, data):
+		return True

@@ -83,7 +83,7 @@ class ControlPanel(ctk.CTkFrame):
 			height = self.settings["btn_size"][1],
 			command = self.get_file_name).grid(row = 2, column = 0, sticky = "NW")
 
-		# a button to load a pre-build level (work in progress)
+		# a button to load a pre-built level (work in progress)
 		ctk.CTkButton(self,
 			text = "Load",
 			font = ctk.CTkFont(family = self.settings["font"], size = 20),
@@ -111,10 +111,18 @@ class ControlPanel(ctk.CTkFrame):
 		self.place(relx = self.settings["control_panel_pos"][0], rely = self.settings["control_panel_pos"][1], relwidth = self.settings["control_panel_size"][0], relheight = self.settings["control_panel_size"][1])
 
 	def get_file_name(self):
-		user_input = ctk.CTkInputDialog(text = "Enter Level Name", title = "Level Name")
-		if user_input:
-			self.file_name = user_input.get_input()
+		if self.master.builder.last_save_name:
 			self.master.builder.finalize()
+			return True
+
+		user_input = ctk.CTkInputDialog(text = "Enter Level Name", title = "Level Name").get_input()
+		if len(user_input) != 0:
+			self.file_name = user_input
+			self.master.builder.finalize()
+			return True
+		else:
+			self.master.show_err("Please enter a file name !")
+		return False
 
 	def update_mouse_info(self):
 		w_pos = self.master.world.get_world_pos()
