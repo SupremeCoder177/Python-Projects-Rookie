@@ -22,7 +22,16 @@ class Maker:
 			with open(path, "r") as f:
 				data = load(f)
 			self.app.show_err("Loading....")
-			self.app.handler.get_images(data)
+
+			# loading the sprites
+			if self.app.handler.get_images(data, os.path.split(path)[0]):
+				self.app.side_panel.update(self.app.handler.sprites)
+			else:
+				self.app.show_err("Sprites could not be loaded !")
+
+			# drawing the map on the world panel and updating info in the builder module
+			self.app.world.draw_data(data)
+			self.app.builder.add_data(data, path)
 						
 
 				

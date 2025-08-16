@@ -2,6 +2,7 @@
 
 import customtkinter as ctk
 from PIL import ImageTk
+import os
 
 class WorldPanel(ctk.CTkCanvas):
 
@@ -42,6 +43,7 @@ class WorldPanel(ctk.CTkCanvas):
 	def get_world_pos(self):
 		return self.x, self.y
 
+	# user input draw method
 	def draw(self):
 		if not self.master.handler.curr_sprite: return
 		self.master.builder.add_cell((self.grid_pos_x, self.grid_pos_y))
@@ -62,6 +64,7 @@ class WorldPanel(ctk.CTkCanvas):
 		}
 		self.count += 1
 
+	# user input erase method
 	def erase(self):
 		if tuple(self.get_grid_pos()) in self.placed:
 			for count in self.placed[tuple(self.get_grid_pos())]["counts"]:
@@ -76,6 +79,32 @@ class WorldPanel(ctk.CTkCanvas):
 		else:
 			self.master.show_err("Nothing to erase !")
 
+	# level loader draw method
+	def draw_data(self, data):
+		self.clear()
+		level = 1
+		for item in data.values():
+			for val in item.values():
+				if tuple(val["pos"]) not in self.placed:
+					self.placed[tuple(val["pos"])] = {"stack_level" : level,  "counts" : [self.count]}
+				else:
+					self.placed[tuple(val["pos"])]["stack_level"] += 1
+					self.placed[tuple(val["pos"])]["counts"].append(self.count)
+				img_name = os.path.split(val["img_path"])[1]
+				tag = [t for t in self.master.handler.sprites if os.path.split(t)[1] == img_name][0]
+				img = ImageTk.PhotoImage(self.master.handler.sprites[tag]["sprite"])
+				x = val["pos"][0] * self.tile_size + (self.tile_size / 2)
+				y = val["pos"][1] * self.tile_size + (self.tile_size / 2)
+				img_id = self.create_image(x, y, image=img)
+				self.items[self.count] = {
+				"img" : img,
+				"id" : img_id,
+				"pos" : val["pos"],
+				"level" : level
+				}
+				self.count += 1
+			level += 1
+
 	def change_offset(self, dx, dy):
 		self.move("all", dx, dy)
 		self.offset_x -= dx
@@ -85,5 +114,4 @@ class WorldPanel(ctk.CTkCanvas):
 	def clear(self):
 		self.items = dict()
 		self.placed = dict()
-		self.x = self.y = self.offset_y = self.offset_x = self.count = 0
-		self.master.control.update_mouse_info()
+		self.count = 0

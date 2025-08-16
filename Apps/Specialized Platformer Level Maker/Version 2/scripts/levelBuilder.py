@@ -39,6 +39,38 @@ class Builder:
 				"level" : self.placed[pos]
 				})
 
+	# adds cell data from json file
+	def add_data(self, data, path):
+		self.clear()
+		self.last_save_name = os.path.split(path)[1].split('.')[0]
+		self.last_save_path = os.path.split(path)[0]
+		for item in data.values():
+			for val in item.values():
+				img_name = os.path.split(val["img_path"])[1]
+				img_tag = [t for t in self.app.handler.sprites if os.path.split(t)[1] == img_name][0]
+				img = self.app.handler.sprites[img_tag]["sprite"]
+				size = self.app.handler.sprites[img_tag]["sprite_size"]
+				rel_name = img_name.split('.')[0]
+
+				if tuple(val["pos"]) not in self.placed:
+					self.placed[tuple(val["pos"])] = 1
+				else:
+					self.placed[tuple(val["pos"])] += 1
+				if tuple(val["pos"]) not in self.items:
+					self.items[tuple(val["pos"])] = [{
+					"sprite" : img,
+					"size" : size,
+					"tag" : rel_name,
+					"level" : self.placed[tuple(val["pos"])]
+					}]
+				else:
+					self.items[tuple(val["pos"])].append({
+						"sprite" : img,
+						"size" : size,
+						"tag" : rel_name,
+						"level" : self.placed[tuple(val["pos"])]
+						})
+
 	# deletes a cell from occupied 
 	def delete_cell(self, pos):
 		if pos in self.placed:
@@ -60,14 +92,14 @@ class Builder:
 			path = filedialog.askdirectory()
 		if path or self.last_save_path:
 			name = self.app.control.file_name
-			self.last_save_name = name
+			self.last_save_name = name if name else self.last_save_name
 			self.last_save_path = path if path else self.last_save_path
 			try:
 				# making a directory to save the user images
 				os.chdir(path if path else self.last_save_path)
-				if f"{name} sprites" not in os.listdir():
-					os.mkdir(f"{name} sprites")
-				os.chdir(f"{name} sprites")
+				if f"{self.last_save_name} sprites" not in os.listdir():
+					os.mkdir(f"{self.last_save_name} sprites")
+				os.chdir(f"{self.last_save_name} sprites")
 				invalids = ["/", ":", " ", "."]
 				names = dict()
 				already_saved = list()
@@ -108,7 +140,7 @@ class Builder:
 							count += 1
 
 				# writing to the json file
-				with open(os.path.join(path if path else self.last_save_path, f"{name}.json"), "w") as f:
+				with open(os.path.join(path if path else self.last_save_path, f"{self.last_save_name}.json"), "w") as f:
 						j.dump(temp, f, indent = True)
 
 				self.nothing_changed = True
@@ -118,3 +150,9 @@ class Builder:
 				self.app.show_err("Something went wrong !")	
 		else:
 			self.app.show_err("Select a directory to save file !")
+
+	def clear(self):
+		self.last_save_path = self.last_save_name = None
+		self.items = dict()
+		self.placed = dict()
+		self.nothing_changed = True

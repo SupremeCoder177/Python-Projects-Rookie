@@ -1,7 +1,7 @@
 # this module handles all the loading and unloading of sprites from images
 
 from PIL import Image
-
+import os
 
 class SpriteHandler:
 
@@ -56,5 +56,23 @@ class SpriteHandler:
 		self.curr_sprite = None
 		self.sprites = dict()
 
-	def get_images(self, data):
+	def get_images(self, data, path):
+		os.chdir(path)
+		if len(data) == 0: return True
+		for item in data.values():
+			for val in item.values():
+				try:
+					if val["img_path"] not in self.sprites:
+						img = Image.open(val["img_path"])
+						self.sprites[val["img_path"]] = {
+						"sprite" : img,
+						"sprite_size" : (img.size[0], img.size[1])
+						}					
+				except Exception as e:
+					return False
 		return True
+
+
+
+
+
