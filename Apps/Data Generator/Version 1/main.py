@@ -4,6 +4,7 @@ import customtkinter as ctk
 from json import load
 from darkdetect import isDark
 from console import Console
+from tableView import TableView
 
 
 # main app class
@@ -21,14 +22,17 @@ class App(ctk.CTk):
 		super().__init__()
 		self.title("CSV Data Generator")
 
+		# variables
+		self.theme = "light"
+
+		ctk.set_appearance_mode(self.theme)
+
 		# settings the theme, if the them file is not present, then using default customtkiner themes
 		try:
 			ctk.set_default_color_theme("theme.json")
 			print("sucessfully set custom theme")
 		except FileNotFoundError as e:
-			# setting the appropriate theme
 			print("Couldn't load theme settings")
-			ctk.set_appearance_mode("dark" if isDark() else "light")
 
 		# setting window dimensions and position
 		x = (self.winfo_screenwidth() - self.settings["app_size"][0]) // 2
@@ -37,8 +41,16 @@ class App(ctk.CTk):
 
 		# adding widgets
 
+		# a button to toggle theme
+		ctk.CTkButton(self,
+			text = "T",
+			command = self.theme_toggle).place(relx = 0, rely = 0.95, relwidth = 0.05, relheight = 0.05)
+
 		# adding the console
 		self.console = Console(self, self.settings)
+
+		# adding the table view
+		self.view = TableView(self, self.settings)
 
 		self.bind("<Escape>", lambda event: self.quit())
 		self.mainloop()
@@ -55,6 +67,10 @@ class App(ctk.CTk):
 		except FileNotFoundError as e:
 			return False
 
+	# function to change the theme of the app from light to dark mode, or vice-versa
+	def theme_toggle(self):
+		self.theme = "dark" if self.theme == "light" else "light"
+		ctk.set_appearance_mode(self.theme)
 
 
 if __name__ == "__main__":

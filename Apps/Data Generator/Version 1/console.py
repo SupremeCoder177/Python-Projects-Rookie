@@ -11,7 +11,7 @@ class Console(ctk.CTkFrame):
 
 		self.default_messages = {
 		"default" : "App status, good !",
-		"error" : "An error has occurred,\nplease exit the application\nand try again.",
+		"error" : "An error has occurred !",
 		"warning" : "Input error has occurred"
 		}
 
