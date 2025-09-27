@@ -1,0 +1,8 @@
+{
+	"app_size" : [800, 600],
+	"console_pos" : [0, 0.8],
+	"console_dimensions" : [0.4, 0.2],
+	"console_bg" : "black",
+	"console_txt_clr" : "light green",
+	"console_label_bg" : "transparent"
+}

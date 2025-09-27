@@ -6,5 +6,9 @@
     "Skullfire": {
         "password": "something12",
         "path": "data/csv/Skullfire.csv"
+    },
+    "something12": {
+        "password": "agoodpassword01",
+        "path": "data/csv/something12.csv"
     }
 }

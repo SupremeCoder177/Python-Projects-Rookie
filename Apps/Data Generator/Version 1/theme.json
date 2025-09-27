@@ -1,0 +1,60 @@
+{
+	"CTk" : {
+		"fg_color" : ["#1f8f36", "#d8e8db"]
+	},
+	"CTkButton" : {
+		"fg_color" : ["#38ba50", "#38ba50"],
+		"hover_color" : ["#2a913d", "#2a913d"],
+		"corner_radius" : 10,
+		"border_color" : ["black", "white"],
+		"text_color" : ["white", "white"],
+		"text_color_disabled" : ["gray74", "gray60"],
+		"border_width" : 1,
+		"font_size" : 10
+	},
+	"CTkFont" : {
+		"macOS" : {
+			"family" : "Cascadia Mono",
+			"size" : 14,
+			"weight" : "normal"
+		},
+		"Windows" : {
+			"family" : "Cascadia Mono",
+			"size" : 14,
+			"weight" : "normal"
+		},
+		"Linux" : {
+			"family" : "Cascadia Mono",
+			"size" : 14,
+			"weight" : "normal"
+		}
+	},
+	"CTkFrame" : {
+		"fg_color" : ["#bdffc9", "#bdfeff"],
+		"border_width" : 3,
+		"top_fg_color" : ["white", "white"],
+		"border_color" : ["black", "white"],
+		"corner_radius" : 10
+	},
+	"CTkLabel" : {
+		"corner_radius" : 0,
+		"fg_color" : ["black", "white"],
+		"text_color" : ["white", "black"]
+	},
+	"CTkTextbox" : {
+		"corner_radius" : 10,
+		"fg_color" : ["black", "white"],
+		"text_color" : ["white", "black"],
+		"border_width" : 1,
+		"border_color" : ["white", "black"],
+		"scrollbar_button_color" : ["gray74", "gray60"],
+		"scrollbar_button_hover_color" : ["gray60", "gray40"]
+	},
+	"CTkScrollbar": {
+    	"corner_radius": 1000,
+    	"border_spacing": 4,
+    	"fg_color": "transparent",
+    	"button_color": ["gray55", "gray41"],
+    	"button_hover_color": ["gray40", "gray53"]
+  	}
+}
