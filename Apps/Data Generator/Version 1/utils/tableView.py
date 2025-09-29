@@ -3,7 +3,7 @@
 import customtkinter as ctk
 
 
-class Table(ctk.CTkScrollableFrame):
+class Table(ctk.CTkFrame):
 
 	def __init__(self, master : ctk.CTkFrame, settings : dict):
 		self.settings = settings
@@ -12,20 +12,22 @@ class Table(ctk.CTkScrollableFrame):
 		# variables
 		self.x = 0
 		self.y = 0
-		self.width = 0.2
-		self.height = 0.1
+		self.cell_width = 0.2
+		self.cell_height = 0.1
+
+		self.add_cell("Hello")
 
 		self.place(relx = self.settings["canvas_pos"][0], rely = self.settings["canvas_pos"][1], relwidth = self.settings["canvas_dimensions"][0], relheight = self.settings["canvas_dimensions"][1])
 
 	# add a cell to the frame
 	def add_cell(self, text : str) -> None:
 		label = ctk.CTkLabel(self, text = text, fg_color = "#3F3244")
-		label.place(relx = self.x, rely = self.y, relwidth = self.width, relheight = self.height)
-		self.x += self.width
+		label.place(relx = self.x, rely = self.y, relwidth = self.cell_width, relheight = self.cell_height)
+		self.x += self.cell_width
 
 		# resetting the cell draw offset
-		if self.x >= 1:
-			self.y += self.height
+		if self.x >= self.winfo_width():
+			self.y += self.cell_height
 			self.x = 0
 
 	# deletes all the cells on the table

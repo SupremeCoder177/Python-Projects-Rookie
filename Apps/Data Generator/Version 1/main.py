@@ -3,8 +3,11 @@
 import customtkinter as ctk
 from json import load
 from darkdetect import isDark
-from console import Console
-from tableView import TableView
+from utils.console import Console
+from utils.tableView import TableView
+from utils.animations import Animations
+from tkinter import filedialog, messagebox
+import threading
 
 
 # main app class
@@ -17,6 +20,7 @@ class App(ctk.CTk):
 			print("Settings loaded sucessfully, loading components...")
 		else:
 			print("Couldn't load settings, exiting...")
+			return
 
 		# initializing tkinter and settings title
 		super().__init__()
@@ -29,7 +33,7 @@ class App(ctk.CTk):
 
 		# settings the theme, if the them file is not present, then using default customtkiner themes
 		try:
-			ctk.set_default_color_theme("theme.json")
+			ctk.set_default_color_theme("settings/theme.json")
 			print("sucessfully set custom theme")
 		except FileNotFoundError as e:
 			print("Couldn't load theme settings")
@@ -38,6 +42,9 @@ class App(ctk.CTk):
 		x = (self.winfo_screenwidth() - self.settings["app_size"][0]) // 2
 		y = (self.winfo_screenheight() - self.settings["app_size"][1]) // 2
 		self.geometry(f"{self.settings["app_size"][0]}x{self.settings["app_size"][1]}+{x}+{y}")
+
+		# active threads variables
+		self.threads = list()
 
 		# adding widgets
 
@@ -52,8 +59,29 @@ class App(ctk.CTk):
 		# adding the table view
 		self.view = TableView(self, self.settings)
 
-		self.bind("<Escape>", lambda event: self.quit())
+		self.bind("<Escape>", lambda event: self.quit_app())
 		self.mainloop()
+
+	# animates the console with a generating... text animation
+	def animate_generation(self):
+		Animations().animate_text(self.console, "Generating",  "Generating.....", ".", 2000)
+		self.after(2000, self.animate_generation)
+
+	# adds a thread to the active threads
+	def add_thread(self, target):
+		temp = threading.Thread(target = target)
+		temp.daemon = True
+		self.threads.append(temp)
+		temp.start()
+
+	# prompts the user if they want to close the app
+	# if some background threads are still running
+	# else just quit normally
+	def quit_app(self):
+		if threading.active_count() == 1:
+			self.quit()
+		else:
+			if messagebox.askokcancel(title = "Are you Sure?",message = "Some background tasks are still running, do you still wanna quit?"): self.quit()
 
 	# loads the json file which contains the app settings
 	# the app will not start if the json file is missing
@@ -61,14 +89,14 @@ class App(ctk.CTk):
 	# app to function
 	def load_data(self) -> bool:
 		try:
-			with open("settings.json", "r") as f:
+			with open("settings/settings.json", "r") as f:
 				self.settings = load(f)
 			return True
 		except FileNotFoundError as e:
 			return False
 
 	# function to change the theme of the app from light to dark mode, or vice-versa
-	def theme_toggle(self):
+	def theme_toggle(self) -> None:
 		self.theme = "dark" if self.theme == "light" else "light"
 		ctk.set_appearance_mode(self.theme)
 
