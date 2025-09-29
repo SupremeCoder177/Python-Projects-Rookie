@@ -15,8 +15,6 @@ class Table(ctk.CTkFrame):
 		self.cell_width = 0.2
 		self.cell_height = 0.1
 
-		self.add_cell("Hello")
-
 		self.place(relx = self.settings["canvas_pos"][0], rely = self.settings["canvas_pos"][1], relwidth = self.settings["canvas_dimensions"][0], relheight = self.settings["canvas_dimensions"][1])
 
 	# add a cell to the frame

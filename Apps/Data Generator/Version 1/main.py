@@ -5,7 +5,9 @@ from json import load
 from darkdetect import isDark
 from utils.console import Console
 from utils.tableView import TableView
+from utils.mainPanel import MainPanel
 from utils.animations import Animations
+from utils.sidePanel import SidePanel
 from tkinter import filedialog, messagebox
 import threading
 
@@ -43,15 +45,7 @@ class App(ctk.CTk):
 		y = (self.winfo_screenheight() - self.settings["app_size"][1]) // 2
 		self.geometry(f"{self.settings["app_size"][0]}x{self.settings["app_size"][1]}+{x}+{y}")
 
-		# active threads variables
-		self.threads = list()
-
 		# adding widgets
-
-		# a button to toggle theme
-		ctk.CTkButton(self,
-			text = "T",
-			command = self.theme_toggle).place(relx = 0, rely = 0.95, relwidth = 0.05, relheight = 0.05)
 
 		# adding the console
 		self.console = Console(self, self.settings)
@@ -59,19 +53,35 @@ class App(ctk.CTk):
 		# adding the table view
 		self.view = TableView(self, self.settings)
 
+		# adding the side panel
+		self.side_panel = SidePanel(self, self.settings)
+
+		# adding the main panel
+		self.main_panel = MainPanel(self, self.settings)
+
+		# raising the side_panel above the main panel
+		self.side_panel.tkraise()
+
+		self.animate_generation()
+
+		# adding a theme toggle button
+		ctk.CTkButton(self,
+			text = "T",
+			command = self.theme_toggle,
+			corner_radius = 0).place(relx = 0.95, rely = 0.95, relwidth = 0.05, relheight = 0.05)
+
 		self.bind("<Escape>", lambda event: self.quit_app())
 		self.mainloop()
 
 	# animates the console with a generating... text animation
 	def animate_generation(self):
-		Animations().animate_text(self.console, "Generating",  "Generating.....", ".", 2000)
+		Animations().animate_text(self.console, "Generating",  "Generating.........", ".", 2000)
 		self.after(2000, self.animate_generation)
 
 	# adds a thread to the active threads
 	def add_thread(self, target):
 		temp = threading.Thread(target = target)
 		temp.daemon = True
-		self.threads.append(temp)
 		temp.start()
 
 	# prompts the user if they want to close the app

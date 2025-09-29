@@ -9,5 +9,12 @@
 	"table_view_dimensions" : [0.4, 0.9],
 	"canvas_dimensions" : [0.9, 0.86],
 	"canvas_pos" : [0.05, 0.13],
-	"canvas_fill" : ["#102E4A", "#F7FFDD"]
+	"canvas_fill" : ["#102E4A", "#F7FFDD"],
+	"main_panel_pos" : [0.02, 0],
+	"main_panel_dimensions" : [0.56, 1],
+	"main_panel_btn_container_bg" : ["#E78F8E", "#383B53"],
+	"main_panel_btn_container_border_color" : ["#32213A", "#32213A"],
+	"side_panel_start_pos" : [-0.3, 0.2],
+	"side_panel_shown_pos" : [0.02, 0.2],
+	"side_panel_dimensions" : [0.3, 0.6]
 }
