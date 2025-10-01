@@ -4,6 +4,13 @@ import customtkinter as ctk
 from utils.animations import Animations
 
 
+# this class defines the GUI for the side panel inputs
+class InputFrame(ctk.CTkFrame):
+
+	def __init__(self, master : ctk.CTkFrame, settings : dict):
+		pass
+
+
 class SidePanel(ctk.CTkFrame):
 
 	def __init__(self, master : ctk.CTk, settings : dict):
@@ -15,7 +22,7 @@ class SidePanel(ctk.CTkFrame):
 		self.end_x = self.settings["side_panel_shown_pos"][0]
 		self.y = self.settings["side_panel_start_pos"][1]
 		self.hidden = True
-		self.anim_time = 500 # milliseconds
+		self.anim_time = 300 # milliseconds
 
 		# adding the widgets
 
@@ -33,3 +40,7 @@ class SidePanel(ctk.CTkFrame):
 		else:
 			Animations().slide_frame_horizontal(self, self.end_x, self.start_x, self.y, self.anim_time)
 		self.hidden = not self.hidden
+
+	# returns true if not hidden, else false
+	def is_shown(self) -> bool:
+		return not self.hidden

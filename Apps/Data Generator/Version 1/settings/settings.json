@@ -16,5 +16,8 @@
 	"main_panel_btn_container_border_color" : ["#32213A", "#32213A"],
 	"side_panel_start_pos" : [-0.3, 0.2],
 	"side_panel_shown_pos" : [0.02, 0.2],
-	"side_panel_dimensions" : [0.3, 0.6]
+	"side_panel_dimensions" : [0.3, 0.6],
+	"column_heading_fg_color" : ["#EDB88B", "#344966"],
+	"column_heading_fg_color_selected" : ["#edd2bb", "#48586e"],
+	"column_heading_border_color" : ["#CD5334", "#0D1821"]
 }
