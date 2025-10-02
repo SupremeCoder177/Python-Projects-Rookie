@@ -1,0 +1,8 @@
+{
+	"America" : {
+		"firsts_male" : ["John", "Mark", "Tom", "Brian", "Bryan", "Joseph", "Carl", "Alan", "Micheal", "Tim", "Timothy", "Zach",
+						 "Zacherry", "Harry", "Sean", "George", "Peter", "Carl", "Stanley", "Stan", "Bill", "Clint", "Flint",
+						 "Hugh", "Bruce", "Clark", "Liam", "Nathan", "Kevin", "Mike", "Bob"],
+		"firsts_female" : ["Lucy", "Nancy", "Sara", "Helen", "Lois", "Martha", "Emma", ""]
+	}
+}

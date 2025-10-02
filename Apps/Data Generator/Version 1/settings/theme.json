@@ -59,5 +59,26 @@
   	},
   	"CTkScrollableFrame" : {
   		"label_fg_color" : ["#EFF9F0", "#2F2235"]
+  	},
+  	"CTkEntry" : {
+  		"corner_radius" : 10,
+  		"border_width" : 2,
+  		"fg_color" : ["#E2E8DD", "#02111B"],
+  		"border_color" : ["#B7D1DA", "#82816D"],
+  		"text_color" : ["black", "white"],
+  		"placeholder_text_color" : ["gray74", "gray74"]
+  	},
+  	"CTkOptionMenu" : {
+  		"corner_radius" : 10,
+  		"fg_color" : ["#FFF7AE", "#41292C"],
+  		"button_color" : ["#75C9C8", "#AC7B7D"],
+  		"button_hover_color" : ["#1C3144", "#41292C"],
+  		"text_color" : ["black", "white"],
+  		"text_color_disabled" : ["gray74", "gray74"]
+  	},
+  	"DropdownMenu" : {
+  		"fg_color" : ["#9EC5AB", "#031926"],
+  		"hover_color" : ["#32746D", "#998DA0"],
+  		"text_color" : ["black", "white"]
   	}
 }

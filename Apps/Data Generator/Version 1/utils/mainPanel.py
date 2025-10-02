@@ -2,6 +2,8 @@
 
 import customtkinter as ctk
 from typing import List
+from utils.commonWidgets import LabelEntry, LabelOptions
+from utils.generator import DATA_TYPES
 
 
 # this class defines the columns stored in the column container widget of the main panel (see below)
@@ -16,10 +18,10 @@ class ColumnHeading(ctk.CTkFrame):
 		# variables
 		self.settings = settings
 		self.master_of_master = master_of_master
-		self.name = column_name
-		self.d_type = column_data_type
-		self.lower = lower_range
-		self.upper = upper_range
+		self.name = ctk.StringVar(value = column_name)
+		self.d_type = ctk.StringVar(value = column_data_type)
+		self.lower = ctk.StringVar(value = lower_range)
+		self.upper = ctk.StringVar(value = upper_range)
 		self.selected = False
 		self.permanent_select = False
 		self.edit_mode = False
@@ -49,6 +51,23 @@ class ColumnHeading(ctk.CTkFrame):
 			command = self.toggle_state)
 		self.cancel_btn.place(relx = 0.79, rely = 0.84, relwidth = 0.2, relheight = 0.15)
 
+		# sub-frames
+		self.name_frame = LabelEntry(self, self.name, "Name")
+		self.type_frame = LabelOptions(self, DATA_TYPES, self.d_type, "Type")
+		self.lower_frame = LabelEntry(self, self.lower, "Lower")
+		self.upper_frame = LabelEntry(self, self.upper, "Upper")
+
+		# placing the sub-frames
+		self.name_frame.place(relx = 0.2, rely = 0.01, relwidth = 0.3, relheight = 0.4)
+		self.type_frame.place(relx = 0.5, rely = 0.01, relwidth = 0.3, relheight = 0.4)
+		self.lower_frame.place(relx = 0.2, rely = 0.41, relwidth = 0.3, relheight = 0.4)
+		self.upper_frame.place(relx = 0.5, rely = 0.41, relwidth = 0.3, relheight = 0.4)
+
+		# disabling the inputs for the sub-frames
+		self.name_frame.entry.configure(state = "disabled")
+		self.type_frame.menu.configure(state = "disabled")
+		self.lower_frame.entry.configure(state = "disabled")
+		self.upper_frame.entry.configure(state = "disabled")
 
 		# event bindings
 		self.bind("<Enter>", lambda event: self.selection_status_toggle())
@@ -70,9 +89,17 @@ class ColumnHeading(ctk.CTkFrame):
 		if self.edit_mode:
 			self.save_btn.configure(state = "normal")
 			self.cancel_btn.configure(state = "normal")
+			self.name_frame.entry.configure(state = "normal")
+			self.type_frame.menu.configure(state = "normal")
+			self.lower_frame.entry.configure(state = "normal")
+			self.upper_frame.entry.configure(state = "normal")
 		else:
 			self.save_btn.configure(state = "disabled")
 			self.cancel_btn.configure(state = "disabled")
+			self.name_frame.entry.configure(state = "disabled")
+			self.type_frame.menu.configure(state = "disabled")
+			self.lower_frame.entry.configure(state = "disabled")
+			self.upper_frame.entry.configure(state = "disabled")
 
 	# toggle the permanent select variable
 	def toggle_perma_select(self, event):
@@ -82,15 +109,29 @@ class ColumnHeading(ctk.CTkFrame):
 	def change_color(self) -> None:
 		self.configure(fg_color = self.settings["column_heading_fg_color_selected"] if self.selected or self.permanent_select else self.settings["column_heading_fg_color"])
 
+	# changes the index label text
+	def change_index(self, index) -> None:
+		self.index_label.configure(text = index)
+
+	# returns the name of the column
+	def get_name(self) -> str:
+		return self.name.get()
+
+	# tries to change the data with the
+	# new input data
+	def change_data(self):
+		pass
+
 
 # the main panel
 class MainPanel(ctk.CTkFrame):
 
-	def __init__(self, master : ctk.CTk, settings : dict):
+	def __init__(self, master : ctk.CTk, settings : dict, console):
 		super().__init__(master = master)
 
 		# variables
 		self.settings = settings
+		self.console = console
 		self.index = 1
 		self.headings = []
 
@@ -108,11 +149,6 @@ class MainPanel(ctk.CTkFrame):
 			fg_color = self.settings["main_panel_btn_container_bg"],
 			border_color = self.settings["main_panel_btn_container_border_color"])
 		self.buttons_container.place(relx = 0.01, rely = 0.89, relwidth = 0.98, relheight = 0.1)
-
-		self.add_column("Something", "Date", 100, 200)
-		self.add_column("Something", "Name", 100, 200)
-		self.add_column("Something", "Email", 100, 200)
-		self.add_column("Something", "Gender", 0, 0)
 
 		# adding a grid to the buttons container
 		self.buttons_container.columnconfigure((0, 1, 2), weight = 1, uniform = 'a')
@@ -143,11 +179,16 @@ class MainPanel(ctk.CTkFrame):
 
 		self.place(relx = self.settings["main_panel_pos"][0], rely = self.settings["main_panel_pos"][1], relwidth = self.settings["main_panel_dimensions"][0], relheight = self.settings["main_panel_dimensions"][1])
 
-	# adds a column to the GUI column container
-	def add_column(self, name : str, data_type : str, lower : int, upper : int) -> None:
+	# adds a column to the GUI column container, returns a true if column was succesfully added
+	# else false
+	def add_column(self, name : str, data_type : str, lower : int, upper : int) -> bool:
+		for heading in self.headings:
+			if heading.get_name() == name: return False
+
 		temp = ColumnHeading(self.column_container, self.settings, name, data_type, lower, upper, self.index, self)
 		self.index += 1
 		self.headings.append(temp)
+		return True
 
 	# deletes all the columns from the column container
 	def reset_columns(self) -> None:

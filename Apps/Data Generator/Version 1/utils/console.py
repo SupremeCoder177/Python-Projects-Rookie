@@ -10,7 +10,7 @@ class Console(ctk.CTkFrame):
 		self.settings = settings
 
 		self.default_messages = {
-		"default" : "App status, good !",
+		"default" : "App status, good ! :)",
 		"error" : "An error has occurred !",
 		"warning" : "Input error has occurred"
 		}

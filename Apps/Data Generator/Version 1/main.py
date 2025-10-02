@@ -68,10 +68,10 @@ class App(ctk.CTk):
 		self.view = TableView(self, self.settings)
 
 		# adding the side panel
-		self.side_panel = SidePanel(self, self.settings)
+		self.side_panel = SidePanel(self, self.settings, self.console)
 
 		# adding the main panel
-		self.main_panel = MainPanel(self, self.settings)
+		self.main_panel = MainPanel(self, self.settings, self.console)
 
 		# raising the side_panel above the main panel
 		self.side_panel.tkraise()
@@ -121,6 +121,16 @@ class App(ctk.CTk):
 	def theme_toggle(self) -> None:
 		self.theme = "dark" if self.theme == "light" else "light"
 		ctk.set_appearance_mode(self.theme)
+
+	# retrives the data from the side panel and adds
+	# it to the main panel
+	def add_column_to_main(self) -> None:
+		data = self.side_panel.get_data()
+		if data:
+			if not self.main_panel.add_column(data["name"], data["type"], data["lower"], data["upper"]):
+				self.console.set_text("This Column Already Exists !", 2000, "Change Column Name")
+		else:
+			self.console.display_warning()
 
 
 if __name__ == "__main__":
