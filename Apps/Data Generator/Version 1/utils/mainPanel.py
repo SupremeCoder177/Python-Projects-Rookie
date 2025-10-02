@@ -110,8 +110,8 @@ class ColumnHeading(ctk.CTkFrame):
 		self.configure(fg_color = self.settings["column_heading_fg_color_selected"] if self.selected or self.permanent_select else self.settings["column_heading_fg_color"])
 
 	# changes the index label text
-	def change_index(self, index) -> None:
-		self.index_label.configure(text = index)
+	def change_index(self, index : int) -> None:
+		self.index_label.configure(text = str(index))
 
 	# returns the name of the column
 	def get_name(self) -> str:
@@ -121,6 +121,10 @@ class ColumnHeading(ctk.CTkFrame):
 	# new input data
 	def change_data(self):
 		pass
+
+	# returns whether the column is selected for deletion
+	def is_selected_for_deletion(self) -> bool:
+		return self.permanent_select
 
 
 # the main panel
@@ -162,13 +166,17 @@ class MainPanel(ctk.CTkFrame):
 			command = self.master.side_panel.move).grid(row = 1, column = 0, sticky = "NSEW")
 
 		# the button which deletes the selected columns
-
-
-		# the button which generates the data
-
+		ctk.CTkButton(self.buttons_container,
+			text = "Delete",
+			command = self.delete_column).grid(row = 1, column = 1, sticky = "NSEW")
 
 		# the button which saves the data into a csv 
+		ctk.CTkButton(self.buttons_container,
+			text = "Save").grid(row = 1, column = 2, sticky = "NSEW")
 
+		# the button which generates the data
+		ctk.CTkButton(self.buttons_container,
+			text = "Generate Data").grid(row = 0, column = 1, sticky = "NSEW")
 
 		# adding event bindings
 
@@ -197,8 +205,24 @@ class MainPanel(ctk.CTkFrame):
 			child.destroy()
 
 	# deletes a specific column/columns from the column container
-	def delete_column(self, index : int | List[int]) -> None:
-		pass
+	# and changes the index of the other columns accordingly
+	def delete_column(self) -> None:
+		for child in self.column_container.winfo_children():
+			if child.is_selected_for_deletion():
+				child.destroy()
+
+		delete_indices = []
+		for i in range(len(self.headings)):
+			if self.headings[i].is_selected_for_deletion(): delete_indices.append(i)
+
+		for index in delete_indices:
+			self.headings.pop(index)
+
+		count = 1
+		for heading in self.headings:
+			heading.change_index(count)
+			count += 1
+		self.index = count
 
 	# hides the side panel
 	def focus_panel(self, event):

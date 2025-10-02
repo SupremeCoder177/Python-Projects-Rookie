@@ -1,6 +1,7 @@
 # this module handles the viewing of data
 
 import customtkinter as ctk
+from typing import List
 
 
 class Table(ctk.CTkFrame):
@@ -12,25 +13,39 @@ class Table(ctk.CTkFrame):
 		# variables
 		self.x = 0
 		self.y = 0
-		self.cell_width = 0.2
-		self.cell_height = 0.1
+		self.cell_width = 50
+		self.cell_height = 30
+		self.text_ids = list()
+
+		# the canvas which will display the table
+		self.canvas = ctk.CTkCanvas(self, scrollregion = (0, 0, self.winfo_width(), self.winfo_height()))
+		self.canvas.pack(expand = True, fill = 'both', padx = 10, pady = 10)
+
+		# event bindings
+		self.canvas.bind_all("<MouseWheel>", lambda event: self.canvas.yview_scroll(-(event.delta // 60), "units"))
+		self.canvas.bind_all("<Control-MouseWheel>", lambda event: self.canvas.xview_scroll(-(event.delta // 60), "units"))
 
 		self.place(relx = self.settings["canvas_pos"][0], rely = self.settings["canvas_pos"][1], relwidth = self.settings["canvas_dimensions"][0], relheight = self.settings["canvas_dimensions"][1])
 
 	# add a cell to the frame
 	def add_cell(self, text : str) -> None:
-		label = ctk.CTkLabel(self, text = text, fg_color = "#3F3244")
-		label.place(relx = self.x, rely = self.y, relwidth = self.cell_width, relheight = self.cell_height)
+		self.canvas.create_rectangle((self.x, self.y, self.x + self.cell_width, self.y + self.cell_height))
+		_id = self.canvas.create_text(self.x + (self.cell_width // 2), self.y + (self.cell_height // 2), anchor = "center", text = text, justify = "center", fill = "black")
+		self.text_ids.append(_id)
 		self.x += self.cell_width
 
-		# resetting the cell draw offset
-		if self.x >= self.winfo_width():
-			self.y += self.cell_height
-			self.x = 0
+	# adds a row to the tableview
+	def add_row(self, data : List[any]) -> None:
+		for dat in data:
+			self.add_cell(text = dat)
+
+		# resetting the coordinate for the next row
+		self.y += self.cell_height
+		self.x = 0
 
 	# deletes all the cells on the table
 	def reset(self) -> None:
-		for child in self.winfo_children():
+		for child in self.canvas.winfo_children():
 			child.destroy()
 
 

@@ -36,3 +36,5 @@ class LabelOptions(ctk.CTkFrame):
 			variable = textvar,
 			dynamic_resizing = True)
 		self.menu.pack(fill = 'x', padx = 5)
+
+
