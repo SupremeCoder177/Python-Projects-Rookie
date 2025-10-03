@@ -9,7 +9,7 @@ from utils.generator import DATA_TYPES
 # this class defines the columns stored in the column container widget of the main panel (see below)
 class ColumnHeading(ctk.CTkFrame):
 
-	def __init__(self, master : ctk.CTkFrame, settings : dict, column_name : str, column_data_type : str, lower_range : int, upper_range : int, index : int, master_of_master : ctk.CTkFrame):
+	def __init__(self, master : ctk.CTkFrame, settings : dict, column_name : str, column_data_type : str, lower_range : int, upper_range : int, index : int, master_of_master : ctk.CTkFrame, name_func):
 		# initializing the color theme
 		super().__init__(master = master, fg_color = settings["column_heading_fg_color"],
 			border_color = settings["column_heading_border_color"])
@@ -25,6 +25,11 @@ class ColumnHeading(ctk.CTkFrame):
 		self.selected = False
 		self.permanent_select = False
 		self.edit_mode = False
+		self.last_name = column_name
+		self.last_type = column_data_type
+		self.last_lower = str(lower_range)
+		self.last_upper = str(upper_range)
+		self.func = name_func
 
 		# adding the widgets
 
@@ -41,14 +46,15 @@ class ColumnHeading(ctk.CTkFrame):
 		# the save changes button
 		self.save_btn = ctk.CTkButton(self,
 			text = "Save Changes",
-			state = "disabled")
+			state = "disabled",
+			command = self.change_data)
 		self.save_btn.place(relx = 0.54, rely = 0.84, relwidth = 0.25, relheight = 0.15)
 
 		# the ignore changes button
 		self.cancel_btn = ctk.CTkButton(self,
 			text = "Cancel",
 			state = "disabled",
-			command = self.toggle_state)
+			command = self.cancel_changes)
 		self.cancel_btn.place(relx = 0.79, rely = 0.84, relwidth = 0.2, relheight = 0.15)
 
 		# sub-frames
@@ -117,14 +123,77 @@ class ColumnHeading(ctk.CTkFrame):
 	def get_name(self) -> str:
 		return self.name.get()
 
+	# retuns the data type of the column
+	def get_type(self) -> str:
+		return self.d_type.get()
+
+	# returns the lower range
+	def get_lower(self) -> int:
+		return int(self.lower.get())
+
+	# returns the upper range
+	def get_upper(self) -> int:
+		return int(self.upper.get())
+
 	# tries to change the data with the
 	# new input data
 	def change_data(self):
-		pass
+
+		# validating the changes
+
+		# checking if the input fields are empty
+		if not self.name.get():
+			return
+		if not self.d_type.get():
+			return
+		if not self.lower.get():
+			return
+		if not self.upper.get():
+			return
+
+		# checking if the inputs are valid
+		a, b = 0, 0
+		try:
+			a = int(self.lower.get())
+			b = int(self.upper.get())
+		except ValueError as e:
+			return
+		if a > b: return
+		if a < 0: return
+		if b < 0: return
+
+		# checking the new name is still unique
+		count = 0
+		for name in self.func():
+			if name == self.name.get(): count += 1
+		if count > 1: return
+
+		# applying the changes
+		self.last_name = self.name.get()
+		self.last_type = self.d_type.get()
+		self.last_lower = self.lower.get()
+		self.last_upper = self.upper.get()
+		self.toggle_state()
+
 
 	# returns whether the column is selected for deletion
 	def is_selected_for_deletion(self) -> bool:
 		return self.permanent_select
+
+	# ignores the changes made to the column
+	# and resets the varaibles values to the previous
+	# values
+	def ignore_changes(self) -> None:
+		self.name.set(self.last_name)
+		self.d_type.set(self.last_type)
+		self.lower.set(self.last_lower)
+		self.upper.set(self.last_upper)
+
+	# this function is called when the cancel btn is pressed
+	def cancel_changes(self) -> None:
+		self.ignore_changes()
+		self.toggle_state()
+
 
 
 # the main panel
@@ -176,7 +245,8 @@ class MainPanel(ctk.CTkFrame):
 
 		# the button which generates the data
 		ctk.CTkButton(self.buttons_container,
-			text = "Generate Data").grid(row = 0, column = 1, sticky = "NSEW")
+			text = "Generate Data",
+			command = self.master.start_generation).grid(row = 0, column = 1, sticky = "NSEW")
 
 		# adding event bindings
 
@@ -190,10 +260,10 @@ class MainPanel(ctk.CTkFrame):
 	# adds a column to the GUI column container, returns a true if column was succesfully added
 	# else false
 	def add_column(self, name : str, data_type : str, lower : int, upper : int) -> bool:
-		for heading in self.headings:
-			if heading.get_name() == name: return False
+		for heading in self.get_names():
+			if heading == name: return False
 
-		temp = ColumnHeading(self.column_container, self.settings, name, data_type, lower, upper, self.index, self)
+		temp = ColumnHeading(self.column_container, self.settings, name, data_type, lower, upper, self.index, self, self.get_names)
 		self.index += 1
 		self.headings.append(temp)
 		return True
@@ -228,3 +298,17 @@ class MainPanel(ctk.CTkFrame):
 	def focus_panel(self, event):
 		if self.master.side_panel.is_shown():
 			self.master.side_panel.move()
+
+	# returns the column data
+	def get_column_data(self) -> List[any]:
+		output = []
+		for column in self.headings:
+			temp = {"name" : column.get_name(), "type" : column.get_type(), "lower" : column.get_lower(), "upper" : column.get_upper()}
+			output.append(temp)
+		return output
+
+	# returns the names of the currently stored columns
+	def get_names(self) -> List[str]:
+		out = list()
+		for head in self.headings: out.append(head.get_name())
+		return out

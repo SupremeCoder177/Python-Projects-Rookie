@@ -22,6 +22,7 @@ from utils.tableView import TableView
 from utils.mainPanel import MainPanel
 from utils.animations import Animations
 from utils.sidePanel import SidePanel
+from utils.generator import DataGenerator
 from tkinter import filedialog, messagebox
 import threading
 
@@ -44,6 +45,7 @@ class App(ctk.CTk):
 
 		# variables
 		self.theme = "light" # usually I go with the dark theme mode as default, but this apps light mode is really good :)
+		self.data = []
 
 		ctk.set_appearance_mode(self.theme)
 
@@ -73,6 +75,9 @@ class App(ctk.CTk):
 		# adding the main panel
 		self.main_panel = MainPanel(self, self.settings, self.console)
 
+		# adding the generator (not a GUI component)
+		self.generator = DataGenerator(self.console, self)
+
 		# raising the side_panel above the main panel
 		self.side_panel.tkraise()
 
@@ -88,13 +93,12 @@ class App(ctk.CTk):
 	# animates the console with a generating... text animation
 	def animate_generation(self):
 		Animations().animate_text(self.console, "Generating",  "Generating.........", ".", 2000)
-		self.after(2000, self.animate_generation)
 
 	# adds a thread to the active threads
-	def add_thread(self, target):
-		temp = threading.Thread(target = target)
+	def add_thread(self, target, *args, **kwargs) -> threading.Thread:
+		temp = threading.Thread(target = target, args = args, kwargs = kwargs)
 		temp.daemon = True
-		temp.start()
+		return temp
 
 	# prompts the user if they want to close the app
 	# if some background threads are still running
@@ -135,6 +139,36 @@ class App(ctk.CTk):
 				self.console.set_text("This Column Already Exists !", 2000, "Change Column Name")
 		else:
 			self.console.display_warning()
+
+	# this function calls all the sub functions for data generation and 
+	# displaying on the treeview
+	# it also throws error on the console
+	# if any errors occur
+	def start_generation(self) -> None:
+		# getting the amount of rows the user 
+		# wants to generate
+
+		dialog = ctk.CTkInputDialog(text = "How many rows do you want in the file ?", title = "Input")
+		text = dialog.get_input()
+
+		# trying to see if the user entered valid amount of rows
+		num_rows = 0
+		try:
+			num_rows = int(text)
+		except ValueError as e:
+			self.console.display_warning()
+			return
+
+		if num_rows <= 0:
+			self.console.set_text("Please enter a positive value !", 2000, "Try again !")
+			return
+
+		headings_data = self.main_panel.get_column_data()
+		temp = self.add_thread(self.generator.gen_data, headings_data, num_rows)
+		temp.start()
+		while temp.is_alive():
+			self.after(2000, self.animate_generation)
+		self.console.set_text("Done !", 2000, "You can now save the data :)")
 
 
 if __name__ == "__main__":

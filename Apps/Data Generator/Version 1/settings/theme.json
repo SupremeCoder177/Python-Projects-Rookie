@@ -80,5 +80,8 @@
   		"fg_color" : ["#9EC5AB", "#031926"],
   		"hover_color" : ["#32746D", "#998DA0"],
   		"text_color" : ["black", "white"]
+  	},
+  	"CTkToplevel" : {
+  		"fg_color" : ["gray40", "gray53"]
   	}
 }
