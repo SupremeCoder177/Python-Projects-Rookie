@@ -37,7 +37,7 @@ class Table(ctk.CTkFrame):
 	# adds a row to the tableview
 	def add_row(self, data : List[any]) -> None:
 		for dat in data:
-			self.add_cell(text = dat)
+			self.add_cell(text = str(dat))
 
 		# resetting the coordinate for the next row
 		self.y += self.cell_height
@@ -64,3 +64,10 @@ class TableView(ctk.CTkFrame):
 
 		self.place(relx = self.settings["table_view_pos"][0], rely = self.settings["table_view_pos"][1], relwidth = self.settings["table_view_dimensions"][0], relheight = self.settings["table_view_dimensions"][1])
 
+	# clears the previous table
+	def reset(self):
+		self.table.reset()
+
+	# adds a row to the table
+	def add_row(self, data : List[any]):
+		self.table.add_row(data)

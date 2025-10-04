@@ -263,6 +263,9 @@ class MainPanel(ctk.CTkFrame):
 		for heading in self.get_names():
 			if heading == name: return False
 
+		for type_ in self.get_types():
+			if type_ == data_type and data_type != "Number": return False
+
 		temp = ColumnHeading(self.column_container, self.settings, name, data_type, lower, upper, self.index, self, self.get_names)
 		self.index += 1
 		self.headings.append(temp)
@@ -311,4 +314,10 @@ class MainPanel(ctk.CTkFrame):
 	def get_names(self) -> List[str]:
 		out = list()
 		for head in self.headings: out.append(head.get_name())
+		return out
+
+	# returns the types of the data of the currently stored columns
+	def get_types(self) -> List[str]:
+		out = []
+		for head in self.headings: out.append(head.get_type())
 		return out

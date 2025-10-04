@@ -168,7 +168,16 @@ class App(ctk.CTk):
 		temp.start()
 		while temp.is_alive():
 			self.after(2000, self.animate_generation)
+		self.display_data_on_table()
 		self.console.set_text("Done !", 2000, "You can now save the data :)")
+
+	# gets the data from the generator and displays it on the table view
+	def display_data_on_table(self) -> None:
+		self.view.reset()
+		data = self.generator.get_data()
+
+		for row in data:
+			self.view.add_row(row)
 
 
 if __name__ == "__main__":

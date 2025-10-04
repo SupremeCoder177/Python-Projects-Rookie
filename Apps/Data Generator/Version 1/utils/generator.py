@@ -22,23 +22,46 @@ class DataGenerator:
 	def __init__(self, console, master):
 		self.console = console
 		self.master = master
-		self.data = list()
-		self.location = None
+		self.data = []
 
 		self.gen_func_mapping = {
-		"First Name" : lambda amount, location: self.gen_names(amount, location),
-		"Last Name" : lambda amount, location: self.gen_names(amount, location, first = False)
+		"First Name" : lambda location: self.gen_names(location),
+		"Last Name" : lambda location: self.gen_names(location, first = False)
 		}
 
 	# this is the main function which calls the sub-funcitons to generate data
-	def gen_data(self, column_data : List[any], num_rows : int) -> dict:
-		for column in column_data:
-			temp = self.gen_func_mapping[column["name"]](num_rows)
+	def gen_data(self, column_data : List[any], num_rows : int) -> None:
+		self.data = []
+		heading_row = []
+		for data in column_data:
+			heading_row.append(data["name"])
+	
+		self.data.append(heading_row)
+		num_columns = len(column_data)
 
-	# generates a list of first/last names
+		for i in range(1, num_rows + 1):
+			temp = [None for i in range(num_columns)]
+			self.data.append(temp)
+
+	# generates a first/last name
 	# a the given length = amount, and
-	# belonging to the chosne location
-	def gen_names(self, amount : int, location : str, first = True) -> List[str]:
+	# belonging to the chosen location
+	def gen_names(self, location : str, first = True) -> List[str]:
 		pass
 
+	# checks to see if there is a column with the data type of Geography
+	# if there is one, then returns the index of that column
+	def check_location_column(self, column_data : list[any]) -> tuple[bool, int]:
+		for index, data in enumerate(column_data):
+			if column_data["type"] == "Geography":
+				return (True, index)
+		return (False, -1)
 
+	# returns a random location from the
+	# available locations
+	def gen_location(self):
+		pass
+
+	# self explanatory I think
+	def get_data(self) -> List[any]:
+		return self.data
