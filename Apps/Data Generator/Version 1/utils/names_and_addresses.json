@@ -2,7 +2,99 @@
 	"America" : {
 		"firsts_male" : ["John", "Mark", "Tom", "Brian", "Bryan", "Joseph", "Carl", "Alan", "Micheal", "Tim", "Timothy", "Zach",
 						 "Zacherry", "Harry", "Sean", "George", "Peter", "Carl", "Stanley", "Stan", "Bill", "Clint", "Flint",
-						 "Hugh", "Bruce", "Clark", "Liam", "Nathan", "Kevin", "Mike", "Bob"],
-		"firsts_female" : ["Lucy", "Nancy", "Sara", "Helen", "Lois", "Martha", "Emma", ""]
-	}
+						 "Hugh", "Bruce", "Clark", "Liam", "Nathan", "Kevin", "Mike", "Bob", "Dave", "David"],
+		"firsts_female" : ["Lucy", "Nancy", "Sara", "Helen", "Lois", "Martha", "Emma", "Mary", "Patricia", "Evelyn", "Harper", "Mia",
+						"Amelia", "Charlotte", "Isabella", "Ava", "Olivia", "Sophia", "Emily", "Madison", "Abigail", "Natalie",
+						"Grace", "Lily", "Chloe", "Zoey", "Hannah", "Abigail"],
+		"lasts" : ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez",
+    				"Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin", "Lee",
+    				"Perez", "Thompson", "White", "Harris", "Sanchez", "Clark",]
+	},
+
+	"England" : {
+		"firsts_male" : ["James", "Thomas", "William", "George", "Harry", "Jack", "Oliver", "Charles", "Edward", "Henry",
+                      "Joseph", "Samuel", "David", "John", "Michael", "Robert", "Daniel", "Matthew", "Andrew", "Mark",
+                      "Paul", "Steven", "Richard", "Edward", "Benjamin", "Frederick", "Albert", "Arthur", "Philip", "Luke",
+                      "Simon", "Christopher", "Jonathan", "Timothy", "Nicholas", "Peter", "Adam"],
+		"firsts_female" : ["Emma", "Olivia", "Sophia", "Isabella", "Charlotte", "Amelia", "Emily", "Lily", "Grace", "Jessica",
+                       "Sophie", "Chloe", "Hannah", "Lucy", "Elizabeth", "Sarah", "Rebecca", "Lauren", "Megan", "Victoria",
+                       "Katie", "Alexandra", "Natalie", "Zoe", "Holly", "Amy", "Eleanor", "Clare", "Alice", "Phoebe",
+                       "Freya", "Isabelle", "Rosie", "Millie", "Ellen", "Jane", "Margaret"],
+		"lasts" : ["Smith", "Johnson", "Brown", "Taylor", "Wilson", "Davis", "Clark", "Harris", "Lewis", "Walker",
+                      "Hall", "Allen", "Young", "King", "Wright", "Scott", "Green", "Baker", "Adams", "Nelson",
+                      "Hill", "Moore", "Turner", "Parker", "Collins", "Edwards", "Stewart", "Morris", "Rogers", "Reed",
+                      "Cook", "Morgan", "Bell", "Murphy", "Bailey", "River", "Cooper"]
+	},
+
+	"Russia" : {
+		"firsts_male" : ["Alexander", "Dmitry", "Ivan", "Sergey", "Mikhail", "Andrey", "Nikolay", "Vladimir", "Alexey", "Maxim",
+                      "Yuri", "Pavel", "Denis", "Roman", "Igor", "Konstantin", "Evgeny", "Victor", "Stanislav", "Oleg",
+                      "Anton", "Artyom", "Kirill", "Vasily", "Boris", "Leonid", "Fedor", "Valery", "Anatoly", "Daniil",
+                      "Ilya", "Nikita", "Vadim", "Ruslan", "Maksim", "Grigory", "Timur"],
+		"firsts_female" : ["Anastasia", "Maria", "Ekaterina", "Olga", "Natalia", "Irina", "Svetlana", "Elena", "Tatiana", "Yulia",
+                       "Anna", "Daria", "Marina", "Victoria", "Sofia", "Polina", "Alina", "Ksenia", "Galina", "Lyudmila",
+                       "Oksana", "Valentina", "Nadezhda", "Evgenia", "Alla", "Vera", "Larisa", "Inna", "Elizaveta", "Margarita",
+                       "Kristina", "Yana", "Zoya", "Tamara", "Anzhela", "Lilia", "Nina"],
+		"lasts" : ["Ivanov", "Smirnov", "Kuznetsov", "Popov", "Sokolov", "Lebedev", "Kozlov", "Novikov", "Morozov", "Petrov",
+                   "Volkov", "Solovyov", "Vasiliev", "Zaytsev", "Pavlov", "Semenov", "Golubev", "Vinogradov", "Bogdanov", "Voronov",
+                   "Fedorov", "Mikhailov", "Belyaev", "Tarasov", "Belov", "Komarov", "Orlov", "Kiselev", "Makarov", "Andreev"]
+	},
+
+	"Japan" : {
+		"firsts_male" : ["Hiroshi", "Takashi", "Kenji", "Satoshi", "Yuki", "Taro", "Kenta", "Daiki", "Ryo", "Shota",
+                      "Masaru", "Kazuo", "Naoki", "Yuta", "Haruto", "Kaito", "Ren", "Hikaru", "Tetsuya", "Atsushi",
+                      "Shinji", "Yusuke", "Makoto", "Tomoya", "Sho", "Ryota", "Takuya", "Koichi", "Jun", "Hiroki",
+                      "Daichi", "Tsubasa", "Kota", "Riku", "Soma", "Yuya", "Itsuki"],
+		"firsts_female" : ["Sakura", "Yui", "Aoi", "Hana", "Mio", "Rin", "Yuka", "Misaki", "Haruka", "Akari",
+                       "Ayaka", "Mika", "Saki", "Rina", "Yuna", "Hikari", "Asuka", "Mai", "Emi", "Kana",
+                       "Nanami", "Chihiro", "Aya", "Moe", "Risa", "Nao", "Miu", "Mei", "Sana", "Kokoa",
+                       "Yume", "Noa", "Riko", "Hina", "Minami", "Kaori", "Sayaka"],
+		"lasts" : ["Sato", "Suzuki", "Takahashi", "Tanaka", "Watanabe", "Ito", "Nakamura", "Kobayashi", "Yamamoto", "Nakajima",
+                    "Ishikawa", "Yamaguchi", "Matsumoto", "Inoue", "Kimura", "Hayashi", "Saito", "Shimizu", "Yamazaki", "Mori",
+                    "Abe", "Ikeda", "Hashimoto", "Yamashita", "Ishii", "Nakagawa", "Fuji", "Ogawa", "Okada", "Goto",
+                    "Hasegawa", "Murakami", "Kondo", "Sakamoto", "Endo", "Aoki", "Fujita"]
+	},
+
+	"Brazil": {
+        "firsts_male": ["João", "Pedro", "Lucas", "Mateus", "Gabriel", "Rafael", "Felipe", "Bruno", "Diego", "Thiago",
+                        "Gustavo", "Vinicius", "Eduardo", "Leonardo", "Caio", "Henrique", "Murilo", "Rodrigo", "Vitor", "Arthur",
+                        "André", "Carlos", "Daniel", "Fernando", "Igor", "José", "Luiz", "Marcelo", "Paulo", "Ricardo",
+                        "Samuel", "Sérgio", "Victor", "Wesley", "Yuri", "Bernardo", "Dav"],
+        "firsts_female": ["Ana", "Maria", "Julia", "Beatriz", "Larissa", "Camila", "Gabriela", "Fernanda", "Amanda", "Bruna",
+                          "Letícia", "Isabela", "Luana", "Vitória", "Mariana", "Carolina", "Eduarda", "Rafaela", "Lara", "Natália",
+                          "Clara", "Débora", "Evelyn", "Helena", "Isadora", "Jéssica", "Lívia", "Manuela", "Mônica", "Patrícia",
+                          "Rebeca", "Sofia", "Tainá", "Thaís", "Valentina", "Yasmin", "Bianca"],
+        "lasts": ["Silva", "Santos", "Oliveira", "Souza", "Lima", "Pereira", "Ferreira", "Costa", "Rodrigues", "Almeida",
+                  "Nascimento", "Araújo", "Barbosa", "Cardoso", "Carvalho", "Cunha", "Dias", "Duarte", "Freitas", "Gomes",
+                  "Lopes", "Machado", "Marques", "Mendes", "Monteiro", "Moreira", "Nunes", "Ramos", "Ribeiro", "Rocha",
+                  "Siqueira", "Teixeira", "Vieira", "Xavier", "Aguiar", "Barros", "Correia"]
+    },
+    "India": {
+        "firsts_male": ["Arjun", "Rohan", "Vikram", "Aryan", "Rahul", "Sanjay", "Amit", "Karan", "Vivek", "Nikhil",
+                        "Siddharth", "Anil", "Deepak", "Ravi", "Aditya", "Krishna", "Mohan", "Pranav", "Rajesh", "Suresh",
+                        "Ankit", "Dev", "Gautam", "Harish", "Ishaan", "Jay", "Kunal", "Manish", "Naveen", "Prateek",
+                        "Rakesh", "Sahil", "Tarun", "Varun", "Yash", "Dhruv", "Arnav"],
+        "firsts_female": ["Priya", "Ananya", "Shreya", "Pooja", "Neha", "Riya", "Aishwarya", "Divya", "Kavya", "Sneha",
+                          "Aditi", "Anjali", "Kritika", "Meera", "Nisha", "Preeti", "Rani", "Sanya", "Tanya", "Vaishali",
+                          "Aarushi", "Bhavna", "Deepika", "Gauri", "Isha", "Jaya", "Komal", "Lakshmi", "Mahima", "Nandini",
+                          "Radha", "Ritu", "Saanvi", "Shalini", "Swati", "Trisha", "Vandana"],
+        "lasts": ["Sharma", "Patel", "Kumar", "Singh", "Verma", "Gupta", "Yadav", "Mehta", "Reddy", "Rao",
+                  "Nair", "Joshi", "Chauhan", "Pandey", "Mishra", "Das", "Agarwal", "Bhat", "Choudhary", "Jain",
+                  "Malhotra", "Srivastava", "Kapoor", "Thakur", "Pillai", "Menon", "Bose", "Iyer", "Naidu", "Saxena",
+                  "Trivedi", "Banerjee", "Ghosh", "Rathore", "Desai", "Kaur", "Prasad"]
+    },
+    "Nigeria": {
+        "firsts_male": ["Chinedu", "Olumide", "Tunde", "Adebayo", "Emeka", "Chukwuemeka", "Oluwaseun", "Ibrahim", "Abdul", "Sani",
+                        "Segun", "Adewale", "Kehinde", "Taiwo", "Oladipo", "Femi", "Chukwudi", "Yusuf", "Ahmed", "Musa",
+                        "Oluwatobi", "Sunday", "Samuel", "David", "Joseph", "Daniel", "Peter", "Paul", "Victor", "James",
+                        "Benjamin", "Michael", "Chidi", "Obinna", "Kalu", "Uche", "Eze"],
+        "firsts_female": ["Ngozi", "Chiamaka", "Funmilayo", "Aminat", "Fatima", "Blessing", "Joy", "Mercy", "Grace", "Esther",
+                          "Chinwe", "Oluwatosin", "Titilayo", "Abimbola", "Yetunde", "Modupe", "Aisha", "Zainab", "Maryam", "Hauwa",
+                          "Chioma", "Adaobi", "Ifeoma", "Amarachi", "Ogechi", "Nkechi", "Chidinma", "Omolola", "Bolanle", "Temitope",
+                          "Shade", "Funke", "Bisi", "Ronke", "Folake", "Toyin", "Yemisi"],
+        "lasts": ["Adebayo", "Ogunleye", "Okafor", "Okonkwo", "Nwachukwu", "Ibrahim", "Abdullahi", "Lawal", "Mohammed", "Yusuf",
+                  "Eze", "Chukwu", "Ojo", "Adeyemi", "Balogun", "Oladipo", "Adekunle", "Olawale", "Oni", "Oke",
+                  "Sani", "Bello", "Aliyu", "Usman", "Danjuma", "Umar", "Hassan", "Musa", "Abubakar", "Ogunbiyi",
+                  "Akinyemi", "Odetola", "Ekeh", "Ibe", "Nwafor", "Okoye", "Udeh"]
+    }
 }
