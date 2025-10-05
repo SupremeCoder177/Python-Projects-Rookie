@@ -16,6 +16,7 @@ Contributors:
 
 import customtkinter as ctk
 from json import load
+from csv import writer
 from darkdetect import isDark
 from utils.console import Console
 from utils.tableView import TableView
@@ -87,12 +88,19 @@ class App(ctk.CTk):
 			command = self.theme_toggle,
 			corner_radius = 0).place(relx = 0.95, rely = 0.95, relwidth = 0.05, relheight = 0.05)
 
-		self.bind("<Escape>", lambda event: self.quit_app())
+		# event bindings
+		self.bind("<Escape>", lambda event: self.side_panel.move() if self.side_panel.is_shown() else None)
+		self.bind("<Alt-Escape>", lambda event: self.quit_app())
+
 		self.mainloop()
 
 	# animates the console with a generating... text animation
 	def animate_generation(self):
 		Animations().animate_text(self.console, "Generating",  "Generating.........", ".", 2000)
+
+	# aniimates the console with a saving.... text animation
+	def animate_saving(self):
+		Animations().animate_text(self.console, "Saving", "Saving.........", ".", 2000)
 
 	# adds a thread to the active threads
 	def add_thread(self, target, *args, **kwargs) -> threading.Thread:
@@ -167,7 +175,7 @@ class App(ctk.CTk):
 		temp = self.add_thread(self.generator.gen_data, headings_data, num_rows)
 		temp.start()
 		while temp.is_alive():
-			self.after(2000, self.animate_generation)
+			self.after(100, self.animate_generation)
 		self.display_data_on_table()
 		self.console.set_text("Done !", 2000, "You can now save the data :)")
 
@@ -178,6 +186,34 @@ class App(ctk.CTk):
 
 		for row in data:
 			self.view.add_row(row)
+
+	# this function retrives data from the generator
+	# and starts saving it in to the filename provided
+	def begin_saving(self, path : str) -> None:
+		data = self.generator.get_data()
+		with open(path, "w", newline = '') as f:
+			my_writer = writer(f, delimiter = ',')
+			for row in data:
+				my_writer.writerow(row)
+
+	# prompts the user for a file name
+	# and then saves the file in a .csv format
+	def save(self) -> None:
+		path_to_file = filedialog.asksaveasfilename()
+
+		if not path_to_file:
+			self.console.set_text("No file name entered !", 2000, "")
+			return
+
+		if not path_to_file.endswith(".csv"):
+			path_to_file += ".csv"
+
+		temp = self.add_thread(self.begin_saving, path_to_file)
+		temp.start()
+		while temp.is_alive():
+			self.after(100, self.animate_saving)
+		self.console.set_text("File Saved !", 2000, "You can view it in excel now :)")
+
 
 
 if __name__ == "__main__":

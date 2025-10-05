@@ -85,7 +85,7 @@ class SidePanel(ctk.CTkFrame):
 		except ValueError as e:
 			self.console.display_error()
 			return {}
-		if lower < upper:
+		if lower < upper or self.d_type.get() not in ["Number", "Date"]:
 			return {"name" : self.name.get(), "type" : self.d_type.get(), "lower" : lower, "upper" : upper}
 		else:
 			return {}

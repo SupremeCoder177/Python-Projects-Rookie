@@ -241,7 +241,8 @@ class MainPanel(ctk.CTkFrame):
 
 		# the button which saves the data into a csv 
 		ctk.CTkButton(self.buttons_container,
-			text = "Save").grid(row = 1, column = 2, sticky = "NSEW")
+			text = "Save",
+			command = self.save_data).grid(row = 1, column = 2, sticky = "NSEW")
 
 		# the button which generates the data
 		ctk.CTkButton(self.buttons_container,
@@ -321,3 +322,7 @@ class MainPanel(ctk.CTkFrame):
 		out = []
 		for head in self.headings: out.append(head.get_type())
 		return out
+
+	# calls the main modules save function to save the current data
+	def save_data(self) -> None:
+		self.master.save()
