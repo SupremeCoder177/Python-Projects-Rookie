@@ -51,8 +51,9 @@ class Table(ctk.CTkFrame):
 
 	# deletes all the cells on the table
 	def reset(self) -> None:
-		for child in self.canvas.winfo_children():
-			child.destroy()
+		self.canvas.delete("all")
+		self.y = 0
+		self.x = 0
 
 	# moves all the cells vertically
 	def move_y(self, event) -> None:
@@ -67,7 +68,7 @@ class Table(ctk.CTkFrame):
 			self.canvas.move("all", -self.scroll_speed, 0)
 		else:
 			self.canvas.move("all", self.scroll_speed, 0)
-
+			
 
 class TableView(ctk.CTkFrame):
 

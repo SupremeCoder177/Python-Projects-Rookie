@@ -163,7 +163,7 @@ class App(ctk.CTk):
 		num_rows = 0
 		try:
 			num_rows = int(text)
-		except ValueError as e:
+		except TypeError as e:
 			self.console.display_warning()
 			return
 
