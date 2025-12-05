@@ -1,0 +1,9 @@
+{
+    "window_size" : [1000, 800],
+    "tile_size" : 64,
+    "fps" : 30,
+    "font_size" : 30,
+    "grid_size" : [800, 800],
+    "grid_pos" : [200, 0],
+    "blocky_pos" : [0, 600]
+}
