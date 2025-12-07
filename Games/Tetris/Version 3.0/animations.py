@@ -1,6 +1,7 @@
 # this module handles the animation logic
 
 import pygame as pg
+from typing import List
 import os
 
 
@@ -34,6 +35,7 @@ class Animation:
 		self.tile_size = tile_size
 		self.frames = frames
 		self.img_index = 0
+		self.anim_id = fp + str(tile_size) + str(frames)
 		self.calc_images(fp)
 
 	# loads all sprites in the tilesheet
@@ -55,6 +57,26 @@ class Animation:
 		rect = pg.Rect((x, y, tile_size, tile_size))
 		surface.blit(pg.transform.scale(self.image.subsurface((self.img_index * self.tile_size, 0, self.tile_size, self.tile_size)), (tile_size, tile_size)), rect)
 
+	# returns the current frame of the animation
+	def get_current_frame(self):
+		return self.image.subsurface((self.img_index * self.tile_size, 0, self.tile_size, self.tile_size))
+
 	# when starting the animation remember to reset it
 	def reset(self):
 		self.img_index = 0
+
+	def __eq__(self, anim):
+		return self.anim_id == anim.anim_id
+
+
+# a new version of the animation class
+# this one takes in an input of coordinates
+# to display the animation 
+class GroupedAnimation(Animation):
+
+	def __init__(self, fp : str, tile_size : int, frames : int):
+		super().__init__(fp, tile_size, frames)
+
+	def draw_coords(self, coords : List[int], surface : pg.Surface, tile_size : int):
+		for coor in coords:
+			super().draw(coor[0], coor[1], surface, tile_size)

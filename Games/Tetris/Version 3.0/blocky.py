@@ -17,22 +17,26 @@ class Blocky:
 		anim_duration = 15 # frames for each sprite
 
 		# loading all the animations
-		self.idle_anim = Animation(anim_path + "blocky_idle.png", 32, anim_duration)
-
-		# animation settings
-		self.anims = [self.idle_anim]
-		self.anim_index = 0
-
-		# state
-		self.state = "idle"
 
 		# state and animation mapping
 		self.anim_map = {
-			"idle" : 0
+			"idle" : Animation(anim_path + "blocky_idle.png", 32, anim_duration)
 		}
 
-		self.anims[self.anim_index].reset()
+		# animation settings
+
+		# state
+		self.state = "idle"
+		self.changed_state = True
 
 	def draw(self):
-		self.anims[self.anim_index].update(self.game.frames_elapsed)
-		self.anims[self.anim_index].draw(self.x, self.y, self.game.screen, self.tile_size)
+		if self.changed_state:
+			self.anim_map[self.state].reset()
+			self.changed_state = False
+
+		self.anim_map[self.state].update(self.game.frames_elapsed)
+		self.anim_map[self.state].draw(self.x, self.y, self.game.screen, self.tile_size)
+
+	def set_state(self, state : str):
+		self.state = state if state in self.anim_map else self.state
+		self.changed_state = True
