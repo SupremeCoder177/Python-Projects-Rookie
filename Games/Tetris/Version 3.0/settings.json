@@ -1,7 +1,7 @@
 {
     "window_size" : [1000, 800],
     "tile_size" : 64,
-    "fps" : 30,
+    "fps" : 60,
     "font_size" : 30,
     "grid_size" : [768, 768],
     "grid_pos" : [200, 0],

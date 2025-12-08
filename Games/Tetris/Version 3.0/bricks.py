@@ -2,6 +2,7 @@
 
 import pygame as pg
 from animations import Animation, GroupedAnimation
+from typing import List
 from random import choice, randint
 
 # this class generates brick types, colors and animations
@@ -94,8 +95,12 @@ class Brick:
 		self.anim = None
 		self.pos = [0, 0]
 		self.index = 0
-		self.fall_speed = 2 # tile per second
+		self.fall_speed = 2 # tiles per second
+		self.inc_fall_speed = 3 # tiles per second
+		self.new_frames_movement = self.settings["fps"] // self.inc_fall_speed
 		self.frames_per_movement = self.settings["fps"] // self.fall_speed
+		self.input_speed = 0.2 # every one second
+		self.input_frames = int(self.settings["fps"] * self.input_speed)
 		self.color = None
 		self.gen_brick()
 
@@ -136,16 +141,41 @@ class Brick:
 		if not self.game.frames_elapsed % self.frames_per_movement:
 			self.pos[1] += self.settings["tile_size"]
 		# checking for floor contact
-		if self.check_floor_collision():
-			self.game.add_brick(self.brick[self.index](self.pos[0], self.pos[1], self.settings["tile_size"]), self.color)
-			self.gen_brick()
-
-		self.take_input()
-
+			if self.check_floor_collision() or self.check_brick_collision():
+				self.pos[1] -= self.settings["tile_size"]
+				self.frames_per_movement = self.settings["fps"] // self.fall_speed
+				self.game.add_brick(self.brick[self.index](self.pos[0], self.pos[1], self.settings["tile_size"]), self.color)
+				self.gen_brick()
+		
+		# taking input
+		if not self.game.frames_elapsed % self.input_frames:
+			self.take_input()
 
 	# taking player input
+	# and returns checks collision with out of bounds and with other bricks
 	def take_input(self):
 		keys = pg.key.get_pressed()
+
+		delta_x = 0
+		# changing the x position
+		if keys[pg.K_LEFT]:
+			delta_x -= self.settings["tile_size"]
+		if keys[pg.K_RIGHT]:
+			delta_x += self.settings["tile_size"]
+
+		# applying movement and checking for collision
+		if delta_x:
+			self.pos[0] += delta_x
+			if self.check_brick_collision() or self.check_out_of_bounds():
+				self.pos[0] -= delta_x
+
+		# changing the brick index
+		if keys[pg.K_UP]:
+			self.index += 1
+			self.index %= len(self.brick)
+
+		if keys[pg.K_DOWN]:
+			self.frames_per_movement = self.new_frames_movement
 
 	# checking if the brick is out of bounds
 	def check_floor_collision(self) -> bool:
@@ -153,6 +183,13 @@ class Brick:
 			if pos[1] >= self.settings["grid_size"][1]: return True
 		return False
 
+	# checking for out of bounds
+	def check_out_of_bounds(self) -> bool:
+		for pos in self.brick[self.index](self.pos[0], self.pos[1], self.settings["tile_size"]):
+			if pos[0] < 0 or pos[0] + self.settings["tile_size"] > self.settings["grid_size"][0]: return True
+			if pos[1] + self.settings["tile_size"] > self.settings["grid_size"][1]: return True
+		return False
+
 	# checking brick collision and out of bounds collision
 	def check_brick_collision(self) -> bool:
-		pass
+		return False
