@@ -50,6 +50,7 @@ class Game:
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_k:
                         self.blocky.send_message("Something about the game feels right lol", 3)
+                        self.blocky.set_state("spin")
 
             # updating frames elapsed
             self.frames_elapsed += 1

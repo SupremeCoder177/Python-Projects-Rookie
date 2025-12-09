@@ -22,7 +22,8 @@ class Blocky:
 
 		# state and animation mapping
 		self.anim_map = {
-			"idle" : Animation(anim_path + "blocky_idle.png", 32, anim_duration)
+			"idle" : Animation(anim_path + "blocky_idle.png", 32, anim_duration),
+			"spin" : Animation(anim_path + "blocky_spin.png", 32, anim_duration)
 		}
 
 		# message vars

@@ -142,10 +142,7 @@ class Brick:
 			self.pos[1] += self.settings["tile_size"]
 		# checking for floor contact
 			if self.check_floor_collision() or self.check_brick_collision():
-				self.pos[1] -= self.settings["tile_size"]
-				self.frames_per_movement = self.settings["fps"] // self.fall_speed
-				self.game.add_brick(self.brick[self.index](self.pos[0], self.pos[1], self.settings["tile_size"]), self.color)
-				self.gen_brick()
+				self.reset()
 		
 		# taking input
 		if not self.game.frames_elapsed % self.input_frames:
@@ -169,10 +166,14 @@ class Brick:
 			if self.check_brick_collision() or self.check_out_of_bounds():
 				self.pos[0] -= delta_x
 
-		# changing the brick index
+		# changing the brick index and checking for collision
+		old_index = self.index
 		if keys[pg.K_UP]:
 			self.index += 1
 			self.index %= len(self.brick)
+
+			if self.check_out_of_bounds() or self.check_brick_collision():
+				self.index = old_index
 
 		if keys[pg.K_DOWN]:
 			self.frames_per_movement = self.new_frames_movement
@@ -192,4 +193,16 @@ class Brick:
 
 	# checking brick collision and out of bounds collision
 	def check_brick_collision(self) -> bool:
+		occupied = tuple(self.game.coor_map.keys())
+		for pos in self.brick[self.index](self.pos[0], self.pos[1], self.settings["tile_size"]):
+			for tile in occupied:
+				if pos == tile:
+					return True
 		return False
+
+	# reseting the brick
+	def reset(self):
+		self.pos[1] -= self.settings["tile_size"]
+		self.frames_per_movement = self.settings["fps"] // self.fall_speed
+		self.game.add_brick(self.brick[self.index](self.pos[0], self.pos[1], self.settings["tile_size"]), self.color)
+		self.gen_brick()
