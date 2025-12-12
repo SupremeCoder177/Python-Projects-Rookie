@@ -2,6 +2,7 @@
 
 import pygame as pg
 from animations import Animation, load_image
+from typing import List
 
 
 class Blocky:
@@ -32,7 +33,8 @@ class Blocky:
 		self.box_surf = None
 		self.box_rect = None
 		self.max_width = None
-		self.delta = None
+		self.x_delta = None
+		self.y_delta = None
 		self.curr_width = None
 		self.box_ratio = 0.5 # i.e 2 : 1 ratio of width and height
 		self.frames_elapsed = 0
@@ -41,9 +43,13 @@ class Blocky:
 		self.min_height = 5
 		self.anim_frames = self.game.settings["fps"] // 5
 		self.max_height = None
-		self.padding = 10
-		self.max_text_surf_width = 200
-		self.max_line_height = 15
+		self.padding = 15 # the text padding
+		self.max_text_surf_width = 250
+		self.text_size_ratio = 0.5
+		self.max_line_height = self.game.settings["font_size"]
+		self.message_surfs = []
+		self.message_rects = []
+		self.grow_complete = False
 
 		# animation settings
 
@@ -66,6 +72,10 @@ class Blocky:
 			self.animate_box()
 			self.game.screen.blit(self.box_surf, self.box_rect)
 
+			if self.grow_complete:
+				for i in range(len(self.message_surfs)):
+					self.game.screen.blit(self.message_surfs[i], self.message_rects[i])
+
 	# changes current state of blocky to the state given
 	def set_state(self, state : str):
 		self.state = state if state in self.anim_map else self.state
@@ -78,43 +88,75 @@ class Blocky:
 		self.max_frames = self.game.settings["fps"] * time
 		temp = self.font.render(text, False, self.fg)
 		temp_rect = temp.get_rect()
+
 		self.max_width = self.max_text_surf_width + 2 * self.padding
-		self.max_height = int((temp_rect.width / self.max_text_surf_width) * self.max_line_height) + 2 * self.padding
+
+		# making the message chunks
+		words = text.split(" ")
+		message_chunks = []
+		chunk = []
+		for word in words:		
+			if self.get_chunk_length(chunk) + (len(word) * self.game.settings["font_size"]) <= self.max_text_surf_width:
+				chunk.append(word)
+			else:
+				message_chunks.append(" ".join(chunk))
+				chunk = [word]
+		message_chunks.append(" ".join(chunk))
+
+		self.max_height = len(message_chunks) * self.max_line_height + 2 * self.padding
+		self.message_surfs = [self.font.render(message_chunks[i], False, self.fg) for i in range(len(message_chunks))]
+		self.message_rects = [self.message_surfs[i].get_rect(topleft = (self.x + self.game.settings["blocky_text_x_pos"] + self.padding, self.y - self.max_height + (i * self.max_line_height) + self.padding)) for i in range(len(message_chunks))]
+
 		self.curr_width = int(self.max_width * 0.25) # 25% of the total width
-		self.delta = max((self.max_width - self.curr_width) // self.anim_frames, 1)
+		self.curr_height = int(self.max_height * 0.15) # 15% of total height
+		self.x_delta = max((self.max_width - self.curr_width) // self.anim_frames, 1)
+		self.y_delta = max((self.max_height - self.curr_height) // self.anim_frames, 1)
 
 	# this function should not be called from outside the 
 	# class definition, this one animates the text box
 	def animate_box(self):
 		self.frames_elapsed += 1
 		if self.frames_elapsed >= self.max_frames:
+			self.grow_complete = False
 			self.animate_shrink()
 		else:
 			self.animate_grow()
 
 	# produces a growing animation
 	def animate_grow(self):
+		self.grow_complete = True
 		if not self.curr_width >= self.max_width:
-			self.curr_width += self.delta
+			self.curr_width += self.x_delta
+			self.grow_complete = False
 
-		x = self.x + 15
-		y = self.y - (self.curr_width * self.box_ratio)
+		if not self.curr_height >= self.max_height:
+			self.curr_height += self.y_delta
+			self.grow_complete = False
 
-		self.box_surf = pg.transform.scale(self.text_box, (self.curr_width, self.curr_width * self.box_ratio))
+		x = self.x + self.game.settings["blocky_text_x_pos"]
+		y = self.y - self.curr_height
+
+		self.box_surf = pg.transform.scale(self.text_box, (self.curr_width, self.curr_height))
 		self.box_rect = self.box_surf.get_rect(topleft = (x, y))
 
 	# produces a shrinking animation
 	def animate_shrink(self):
 		if self.curr_width > self.min_width:
-			self.curr_width -= self.delta
+			self.curr_width -= self.x_delta
 
-		x = self.x + 15
-		y = self.y - (self.curr_width * self.box_ratio)
+		if self.curr_height > self.min_height:
+			self.curr_height -= self.y_delta
+
+		x = self.x + self.game.settings["blocky_text_x_pos"]
+		y = self.y - self.curr_height
 
 		if self.curr_width <= self.min_width: 
 			self.talking = False
 			return
 
-		self.box_surf = pg.transform.scale(self.text_box, (self.curr_width, self.curr_width * self.box_ratio))
+		self.box_surf = pg.transform.scale(self.text_box, (self.curr_width, self.curr_height))
 		self.box_rect = self.box_surf.get_rect(topleft = (x, y))
 
+	# returns the length of a message chunk
+	def get_chunk_length(self, chunk : List[str]):
+		return self.font.render(" ".join(chunk), False, self.fg).get_rect().width

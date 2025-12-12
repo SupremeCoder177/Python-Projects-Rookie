@@ -68,15 +68,3 @@ class Animation:
 	def __eq__(self, anim):
 		return self.anim_id == anim.anim_id
 
-
-# a new version of the animation class
-# this one takes in an input of coordinates
-# to display the animation 
-class GroupedAnimation(Animation):
-
-	def __init__(self, fp : str, tile_size : int, frames : int):
-		super().__init__(fp, tile_size, frames)
-
-	def draw_coords(self, coords : List[int], surface : pg.Surface, tile_size : int):
-		for coor in coords:
-			super().draw(coor[0], coor[1], surface, tile_size)

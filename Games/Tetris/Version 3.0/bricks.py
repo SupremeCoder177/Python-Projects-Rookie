@@ -1,7 +1,7 @@
 # this module handles the bricks (all about bricks LOL)
 
 import pygame as pg
-from animations import Animation, GroupedAnimation
+from animations import Animation
 from typing import List
 from random import choice, randint
 
@@ -61,7 +61,29 @@ class BrickFactory:
 	 1 : lambda x, y, ts: ((x, y), (x, y - ts), (x, y + ts), (x, y + 2 * ts))
 	}
 
-	bricks = [brick1, brick2, brick3, brick4, brick5]
+	"""
+		the
+  		 ##
+		## brick type
+	"""
+
+	brick6 = {
+	 0 : lambda x, y, ts : ((x, y), (x - ts, y), (x, y - ts), (x + ts, y - ts)),
+	 1 : lambda x, y, ts : ((x, y), (x + ts, y), (x, y - ts), (x + ts, y + ts))
+	}
+
+	"""
+		the
+		##
+		 ## brick type
+	"""
+
+	brick7 = {
+	 0 : lambda x, y, ts: ((x, y), (x, y - ts), (x - ts, y - ts), (x + ts, y)),
+	 1 : lambda x, y, ts: ((x, y), (x + ts, y), (x + ts, y - ts), (x, y + ts))
+	}
+
+	bricks = [brick1, brick2, brick3, brick4, brick5, brick6, brick7]
 	colors = ["blue", "green", "magenta", "yellow"]
 
 	# returns a random brick type
@@ -81,10 +103,6 @@ class BrickFactory:
 	def get_animation(self, color : str):
 		return Animation(f"Images/Blocks/{color.capitalize()}/{color}.png", 32, 7)
 
-	# returns a grouped animation based on the color
-	# given
-	def get_group_animation(self, color : str):
-		return GroupedAnimation(f"Images/Blocks/{color.capitalize()}/{color}.png", 32, 7)
 
 # this class defines the falling brick
 class Brick:
