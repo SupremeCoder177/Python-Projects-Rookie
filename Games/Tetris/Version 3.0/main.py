@@ -106,6 +106,15 @@ class Game:
             for x in range(self.settings["grid_size"][0] // self.settings["tile_size"]):
                 del self.coor_map[(x * self.settings["tile_size"], y)]
 
+            temp = self.coor_map.copy()
+            self.coor_map = dict()
+
+            for key, value in temp.items():
+                coor = list(key)
+                if coor[1] < y:
+                    coor[1] += self.settings["tile_size"]
+                self.coor_map[tuple(coor)] = value
+
     # checking if a line has been completed, starting from the top
     def check_line_completion(self):
         for y in range(self.settings["grid_size"][1] // self.settings["tile_size"]):
