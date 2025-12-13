@@ -23,6 +23,7 @@ class Button(Widget):
 		self.text_surf = font.render(text, False, fg)
 		self.text_rect = self.text_surf.get_rect()
 		self.hovering = False
+		self.parent.add_child(id(self))
 
 	# this function dynamically positions the widget
 	def calc_positions(self):

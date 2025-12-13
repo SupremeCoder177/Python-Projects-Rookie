@@ -26,10 +26,12 @@ import pygame as pg
 class Widget:
 
 	def __init__(self):
-		self.rect = None
+		self.rect = pg.Rect()
+		self.selected = False
+		self.shown = False
 
 	# this function will handle the rendering
-	def draw(self):
+	def draw(self, surface : pg.Surface):
 		pass
 
 	# this function will handle all the events

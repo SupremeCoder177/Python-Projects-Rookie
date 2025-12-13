@@ -21,8 +21,7 @@ class Frame(Widget):
 		self.bd_radius = bd_radius
 		self.bd_clr = bd_clr
 		self.bd_width = bd_width
-		self.shown = False
-		self.selected = False
+		self.children = []
 
 	# draws the frame
 	def draw(self, surface : pg.Surface):	
@@ -33,6 +32,14 @@ class Frame(Widget):
 	# sometimes you need to update the frame, but only for frames which have some changes
 	def update(self):
 		pass
+
+	# adds a widget to its children, the widget is the object's id
+	def add_child(self, widget : int):
+		if widget not in self.children: self.children.append(widget)
+
+	# deletes a specific child from the children list
+	def delete_child(self, widget : int):
+		if widget in self.children: self.children.remove(widget)
 
 
 # this frame should only be one per screen, because well if you have multiple then it will 

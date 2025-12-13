@@ -1,5 +1,15 @@
 {
 	"app_size" : [1000, 800],
 	"fps" : 60,
-	"app_font" : "Fonts/SoftCream.ttf"
+	"fonts" : {
+		"app_font" : "Fonts/CascadiaMono-Light.ttf",
+		"app_notification_font" : "Fonts/CascadiaMono-Regular.ttf",
+		"app_highlight_font" : "Fonts/CascadiaMono-LightItalic.ttf"
+	},
+	"color_pallate" : {
+		"btn_bd_clr" : ["#030010", "#eeeeee"],
+		"btn_bg_clr" : "#CCDBDC",
+		"frame_bg_clr" : "#292929",
+		"frame_bd_clr" : "#ededed"
+	}
 }

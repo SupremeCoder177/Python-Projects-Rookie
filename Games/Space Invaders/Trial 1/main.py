@@ -11,6 +11,7 @@ class Game:
 	def __init__(self, data : dict):
 		pg.init()
 		self.data = data
+		print(data)
 		self.screen = pg.display.set_mode(data["window_size"])
 		pg.display.set_caption(data["game_name"])
 		self.clock = pg.time.Clock()
@@ -63,6 +64,7 @@ if __name__ == '__main__':
 	if "settings.json" not in os.listdir(): 
 		raise FileNotFoundError("The settings were not found in the game directory, please ensure\na file named settings.json is in the game folder")
 	else:
+		DATA = None
 		with open("settings.json", "r") as file:
 			DATA = load(file)
 		game = Game(DATA)
